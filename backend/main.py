@@ -78,7 +78,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-8b",
+                "model": "llama-3.3-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
