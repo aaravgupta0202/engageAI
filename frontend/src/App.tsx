@@ -38,10 +38,7 @@ function App() {
       {!isLanding && (
         <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex justify-between items-center transition-all duration-300 shadow-sm">
           <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => handleNavigate('landing')}>
-            <img src="/favicon.png" alt="engageAI Logo" className="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform object-contain" />
-            <h1 className="text-2xl font-black tracking-tight text-sbi-navy group-hover:opacity-80 transition-opacity">
-              engage<span className="text-sbi-blue">AI</span>
-            </h1>
+            <img src="/favicon.png" alt="engageAI Logo" className="h-8 w-auto group-hover:opacity-80 transition-opacity object-contain" />
           </div>
           
           <nav className="flex space-x-1">

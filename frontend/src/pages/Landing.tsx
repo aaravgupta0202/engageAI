@@ -8,19 +8,16 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       {/* Navigation for Landing Only */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
         <div className="flex items-center space-x-3 cursor-pointer group">
-          <img src="/favicon.png" alt="engageAI Logo" className="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform object-contain" />
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 group-hover:opacity-80 transition-opacity">
-            engage<span className="text-sbi-blue">AI</span>
-          </h1>
+          <img src="/favicon.png" alt="engageAI Logo" className="h-8 w-auto group-hover:opacity-80 transition-opacity object-contain" />
         </div>
         <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
-          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Our Solutions</span>
-          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
-          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Testimonials</span>
-          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Contact Us</span>
+          <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
+          <span onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
+          <span onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">GitHub Repo</span>
+          <span onClick={() => window.open('https://aarav-cc.netlify.app/', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">Contact Us</span>
         </div>
         <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-6 font-semibold shadow-md shadow-sbi-blue/20">
-          Enquire <ArrowRight size={16} className="ml-2" />
+          Try Demo <ArrowRight size={16} className="ml-2" />
         </Button>
       </header>
 
@@ -28,17 +25,17 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       <div className="w-full max-w-7xl mx-auto px-6 pt-20 pb-32 relative">
         <div className="max-w-3xl">
           <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-6 leading-[1.1]">
-            Turn Customer Data<br />
-            into <span className="text-emerald-500 font-semibold">Sales Success</span>
+            Turn Banking Data<br />
+            into <span className="text-emerald-500 font-semibold">Agentic Actions</span>
           </h1>
           <p className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
-            Whatever your business size, our autonomous AI system can be customized to help you manage customers, predict life events, and increase efficiency.
+            Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly.
           </p>
           <div className="flex space-x-4">
             <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-6 shadow-xl shadow-sbi-blue/20 text-lg font-semibold flex items-center">
               Try Demo <ArrowRight size={18} className="ml-2" />
             </Button>
-            <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="rounded-full border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-6 text-lg font-medium flex items-center">
+            <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-6 text-lg font-medium flex items-center shadow-sm">
               View Source <ArrowRight size={18} className="ml-2" />
             </Button>
           </div>
@@ -58,7 +55,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="w-full max-w-3xl h-32 md:h-48 rounded-full bg-gradient-to-r from-slate-100 via-white to-slate-100 shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.1)] border-2 border-white/50 relative overflow-hidden backdrop-blur-3xl flex items-center justify-center">
              <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/10 via-transparent to-indigo-500/10 mix-blend-overlay"></div>
              <div className="absolute w-[200%] h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sbi-blue/5 via-transparent to-transparent animate-[spin_10s_linear_infinite]"></div>
-             <span className="text-4xl md:text-6xl font-black text-slate-200 opacity-50 tracking-widest">engageAI</span>
+             <span className="text-4xl md:text-6xl font-black text-slate-300 tracking-widest z-10 drop-shadow-sm">engageAI</span>
           </div>
         </div>
 
@@ -74,16 +71,16 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Massive Blue Statistics Banner */}
-      <div className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[40px] p-12 md:p-20 text-white shadow-2xl relative overflow-hidden mb-32">
+      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[40px] p-12 md:p-20 text-white shadow-2xl relative overflow-hidden mb-32">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#0A1931]/20 to-transparent rounded-full -translate-y-1/4 translate-x-1/4 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#5E95FF]/30 to-transparent rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
         
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 items-start">
           <div className="bg-[#0A1931]/40 backdrop-blur-md p-8 rounded-3xl border border-white/10 md:col-span-1 h-full shadow-inner">
             <div className="text-5xl font-black mb-2">#1</div>
-            <div className="text-xl font-bold mb-4">Agentic AI Platform</div>
+            <div className="text-xl font-bold mb-4">SBI Hackathon MVP</div>
             <p className="text-sm text-blue-100/80 leading-relaxed font-medium">
-              We provide the world's leading autonomous agents to help organizations manage customers, boost sales, and drive growth seamlessly.
+              We provide an advanced multi-agent architecture to help banks understand customers, discover opportunities, and execute actions autonomously.
             </p>
           </div>
           <div className="flex flex-col justify-center h-full">
@@ -102,7 +99,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Our Capabilities Section */}
-      <div className="w-full max-w-7xl mx-auto px-6 pb-40">
+      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-40">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
           
           <div className="md:col-span-5 md:pr-12">
@@ -110,7 +107,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
               Our<br />Capabilities
             </h2>
             <p className="text-lg text-slate-600 leading-relaxed font-medium">
-              We offer a full array of AI-powered services to help you maximize customer engagement and revenue. Observe, analyze, and act autonomously.
+              We offer a full array of AI-powered services tailored for banking. Observe transaction data, analyze life events, and act autonomously.
             </p>
           </div>
 
@@ -124,10 +121,10 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-3">Customer Insights</h3>
                 <p className="text-slate-600 font-medium leading-relaxed mb-4">
-                  Gain a 360° view of your customers with real-time analytics. Identify hidden life events (like salary hikes or loan payoffs) from raw transaction data.
+                  Gain a 360° view of your customers with real-time analytics. Identify hidden life events (like salary hikes or loan payoffs) directly from raw banking transaction data.
                 </p>
-                <button className="flex items-center text-sm font-bold text-sbi-blue hover:text-sbi-navy transition-colors">
-                  Read more <ArrowRight size={14} className="ml-1" />
+                <button onClick={() => onNavigate('generator')} className="flex items-center text-sm font-bold text-sbi-blue hover:text-sbi-navy transition-colors">
+                  See it in action <ArrowRight size={14} className="ml-1" />
                 </button>
               </div>
             </div>
@@ -140,10 +137,10 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-3">Autonomous Agents</h3>
                 <p className="text-slate-600 font-medium leading-relaxed mb-4">
-                  Automate lead tracking and follow-ups. Our LangGraph pipeline detects opportunities and instantly drafts hyper-personalized engagement plans.
+                  Our sequential LangGraph pipeline detects financial opportunities and instantly drafts hyper-personalized wealth management and insurance plans without human intervention.
                 </p>
-                <button className="flex items-center text-sm font-bold text-indigo-500 hover:text-indigo-800 transition-colors">
-                  Read more <ArrowRight size={14} className="ml-1" />
+                <button onClick={() => onNavigate('generator')} className="flex items-center text-sm font-bold text-indigo-500 hover:text-indigo-800 transition-colors">
+                  See it in action <ArrowRight size={14} className="ml-1" />
                 </button>
               </div>
             </div>
@@ -154,12 +151,12 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
                 <Link size={32} strokeWidth={1.5} />
               </div>
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-3">Seamless Integration</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">Explainable Integration</h3>
                 <p className="text-slate-600 font-medium leading-relaxed mb-4">
-                  Easily connect the multi-agent AI brain to your existing data lakes and CRMs. Explainable UI components ensure every AI decision is completely transparent.
+                  Easily connect the multi-agent AI brain to SBI's existing data lakes. Explainable UI components ensure every AI decision and confidence score is completely transparent to the banker.
                 </p>
-                <button className="flex items-center text-sm font-bold text-emerald-500 hover:text-emerald-700 transition-colors">
-                  Read more <ArrowRight size={14} className="ml-1" />
+                <button onClick={() => onNavigate('generator')} className="flex items-center text-sm font-bold text-emerald-500 hover:text-emerald-700 transition-colors">
+                  See it in action <ArrowRight size={14} className="ml-1" />
                 </button>
               </div>
             </div>
