@@ -37,7 +37,7 @@ const renderParsedData = (data: any) => {
             </ul>
           ) : (
             <div className="text-sm text-slate-700 dark:text-slate-300">
-              {typeof value === 'object' ? (
+              {typeof value === 'object' && value !== null ? (
                 <div className="flex flex-wrap gap-2 mt-1">
                   {Object.entries(value).map(([k, val]) => (
                     <span key={k} className="mr-2 px-2 py-1 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 text-xs">
