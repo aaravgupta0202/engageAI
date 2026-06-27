@@ -4,7 +4,7 @@ import { Search, Brain, Send, ChevronDown, Bot, Zap } from 'lucide-react';
 
 /**
  * Landing Page Component
- * Serves as the primary entry point for the EngageAI demo.
+ * Serves as the primary entry point for the engageAI demo.
  * Renders the hero section and the "How it works" explainer.
  */
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
@@ -24,7 +24,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
         
         <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-6">
-          Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-sbi-blue to-cyan-500">EngageAI</span>
+          Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-sbi-blue to-cyan-500">engageAI</span>
         </h1>
         
         <p className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed">
@@ -111,7 +111,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           
           <div className="glass-card p-8 rounded-2xl border border-sbi-blue/30 bg-blue-50 dark:bg-sbi-blue/10 shadow-lg shadow-sbi-blue/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400 opacity-10 rounded-full blur-2xl"></div>
-            <h3 className="text-xl font-bold text-sbi-navy dark:text-sbi-blue mb-4 flex items-center"><Zap className="w-6 h-6 mr-2" /> SBI EngageAI</h3>
+            <h3 className="text-xl font-bold text-sbi-navy dark:text-sbi-blue mb-4 flex items-center"><Zap className="w-6 h-6 mr-2" /> engageAI</h3>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-6">A proactive system that anticipates needs before you ask.</p>
             <div className="flex flex-wrap gap-2 text-sbi-blue font-mono text-xs md:text-sm items-center">
               <span className="px-3 py-1 bg-white dark:bg-slate-800 rounded-md border border-sbi-blue/30 font-bold shadow-sm">Observe</span> <span className="text-slate-400">→</span>

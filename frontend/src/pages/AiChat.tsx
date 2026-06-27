@@ -78,7 +78,7 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
           <div className="absolute top-0 right-0 w-64 h-64 bg-sbi-blue opacity-20 rounded-full blur-3xl -mr-10 -mt-10 animate-pulse"></div>
           <CardTitle className="text-2xl font-bold flex items-center relative z-10">
             <span className="bg-white/20 p-2 rounded-lg mr-3 backdrop-blur-sm">🤖</span> 
-            SBI EngageAI Chat
+            engageAI Chat
           </CardTitle>
           <p className="text-sm text-indigo-200 mt-1 relative z-10">Grounded dynamically in your personal Financial Graph</p>
         </CardHeader>

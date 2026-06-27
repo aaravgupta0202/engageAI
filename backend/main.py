@@ -1,7 +1,7 @@
 """
 FastAPI Backend Application
 
-Orchestrates the EngageAI backend services, exposing endpoints for:
+Orchestrates the engageAI backend services, exposing endpoints for:
 - Persona generation (via Cerebras)
 - Agent execution (LangGraph streamed via SSE)
 - Chat interactions and recommendations
@@ -22,14 +22,14 @@ from llm_adapter import get_llm
 # Ensure tables are created
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="SBI EngageAI API")
+app = FastAPI(title="engageAI API")
 graph_app = create_graph()
 
 # Configure CORS for frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=False,
+    allow_origins=["https://sbiengageai.netlify.app"], 
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -78,7 +78,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama-3.3-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -183,7 +183,7 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
     transactions = "No recent transactions found."
     recommendations = "No active recommendations."
 
-    system_prompt = f"""You are SBI EngageAI, a proactive, helpful financial copilot for the State Bank of India.
+    system_prompt = f"""You are engageAI, a proactive, helpful financial copilot for the State Bank of India.
 You provide intelligent, context-aware answers to user queries.
 
 Customer Profile:

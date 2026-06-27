@@ -1,7 +1,7 @@
 /**
  * Main Application Component
  * 
- * Handles routing across the 5 primary views of EngageAI:
+ * Handles routing across the 5 primary views of engageAI:
  * Landing, Customer Generator, Dashboard, Agent Activity, and Chat.
  * Implements the global navigation header with disabled-state reasoning.
  */
@@ -35,11 +35,9 @@ function App() {
       {!isLanding && (
         <header className="sticky top-0 z-50 glass-panel border-b px-6 py-4 flex justify-between items-center transition-all duration-300">
           <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => handleNavigate('landing')}>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sbi-blue to-cyan-400 flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-105 transition-transform">
-              S
-            </div>
+            <img src="/favicon.png" alt="engageAI Logo" className="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform" />
             <h1 className="text-2xl font-black tracking-tight text-sbi-navy dark:text-white group-hover:opacity-80 transition-opacity">
-              Engage<span className="text-sbi-blue dark:text-cyan-400">AI</span>
+              engage<span className="text-sbi-blue dark:text-cyan-400">AI</span>
             </h1>
           </div>
           
