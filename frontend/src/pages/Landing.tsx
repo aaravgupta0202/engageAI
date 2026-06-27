@@ -1,206 +1,171 @@
-
 import { Button } from '../components/ui/Button';
-import { Search, Brain, Send, ChevronDown, Bot, Zap, Activity, Database, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Layers, Activity, Link, Brain, Search, Send, ArrowRight, Zap, Target, Bot } from 'lucide-react';
 
-/**
- * Landing Page Component
- * Serves as the primary entry point for the engageAI demo.
- * Renders the hero section and the "How it works" explainer.
- */
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
-  const scrollToExplainer = () => {
-    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen text-center animate-in fade-in zoom-in-95 duration-700 overflow-x-hidden">
+    <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white overflow-x-hidden selection:bg-sbi-blue selection:text-white">
       
+      {/* Navigation for Landing Only */}
+      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
+        <div className="flex items-center space-x-3 cursor-pointer group">
+          <div className="w-10 h-10 bg-sbi-blue text-white rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg">S</div>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 group-hover:opacity-80 transition-opacity">
+            engage<span className="text-sbi-blue">AI</span>
+          </h1>
+        </div>
+        <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Our Solutions</span>
+          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
+          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Testimonials</span>
+          <span className="cursor-pointer hover:text-sbi-blue transition-colors">Contact Us</span>
+        </div>
+        <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-6 font-semibold shadow-md shadow-sbi-blue/20">
+          Enquire <ArrowRight size={16} className="ml-2" />
+        </Button>
+      </header>
+
       {/* Hero Section */}
-      <div className="relative flex flex-col items-center justify-center min-h-[90vh] w-full px-4 pt-20">
-        
-        {/* Background glow effects */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-400 opacity-10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-sbi-blue opacity-10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div className="mb-8 relative group cursor-pointer z-10">
-          <div className="absolute -inset-2 bg-gradient-to-r from-cyan-400 via-sbi-blue to-indigo-500 rounded-3xl blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-          <div className="relative w-24 h-24 sm:w-32 sm:h-32 bg-white dark:bg-slate-900 rounded-3xl flex items-center justify-center shadow-2xl border border-slate-100 dark:border-slate-800 transform group-hover:scale-105 transition-transform duration-500">
-            <span className="text-6xl sm:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-br from-sbi-navy to-cyan-500">S</span>
+      <div className="w-full max-w-7xl mx-auto px-6 pt-20 pb-32 relative">
+        <div className="max-w-3xl">
+          <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-6 leading-[1.1]">
+            Turn Customer Data<br />
+            into <span className="text-emerald-500 font-semibold">Sales Success</span>
+          </h1>
+          <p className="text-xl text-slate-600 mb-10 max-w-xl leading-relaxed">
+            Whatever your business size, our autonomous AI system can be customized to help you manage customers, predict life events, and increase efficiency.
+          </p>
+          <div className="flex space-x-4">
+            <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-6 shadow-xl shadow-sbi-blue/20 text-lg font-semibold flex items-center">
+              Try Demo <ArrowRight size={18} className="ml-2" />
+            </Button>
+            <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="rounded-full border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-6 text-lg font-medium flex items-center">
+              View Source <ArrowRight size={18} className="ml-2" />
+            </Button>
           </div>
         </div>
-        
-        <div className="inline-flex items-center space-x-2 bg-slate-100 dark:bg-slate-800/50 rounded-full px-4 py-1.5 mb-8 border border-slate-200 dark:border-slate-700 shadow-sm z-10">
-          <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Hackathon MVP Live</span>
-        </div>
 
-        <h1 className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tight text-slate-900 dark:text-white mb-6 z-10 px-4">
-          Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-sbi-blue via-indigo-500 to-cyan-500">engageAI</span>
-        </h1>
-        
-        <p className="text-lg sm:text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto mb-12 leading-relaxed z-10 px-4 font-medium">
-          An autonomous, multi-agent AI copilot that acts as a proactive, hyper-personalized relationship manager. Built exclusively for the SBI Agentic AI Hackathon.
-        </p>
-
-        {/* Detect -> Reason -> Engage Loop */}
-        <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 md:space-x-8 mb-16 z-10 w-full max-w-2xl px-4">
-          <div className="flex items-center w-full sm:w-auto bg-white/60 dark:bg-slate-800/60 backdrop-blur-md p-4 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm flex-1 justify-center">
-            <Search className="text-sbi-blue w-6 h-6 mr-3 shrink-0" />
-            <span className="font-bold text-slate-800 dark:text-slate-200 text-sm md:text-base">1. Detect</span>
+        {/* Abstract Infinity/Glass Graphic area */}
+        <div className="mt-24 relative w-full h-64 md:h-96 flex items-center justify-center">
+          {/* Abstract Floating UI Elements */}
+          <div className="absolute top-10 left-10 text-sbi-blue font-bold text-2xl md:text-3xl bg-white/80 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl shadow-slate-200/50 transform -rotate-3 animate-pulse">
+            95% Faster
           </div>
-          <div className="hidden sm:block text-slate-300 dark:text-slate-600 shrink-0"><ArrowRight /></div>
-          <div className="flex items-center w-full sm:w-auto bg-white/60 dark:bg-slate-800/60 backdrop-blur-md p-4 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm flex-1 justify-center">
-            <Brain className="text-indigo-500 w-6 h-6 mr-3 shrink-0" />
-            <span className="font-bold text-slate-800 dark:text-slate-200 text-sm md:text-base">2. Reason</span>
-          </div>
-          <div className="hidden sm:block text-slate-300 dark:text-slate-600 shrink-0"><ArrowRight /></div>
-          <div className="flex items-center w-full sm:w-auto bg-white/60 dark:bg-slate-800/60 backdrop-blur-md p-4 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm flex-1 justify-center">
-            <Send className="text-cyan-500 w-6 h-6 mr-3 shrink-0" />
-            <span className="font-bold text-slate-800 dark:text-slate-200 text-sm md:text-base">3. Engage</span>
-          </div>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto px-4 z-10">
-          <Button 
-            onClick={() => onNavigate('generator')} 
-            className="w-full sm:w-auto px-10 py-7 text-lg rounded-full shadow-xl shadow-sbi-blue/20 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:-translate-y-1 transition-all duration-300 text-white font-bold"
-          >
-            Launch the Demo
-          </Button>
-          <Button 
-            variant="outline" 
-            onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')}
-            className="w-full sm:w-auto px-10 py-7 text-lg rounded-full border-2 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300 font-semibold"
-          >
-            View Source Code
-          </Button>
-        </div>
-
-        <div className="absolute bottom-10 animate-bounce cursor-pointer text-slate-400 hover:text-sbi-blue transition-colors z-10 hidden md:block" onClick={scrollToExplainer}>
-          <p className="text-sm font-bold uppercase tracking-widest mb-2">Explore the Platform</p>
-          <ChevronDown className="w-8 h-8 mx-auto" />
-        </div>
-      </div>
-
-      {/* Agentic AI Explanation */}
-      <div className="w-full bg-slate-50 dark:bg-slate-900 border-y border-slate-200 dark:border-slate-800 py-24 px-4 relative overflow-hidden">
-        <div className="max-w-6xl mx-auto text-left relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-sm font-black tracking-widest text-sbi-blue uppercase mb-3">The Paradigm Shift</h2>
-            <h3 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">Why Agentic AI?</h3>
+          <div className="absolute bottom-10 right-10 text-emerald-500 font-bold text-2xl md:text-3xl bg-white/80 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl shadow-slate-200/50 transform rotate-3 animate-pulse" style={{animationDelay: '1s'}}>
+            2x Growth
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-stretch">
-            {/* Chatbot Card */}
-            <div className="glass-card p-8 md:p-10 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 shadow-sm relative group h-full">
-              <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-2xl flex items-center justify-center mb-8">
-                <Bot className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-200 mb-4">Traditional Chatbots</h3>
-              <p className="text-slate-600 dark:text-slate-400 font-medium mb-8 leading-relaxed text-lg">
-                Reactive systems that sit passively in a menu, waiting for the customer to already know what financial product they need.
-              </p>
-              
-              <div className="bg-slate-100 dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <div className="flex items-center space-x-3 text-slate-500 font-mono text-sm overflow-x-auto pb-2">
-                  <span className="px-4 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm whitespace-nowrap">1. Ask</span>
-                  <span className="text-slate-300 dark:text-slate-600 shrink-0">→</span>
-                  <span className="px-4 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm whitespace-nowrap">2. Answer</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* EngageAI Card */}
-            <div className="glass-card p-8 md:p-10 rounded-3xl border-2 border-sbi-blue/30 bg-blue-50/50 dark:bg-sbi-blue/5 shadow-xl shadow-sbi-blue/10 relative overflow-hidden h-full transform lg:-translate-y-4">
-              <div className="absolute -top-24 -right-24 w-64 h-64 bg-cyan-400 opacity-20 rounded-full blur-[80px]"></div>
-              
-              <div className="w-16 h-16 bg-gradient-to-br from-sbi-blue to-cyan-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg">
-                <Zap className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-sbi-navy dark:text-cyan-400 mb-4">engageAI</h3>
-              <p className="text-slate-700 dark:text-slate-300 font-medium mb-8 leading-relaxed text-lg">
-                A proactive, autonomous system that monitors behavior, anticipates life events, and acts before the customer has to ask.
-              </p>
-              
-              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-2xl border border-sbi-blue/20 shadow-inner">
-                <div className="flex flex-wrap gap-2 text-sbi-blue dark:text-cyan-400 font-mono text-xs md:text-sm items-center">
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Observe</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Analyze</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Detect</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Reason</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Recommend</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Act</span> <span className="text-slate-300">→</span>
-                  <span className="px-3 py-2 bg-white dark:bg-slate-800 rounded-lg shadow-sm font-bold border border-slate-100 dark:border-slate-700">Follow-up</span>
-                </div>
-              </div>
-            </div>
+          {/* The Central Shape (simulating the glossy 3D shape from the mockup) */}
+          <div className="w-full max-w-3xl h-32 md:h-48 rounded-full bg-gradient-to-r from-slate-100 via-white to-slate-100 shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.1)] border-2 border-white/50 relative overflow-hidden backdrop-blur-3xl flex items-center justify-center">
+             <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/10 via-transparent to-indigo-500/10 mix-blend-overlay"></div>
+             <div className="absolute w-[200%] h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sbi-blue/5 via-transparent to-transparent animate-[spin_10s_linear_infinite]"></div>
+             <span className="text-4xl md:text-6xl font-black text-slate-200 opacity-50 tracking-widest">engageAI</span>
+          </div>
+        </div>
+
+        {/* Logos Bar */}
+        <div className="mt-20 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-6">
+          <div className="text-sm font-medium text-slate-500">Trusted by visionary businesses</div>
+          <div className="flex space-x-6 md:space-x-12 text-sm font-semibold text-slate-700">
+             <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2"/> Collaborative AI</div>
+             <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2"/> Data-Driven Decisions</div>
+             <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2"/> Task Automation</div>
           </div>
         </div>
       </div>
 
-      {/* Detailed Features / How it Works Explainer */}
-      <div id="how-it-works" className="w-full max-w-6xl mx-auto py-24 px-4 text-left">
-        <div className="text-center mb-20">
-          <h2 className="text-sm font-black tracking-widest text-sbi-blue uppercase mb-3">Core Architecture</h2>
-          <h3 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white">How engageAI Works</h3>
-        </div>
+      {/* Massive Blue Statistics Banner */}
+      <div className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[40px] p-12 md:p-20 text-white shadow-2xl relative overflow-hidden mb-32">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#0A1931]/20 to-transparent rounded-full -translate-y-1/4 translate-x-1/4 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#5E95FF]/30 to-transparent rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { 
-              title: 'Synthetic Generation', 
-              desc: 'Because we don\'t use real SBI data, we built a 2-pass Cerebras LLM generator to create mathematically realistic personas with hidden "life events" embedded in their transactions.', 
-              icon: <Database className="w-8 h-8 text-indigo-500" />,
-              features: ['120B parameter models', 'Statistical variance', 'Embedded ground-truth']
-            },
-            { 
-              title: 'LangGraph Orchestration', 
-              desc: 'A sequential pipeline of 6 specialized AI agents running on Groq (Llama-3). They analyze behavior, detect events, map opportunities, and draft personalized engagement plans.', 
-              icon: <Layers className="w-8 h-8 text-sbi-blue" />,
-              features: ['6 Specialized Agents', 'Deterministic workflows', 'FastAPI backend']
-            },
-            { 
-              title: 'Explainable AI UI', 
-              desc: 'Every recommendation is completely traceable. The Agent Activity Center streams the LLM\'s internal reasoning live to the screen, proving it\'s not a hard-coded script.', 
-              icon: <Activity className="w-8 h-8 text-emerald-500" />,
-              features: ['Server-Sent Events', 'Audit trail graphs', 'Live rendering']
-            }
-          ].map((feature, i) => (
-            <div key={i} className="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 hover:border-sbi-blue/30 transition-all duration-300 shadow-lg hover:shadow-xl group flex flex-col h-full">
-              <div className="mb-6 p-4 bg-slate-50 dark:bg-slate-800 inline-block rounded-2xl group-hover:scale-110 transition-transform">
-                {feature.icon}
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{feature.title}</h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg mb-8 flex-1">
-                {feature.desc}
-              </p>
-              
-              <ul className="space-y-3 mt-auto">
-                {feature.features.map((item, idx) => (
-                  <li key={idx} className="flex items-center text-slate-700 dark:text-slate-300 font-medium">
-                    <CheckCircle2 size={18} className="text-emerald-500 mr-3 shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 items-start">
+          <div className="bg-[#0A1931]/40 backdrop-blur-md p-8 rounded-3xl border border-white/10 md:col-span-1 h-full shadow-inner">
+            <div className="text-5xl font-black mb-2">#1</div>
+            <div className="text-xl font-bold mb-4">Agentic AI Platform</div>
+            <p className="text-sm text-blue-100/80 leading-relaxed font-medium">
+              We provide the world's leading autonomous agents to help organizations manage customers, boost sales, and drive growth seamlessly.
+            </p>
+          </div>
+          <div className="flex flex-col justify-center h-full">
+            <div className="text-5xl md:text-6xl font-light tracking-tight mb-3">6.5M+</div>
+            <p className="text-blue-100 font-medium text-sm md:text-base pr-8">Synthetic customer interactions managed dynamically via LangGraph.</p>
+          </div>
+          <div className="flex flex-col justify-center h-full">
+            <div className="text-5xl md:text-6xl font-light tracking-tight mb-3">6+</div>
+            <p className="text-blue-100 font-medium text-sm md:text-base pr-8">Specialized AI agents running sequentially in the orchestration pipeline.</p>
+          </div>
+          <div className="flex flex-col justify-center h-full">
+            <div className="text-5xl md:text-6xl font-light tracking-tight mb-3">120B</div>
+            <p className="text-blue-100 font-medium text-sm md:text-base pr-8">Parameter models powered by Cerebras ensuring rapid, human-like reasoning.</p>
+          </div>
         </div>
       </div>
-      
-      {/* Final CTA Footer */}
-      <div className="w-full bg-sbi-navy py-20 px-4 text-center border-t-8 border-sbi-blue">
-        <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Ready to see it in action?</h2>
-        <p className="text-indigo-200 text-xl max-w-2xl mx-auto mb-10">Step into the shoes of the AI and run the full digital engagement cycle on a synthetic persona.</p>
-        <Button 
-          onClick={() => onNavigate('generator')} 
-          className="px-12 py-7 text-lg md:text-xl rounded-full shadow-2xl shadow-cyan-500/20 bg-gradient-to-r from-cyan-400 to-sbi-blue hover:from-cyan-300 hover:to-cyan-500 transition-all duration-300 text-sbi-navy font-black transform hover:scale-105"
-        >
-          Launch the Experience
-        </Button>
+
+      {/* Our Capabilities Section */}
+      <div className="w-full max-w-7xl mx-auto px-6 pb-40">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
+          
+          <div className="md:col-span-5 md:pr-12">
+            <h2 className="text-5xl font-medium text-slate-900 mb-8 leading-[1.2]">
+              Our<br />Capabilities
+            </h2>
+            <p className="text-lg text-slate-600 leading-relaxed font-medium">
+              We offer a full array of AI-powered services to help you maximize customer engagement and revenue. Observe, analyze, and act autonomously.
+            </p>
+          </div>
+
+          <div className="md:col-span-7 space-y-16">
+            
+            {/* Capability 1 */}
+            <div className="flex items-start">
+              <div className="w-16 h-16 shrink-0 bg-blue-50 text-sbi-blue rounded-full flex items-center justify-center mr-8">
+                <Search size={32} strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">Customer Insights</h3>
+                <p className="text-slate-600 font-medium leading-relaxed mb-4">
+                  Gain a 360° view of your customers with real-time analytics. Identify hidden life events (like salary hikes or loan payoffs) from raw transaction data.
+                </p>
+                <button className="flex items-center text-sm font-bold text-sbi-blue hover:text-sbi-navy transition-colors">
+                  Read more <ArrowRight size={14} className="ml-1" />
+                </button>
+              </div>
+            </div>
+
+            {/* Capability 2 */}
+            <div className="flex items-start">
+              <div className="w-16 h-16 shrink-0 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mr-8">
+                <Bot size={32} strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">Autonomous Agents</h3>
+                <p className="text-slate-600 font-medium leading-relaxed mb-4">
+                  Automate lead tracking and follow-ups. Our LangGraph pipeline detects opportunities and instantly drafts hyper-personalized engagement plans.
+                </p>
+                <button className="flex items-center text-sm font-bold text-indigo-500 hover:text-indigo-800 transition-colors">
+                  Read more <ArrowRight size={14} className="ml-1" />
+                </button>
+              </div>
+            </div>
+
+            {/* Capability 3 */}
+            <div className="flex items-start">
+              <div className="w-16 h-16 shrink-0 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mr-8">
+                <Link size={32} strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-3">Seamless Integration</h3>
+                <p className="text-slate-600 font-medium leading-relaxed mb-4">
+                  Easily connect the multi-agent AI brain to your existing data lakes and CRMs. Explainable UI components ensure every AI decision is completely transparent.
+                </p>
+                <button className="flex items-center text-sm font-bold text-emerald-500 hover:text-emerald-700 transition-colors">
+                  Read more <ArrowRight size={14} className="ml-1" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
 
     </div>

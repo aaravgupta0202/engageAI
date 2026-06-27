@@ -15,6 +15,7 @@ import AgentActivityCenter from './pages/AgentActivityCenter';
 import RecommendationsCenter from './pages/RecommendationsCenter';
 import ActionCenter from './pages/ActionCenter';
 import AiChat from './pages/AiChat';
+import Footer from './components/Footer';
 
 function App() {
   const navigate = useNavigate();
@@ -31,15 +32,15 @@ function App() {
   const currentPage = location.pathname.split('/')[1] || 'landing';
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-slate-50 to-slate-200 dark:from-slate-900 dark:via-slate-950 dark:to-slate-900 transition-colors duration-500">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans transition-colors duration-500 selection:bg-sbi-blue selection:text-white">
       
       {/* Premium Glass Header */}
       {!isLanding && (
-        <header className="sticky top-0 z-50 glass-panel border-b px-6 py-4 flex justify-between items-center transition-all duration-300">
+        <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4 flex justify-between items-center transition-all duration-300 shadow-sm">
           <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => handleNavigate('landing')}>
-            <img src="/favicon.png" alt="engageAI Logo" className="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform" />
-            <h1 className="text-2xl font-black tracking-tight text-sbi-navy dark:text-white group-hover:opacity-80 transition-opacity">
-              engage<span className="text-sbi-blue dark:text-cyan-400">AI</span>
+            <div className="w-10 h-10 bg-sbi-blue text-white rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg group-hover:scale-105 transition-transform">S</div>
+            <h1 className="text-2xl font-black tracking-tight text-sbi-navy group-hover:opacity-80 transition-opacity">
+              engage<span className="text-sbi-blue">AI</span>
             </h1>
           </div>
           
@@ -51,10 +52,10 @@ function App() {
                   <button
                     onClick={() => handleNavigate(page, activeCustomerId || undefined)}
                     disabled={isDisabled}
-                    className={`flex items-center space-x-1 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                    className={`flex items-center space-x-1 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
                       currentPage === page 
-                        ? 'bg-sbi-blue text-white shadow-md scale-105' 
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed'
+                        ? 'bg-sbi-blue text-white shadow-md' 
+                        : 'text-slate-600 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed'
                     }`}
                   >
                     {isDisabled && <Lock size={14} className="opacity-70 mr-1" />}
@@ -72,9 +73,9 @@ function App() {
         </header>
       )}
 
-      {/* Main Content Area with elegant padding */}
-      <main className={`transition-all duration-500 ease-in-out ${!isLanding ? 'p-6 max-w-7xl mx-auto' : ''}`}>
-        <div className="animate-in fade-in zoom-in-95 duration-500">
+      {/* Main Content Area */}
+      <main className={`flex-1 transition-all duration-500 ease-in-out ${!isLanding ? 'p-6 max-w-7xl mx-auto w-full' : ''}`}>
+        <div className="animate-in fade-in zoom-in-95 duration-500 h-full">
           <Routes>
             <Route path="/" element={<Landing onNavigate={handleNavigate} />} />
             <Route path="/generator" element={<CustomerGenerator onNavigate={handleNavigate} />} />
@@ -86,6 +87,9 @@ function App() {
           </Routes>
         </div>
       </main>
+
+      {/* Global Footer */}
+      <Footer />
 
     </div>
   );

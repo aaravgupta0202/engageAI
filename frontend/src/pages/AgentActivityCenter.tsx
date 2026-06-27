@@ -2,6 +2,38 @@ import { useEffect, useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
+const renderParsedData = (data: any) => {
+  if (typeof data !== 'object' || data === null) {
+    return <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{String(data)}</p>;
+  }
+
+  return (
+    <div className="space-y-3 mt-3">
+      {Object.entries(data).map(([key, value], idx) => (
+        <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+          <div className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">{key.replace(/_/g, ' ')}</div>
+          {Array.isArray(value) ? (
+            <ul className="space-y-2">
+              {value.map((v, i) => (
+                <li key={i} className="text-sm flex items-start">
+                  <span className="text-sbi-blue dark:text-cyan-500 mr-2 mt-0.5 font-bold">•</span>
+                  <span className="text-slate-700 dark:text-slate-300">
+                    {typeof v === 'object' ? (v.event_type ? `${v.event_type} (Conf: ${(v.confidence * 100).toFixed(0)}%) - ${v.reasoning}` : JSON.stringify(v)) : String(v)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="text-sm text-slate-700 dark:text-slate-300">
+              {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export default function AgentActivityCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [logs, setLogs] = useState<any[]>([]);
   const [isDone, setIsDone] = useState(false);
@@ -63,9 +95,7 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
             </div>
             <Card className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] glass-card border-0 shadow-md p-5 transition-transform group-hover:-translate-y-1">
               <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{(log.agent || log.type || 'system').replace('_', ' ')}</div>
-              <pre className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg whitespace-pre-wrap break-words text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
-                {JSON.stringify(log.state_summary || log.data || log, null, 2)}
-              </pre>
+              {renderParsedData(log.state_summary || log.data || log)}
             </Card>
           </div>
         ))}
