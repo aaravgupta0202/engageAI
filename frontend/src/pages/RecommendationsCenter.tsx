@@ -108,8 +108,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                     <CheckCircle2 size={18} className="mr-2" /> Accept
                   </Button>
                   <Button 
-                    variant="outline"
-                    className="flex-1 md:w-40 rounded-full border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center justify-center"
+                    className="flex-1 md:w-40 rounded-full shadow-md bg-red-500 hover:bg-red-600 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                   >
                     <XCircle size={18} className="mr-2" /> Decline
                   </Button>

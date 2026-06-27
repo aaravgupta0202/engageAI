@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { Mic, Paperclip } from 'lucide-react';
 
 export default function AiChat({ customerId }: { customerId: string | null }) {
   const [messages, setMessages] = useState<{role: string, content: string, reasoning?: string[]}[]>([]);
@@ -77,10 +78,9 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
         <CardHeader className="bg-gradient-to-r from-sbi-navy to-indigo-900 text-white p-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-sbi-blue opacity-20 rounded-full blur-3xl -mr-10 -mt-10 animate-pulse"></div>
           <CardTitle className="text-2xl font-bold flex items-center relative z-10">
-            <span className="bg-white/20 p-2 rounded-lg mr-3 backdrop-blur-sm">🤖</span> 
-            engageAI Chat
+            <img src="/favicon.png" alt="engageAI Logo" className="h-14 w-auto object-contain -my-2 scale-125" />
           </CardTitle>
-          <p className="text-sm text-indigo-200 mt-1 relative z-10">Grounded dynamically in your personal Financial Graph</p>
+          <p className="text-sm text-indigo-200 mt-2 relative z-10">Grounded dynamically in your personal Financial Graph</p>
         </CardHeader>
         
         <CardContent className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
@@ -124,17 +124,25 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
           <div ref={messagesEndRef} />
         </CardContent>
         
-        <div className="p-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex space-x-3 items-center">
-          <input 
-            type="text" 
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            disabled={isLoading || isFetchingHistory}
-            className="flex-1 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full px-6 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
-            placeholder="Ask about your financial plan..."
-          />
-          <Button onClick={handleSend} disabled={isLoading || isFetchingHistory} className="rounded-full px-8 py-6 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transition-all duration-300 transform hover:scale-105 font-bold text-white">
+        <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex space-x-2 items-center">
+          <Button variant="ghost" className="rounded-full w-12 h-12 p-0 text-slate-400 hover:text-sbi-blue hover:bg-sbi-blue/10 shrink-0">
+            <Paperclip size={20} />
+          </Button>
+          <div className="flex-1 relative flex items-center">
+            <input 
+              type="text" 
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              disabled={isLoading || isFetchingHistory}
+              className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
+              placeholder="Ask about your financial plan..."
+            />
+            <button className="absolute right-3 p-2 text-slate-400 hover:text-red-500 transition-colors">
+              <Mic size={20} />
+            </button>
+          </div>
+          <Button onClick={handleSend} disabled={isLoading || isFetchingHistory} className="rounded-full px-6 md:px-8 py-6 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transition-all duration-300 transform hover:scale-105 font-bold text-white shrink-0">
             {isLoading ? '...' : 'Send'}
           </Button>
         </div>
