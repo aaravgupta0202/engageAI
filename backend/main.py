@@ -23,6 +23,15 @@ from llm_adapter import get_llm
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="engageAI API")
+
+@app.on_event("startup")
+def startup_event():
+    db = next(get_db())
+    if db.query(models.ProductCatalog).count() < 10:
+        print("Auto-seeding database because catalog has less than 10 products...")
+        import seed
+        seed.seed_data()
+
 graph_app = create_graph()
 
 # Configure CORS for frontend access
