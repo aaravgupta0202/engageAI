@@ -1,0 +1,639 @@
+[
+  {
+    "id": "p_73012bfb",
+    "name": "SBI Savings Account",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Savings Account. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_22ce9db7",
+    "name": "SBI Savings Plus",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Savings Plus. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_c8c84188",
+    "name": "SBI Salary Account",
+    "category": "save",
+    "eligibility_rules": {
+      "salaried": true
+    },
+    "description": "SBI Salary Account. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_e4d10e39",
+    "name": "SBI Minor Account",
+    "category": "save",
+    "eligibility_rules": {
+      "max_age": 25
+    },
+    "description": "SBI Minor Account. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_d2ee7f52",
+    "name": "SBI BSBDA",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI BSBDA. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_2c58ebb0",
+    "name": "SBI NRE",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI NRE. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_05b991f3",
+    "name": "SBI NRO",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI NRO. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_de2e30c2",
+    "name": "SBI Current Account",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Current Account. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_a7492cba",
+    "name": "SBI MOD",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI MOD. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_884aff28",
+    "name": "SBI Annuity Deposit",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Annuity Deposit. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_a6fcd1e2",
+    "name": "SBI Tax Saver FD",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Tax Saver FD. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_9b9ba452",
+    "name": "SBI Amrit Vrishti",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Amrit Vrishti. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_d8feb4d1",
+    "name": "SBI Sarvottam",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Sarvottam. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_aa282396",
+    "name": "SBI WeCare",
+    "category": "save",
+    "eligibility_rules": {
+      "min_age": 60
+    },
+    "description": "SBI WeCare. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_5e7e6466",
+    "name": "SBI Green Deposit",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Green Deposit. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_1a323af3",
+    "name": "SBI Bulk Deposit",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Bulk Deposit. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_564f17c7",
+    "name": "SBI RD",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI RD. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_466696a2",
+    "name": "SBI Har Ghar Lakhpati RD",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI Har Ghar Lakhpati RD. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_7feb997f",
+    "name": "SBI PPF",
+    "category": "save",
+    "eligibility_rules": {},
+    "description": "SBI PPF. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_0ad8bc08",
+    "name": "SBI Sukanya",
+    "category": "save",
+    "eligibility_rules": {
+      "max_age": 25
+    },
+    "description": "SBI Sukanya. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_44809868",
+    "name": "SBI SCSS",
+    "category": "save",
+    "eligibility_rules": {
+      "min_age": 60
+    },
+    "description": "SBI SCSS. A premium save product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_d31b8c86",
+    "name": "SBI Regular Home Loan",
+    "category": "borrow",
+    "eligibility_rules": {
+      "min_income": 40000,
+      "min_age": 21
+    },
+    "description": "SBI Regular Home Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_d4638606",
+    "name": "SBI MaxGain",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI MaxGain. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_f255382e",
+    "name": "SBI Shaurya",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Shaurya. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_d8a1ba67",
+    "name": "SBI Privilege",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Privilege. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_46586a9d",
+    "name": "SBI Realty",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Realty. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_e74e2d4d",
+    "name": "SBI Home Top-Up",
+    "category": "borrow",
+    "eligibility_rules": {
+      "min_income": 40000,
+      "min_age": 21
+    },
+    "description": "SBI Home Top-Up. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_6477d8eb",
+    "name": "SBI Home Renovation",
+    "category": "borrow",
+    "eligibility_rules": {
+      "min_income": 40000,
+      "min_age": 21
+    },
+    "description": "SBI Home Renovation. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_850e9c18",
+    "name": "SBI Plot Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Plot Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_90970136",
+    "name": "SBI Balance Transfer",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Balance Transfer. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_f9699762",
+    "name": "SBI Xpress Credit",
+    "category": "borrow",
+    "eligibility_rules": {
+      "salaried": true
+    },
+    "description": "SBI Xpress Credit. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_6657a3c6",
+    "name": "SBI Xpress Power",
+    "category": "borrow",
+    "eligibility_rules": {
+      "salaried": true
+    },
+    "description": "SBI Xpress Power. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_81ee7e64",
+    "name": "SBI Pension Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Pension Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_c23550f2",
+    "name": "SBI Pre-approved PL",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Pre-approved PL. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_7956ca6b",
+    "name": "SBI Gold Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Gold Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_28f89937",
+    "name": "SBI Car Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Car Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_2de462bf",
+    "name": "SBI Green Car Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Green Car Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_8ba124e8",
+    "name": "SBI Two Wheeler",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Two Wheeler. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_0399370a",
+    "name": "SBI EV Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI EV Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_239709ec",
+    "name": "SBI Loyalty Scheme",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Loyalty Scheme. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_dd9a4c7a",
+    "name": "SBI Scholar Loan",
+    "category": "borrow",
+    "eligibility_rules": {
+      "max_age": 25
+    },
+    "description": "SBI Scholar Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_7db0e800",
+    "name": "SBI Student Loan",
+    "category": "borrow",
+    "eligibility_rules": {
+      "max_age": 25
+    },
+    "description": "SBI Student Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_9bc327b8",
+    "name": "SBI Overseas Education",
+    "category": "borrow",
+    "eligibility_rules": {
+      "max_age": 25
+    },
+    "description": "SBI Overseas Education. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_debf99f0",
+    "name": "SBI Skill Loan",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Skill Loan. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_ed1a7fee",
+    "name": "SBI Loan Against FD",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Loan Against FD. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_56382e01",
+    "name": "SBI Loan Against Securities",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Loan Against Securities. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_9637f9f0",
+    "name": "SBI Loan Against Mutual Funds",
+    "category": "borrow",
+    "eligibility_rules": {},
+    "description": "SBI Loan Against Mutual Funds. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_a5297bc2",
+    "name": "SBI Loan Against Property",
+    "category": "borrow",
+    "eligibility_rules": {
+      "min_income": 40000,
+      "min_age": 21
+    },
+    "description": "SBI Loan Against Property. A premium borrow product offering competitive rates and benefits. Flexible repayment options and fast disbursal."
+  },
+  {
+    "id": "p_49b36c6c",
+    "name": "SBI SIP",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI SIP. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_f28a029a",
+    "name": "SBI Mutual Funds",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Mutual Funds. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_06674d92",
+    "name": "SBI Large Cap Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Large Cap Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_37b0f038",
+    "name": "SBI Mid Cap Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Mid Cap Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_baa85841",
+    "name": "SBI Bluechip Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Bluechip Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_d2cbaf19",
+    "name": "SBI Contra Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Contra Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_0acf5aff",
+    "name": "SBI ELSS",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI ELSS. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_eb8cf68a",
+    "name": "SBI Hybrid Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Hybrid Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_2a467040",
+    "name": "SBI Debt Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Debt Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_14b48d76",
+    "name": "SBI Liquid Fund",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Liquid Fund. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_7d74fe56",
+    "name": "SBI NPS",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI NPS. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_b463ae2f",
+    "name": "SBI RBI Bonds",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI RBI Bonds. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_706b28f7",
+    "name": "SBI SGB",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI SGB. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_fd15d407",
+    "name": "SBI Demat",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Demat. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_13c452a5",
+    "name": "SBI Trading Account",
+    "category": "invest",
+    "eligibility_rules": {},
+    "description": "SBI Trading Account. A premium invest product offering competitive rates and benefits. Grow your wealth with our expert-managed funds and bonds."
+  },
+  {
+    "id": "p_79ad2383",
+    "name": "SBI Health Insurance",
+    "category": "protect",
+    "eligibility_rules": {},
+    "description": "SBI Health Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_b2b75a56",
+    "name": "SBI Life Insurance",
+    "category": "protect",
+    "eligibility_rules": {},
+    "description": "SBI Life Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_4fe12ed9",
+    "name": "SBI Travel Insurance",
+    "category": "protect",
+    "eligibility_rules": {},
+    "description": "SBI Travel Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_5e4ebe87",
+    "name": "SBI Motor Insurance",
+    "category": "protect",
+    "eligibility_rules": {},
+    "description": "SBI Motor Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_9ae4ba3d",
+    "name": "SBI Home Insurance",
+    "category": "protect",
+    "eligibility_rules": {
+      "min_income": 40000,
+      "min_age": 21
+    },
+    "description": "SBI Home Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_439dc3d7",
+    "name": "SBI Accident Insurance",
+    "category": "protect",
+    "eligibility_rules": {},
+    "description": "SBI Accident Insurance. A premium protect product offering competitive rates and benefits. Comprehensive coverage for you and your family."
+  },
+  {
+    "id": "p_1a54fa9f",
+    "name": "SBI Cashback Card",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Cashback Card. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_ddae41b4",
+    "name": "SBI SimplySAVE",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI SimplySAVE. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_d45d1f06",
+    "name": "SBI SimplyCLICK",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI SimplyCLICK. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_24ac0509",
+    "name": "SBI Elite",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Elite. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_3321ec75",
+    "name": "SBI Aurum",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Aurum. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_45c48714",
+    "name": "SBI Prime",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Prime. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_03b73c4f",
+    "name": "SBI BPCL Octane",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI BPCL Octane. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_51e812f7",
+    "name": "SBI IRCTC",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI IRCTC. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_0c8fb7e7",
+    "name": "SBI Vistara",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Vistara. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_ad848d40",
+    "name": "SBI Miles",
+    "category": "cards",
+    "eligibility_rules": {},
+    "description": "SBI SBI Miles. A premium cards product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_c012edc8",
+    "name": "SBI YONO",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI YONO. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_99581508",
+    "name": "SBI YONO Cash",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI YONO Cash. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_2cbc3492",
+    "name": "SBI UPI",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI UPI. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_7820e953",
+    "name": "SBI NEFT",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI NEFT. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_5d80554d",
+    "name": "SBI RTGS",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI RTGS. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_18761866",
+    "name": "SBI IMPS",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI IMPS. A premium digital product offering competitive rates and benefits."
+  },
+  {
+    "id": "p_72f7a7a6",
+    "name": "SBI Bill Pay",
+    "category": "digital",
+    "eligibility_rules": {},
+    "description": "SBI Bill Pay. A premium digital product offering competitive rates and benefits."
+  }
+]

@@ -1,20 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Mic, Paperclip } from 'lucide-react';
+import { Mic, Paperclip, Copy, Edit2, Check } from 'lucide-react';
 
 export default function AiChat({ customerId }: { customerId: string | null }) {
   const [messages, setMessages] = useState<{role: string, content: string, reasoning?: string[]}[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingHistory, setIsFetchingHistory] = useState(true);
+  const [isListening, setIsListening] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!customerId) return;
     
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    // Fetch chat history
     fetch(`${API_URL}/customers/${customerId}/chat`)
       .then(res => res.json())
       .then(data => {
@@ -72,6 +75,61 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
     }
   };
 
+  const handleMicClick = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert("Speech recognition is not supported in your browser.");
+      return;
+    }
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(prev => prev ? prev + " " + transcript : transcript);
+    };
+    recognition.onerror = (e: any) => {
+      console.error(e);
+      setIsListening(false);
+    };
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Strict 500KB limit
+    if (file.size > 500 * 1024) {
+      alert("File exceeds 500KB size limit to protect API quotas. Please upload a smaller text document.");
+      if(fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result;
+      if (typeof text === 'string') {
+        setInput(prev => prev + `\n\n[Attached File Content from ${file.name}]:\n${text}`);
+      }
+    };
+    reader.readAsText(file);
+    if(fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const copyToClipboard = (text: string, index: number) => {
+    navigator.clipboard.writeText(text);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 2000);
+  };
+
+  const editMessage = (text: string) => {
+    setInput(text);
+  };
+
   return (
     <div className="max-w-4xl mx-auto flex flex-col h-[80vh] animate-in slide-in-from-bottom-4 duration-500">
       <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl">
@@ -89,8 +147,28 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
           ) : (
             messages.map((m, i) => (
               <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
-                <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm backdrop-blur-sm ${m.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
-                  {m.content}
+                <div className="flex items-center space-x-2 group/message">
+                  {m.role === 'assistant' && (
+                    <div className="opacity-0 group-hover/message:opacity-100 transition-opacity">
+                      <button onClick={() => copyToClipboard(m.content, i)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Copy response">
+                        {copiedIndex === i ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      </button>
+                    </div>
+                  )}
+                  
+                  <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${m.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
+                    {m.content.split('\n').map((line, lIdx) => (
+                      <span key={lIdx}>{line}<br/></span>
+                    ))}
+                  </div>
+
+                  {m.role === 'user' && (
+                    <div className="opacity-0 group-hover/message:opacity-100 transition-opacity">
+                      <button onClick={() => editMessage(m.content)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Edit message">
+                        <Edit2 size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 
                 {m.reasoning && m.reasoning.length > 0 && (
@@ -125,7 +203,14 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
         </CardContent>
         
         <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex space-x-2 items-center">
-          <Button variant="ghost" className="rounded-full w-12 h-12 p-0 text-slate-400 hover:text-sbi-blue hover:bg-sbi-blue/10 shrink-0">
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            onChange={handleFileChange} 
+            className="hidden" 
+            accept=".txt,.csv,.json,.md" 
+          />
+          <Button variant="ghost" onClick={() => fileInputRef.current?.click()} className="rounded-full w-12 h-12 p-0 text-slate-400 hover:text-sbi-blue hover:bg-sbi-blue/10 shrink-0">
             <Paperclip size={20} />
           </Button>
           <div className="flex-1 relative flex items-center">
@@ -138,7 +223,11 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
               className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
               placeholder="Ask about your financial plan..."
             />
-            <button className="absolute right-3 p-2 text-slate-400 hover:text-red-500 transition-colors">
+            <button 
+              onClick={handleMicClick}
+              className={`absolute right-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
+              title="Speech to Text"
+            >
               <Mic size={20} />
             </button>
           </div>

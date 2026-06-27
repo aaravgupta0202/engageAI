@@ -15,6 +15,7 @@ import AgentActivityCenter from './pages/AgentActivityCenter';
 import RecommendationsCenter from './pages/RecommendationsCenter';
 import ActionCenter from './pages/ActionCenter';
 import AiChat from './pages/AiChat';
+import ProductCatalog from './pages/ProductCatalog';
 import Footer from './components/Footer';
 
 function App() {
@@ -42,8 +43,8 @@ function App() {
           </div>
           
           <nav className="flex space-x-1">
-            {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat'].map((page) => {
-              const isDisabled = !activeCustomerId && page !== 'generator';
+            {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat', 'catalog'].map((page) => {
+              const isDisabled = !activeCustomerId && page !== 'generator' && page !== 'catalog';
               return (
                 <div key={page} className="relative group inline-block">
                   <button
@@ -81,6 +82,7 @@ function App() {
             <Route path="/recommendations" element={<RecommendationsCenter customerId={activeCustomerId} onNavigate={handleNavigate} />} />
             <Route path="/actions" element={<ActionCenter customerId={activeCustomerId} onNavigate={handleNavigate} />} />
             <Route path="/chat" element={<AiChat customerId={activeCustomerId} />} />
+            <Route path="/catalog" element={<ProductCatalog />} />
           </Routes>
         </div>
       </main>

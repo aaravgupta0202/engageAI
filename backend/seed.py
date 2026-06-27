@@ -39,15 +39,10 @@ def seed_data():
         db.add(persona)
 
     print("Seeding Product Catalog...")
-    products = [
-        {"id": "p_sip", "name": "Mutual Fund SIP", "category": "invest", "eligibility_rules": {"min_income": 20000}, "description": "Systematic Investment Plan for wealth creation."},
-        {"id": "p_hl", "name": "SBI Home Loan", "category": "borrow", "eligibility_rules": {"min_income": 40000}, "description": "Home loan with attractive interest rates."},
-        {"id": "p_ti", "name": "SBI Life - eShield (Term Insurance)", "category": "protect", "eligibility_rules": {"min_age": 18}, "description": "Pure term insurance for life protection."},
-        {"id": "p_hi", "name": "SBI General Health Insurance", "category": "protect", "eligibility_rules": {}, "description": "Comprehensive health coverage for family."},
-        {"id": "p_fd", "name": "SBI Fixed Deposit", "category": "save", "eligibility_rules": {}, "description": "Safe savings with assured returns."},
-        {"id": "p_travel", "name": "SBI General Travel Insurance", "category": "protect", "eligibility_rules": {}, "description": "Coverage against travel-related emergencies."},
-        {"id": "p_rd_child", "name": "Child Education RD", "category": "save", "eligibility_rules": {}, "description": "Recurring deposit structured for child education goals."}
-    ]
+    import os
+    catalog_path = os.path.join(os.path.dirname(__file__), "catalog.json")
+    with open(catalog_path, "r") as f:
+        products = json.load(f)
 
     for prod in products:
         product = ProductCatalog(

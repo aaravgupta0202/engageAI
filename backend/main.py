@@ -42,6 +42,11 @@ def get_personas(db: Session = Depends(get_db)):
     personas = db.query(models.Persona).all()
     return [{"id": p.id, "archetype": p.archetype, "profile": p.profile, "embedded_events": p.embedded_events} for p in personas]
 
+@app.get("/products")
+def get_products(db: Session = Depends(get_db)):
+    products = db.query(models.ProductCatalog).all()
+    return [{"id": p.id, "name": p.name, "category": p.category, "description": p.description, "eligibility_rules": p.eligibility_rules} for p in products]
+
 from fastapi import Request
 
 @app.post("/personas/generate")

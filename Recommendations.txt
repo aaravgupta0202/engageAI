@@ -1,0 +1,231 @@
+SBI EngageAI Product Knowledge Base
+Section 1 — Banking Accounts
+Savings Account
+Savings Plus
+Salary Account
+Minor Account
+BSBDA
+NRE
+NRO
+Current Account
+
+For each:
+
+Description
+Eligibility
+Interest
+Benefits
+Clauses
+AI Recommendation Rules
+Section 2 — Fixed Deposits
+
+Include everything from your uploaded document.
+
+Also include
+
+MOD
+Annuity Deposit
+Tax Saver FD
+Amrit Vrishti
+Sarvottam
+WeCare
+Green Deposit
+Bulk Deposit
+Section 3 — Recurring Deposits
+RD
+Har Ghar Lakhpati RD
+Section 4 — Home Loans
+
+Include everything you uploaded plus
+
+Regular Home Loan
+MaxGain
+Shaurya
+Privilege
+Realty
+Home Top-Up
+Home Renovation
+Plot Loan
+Balance Transfer
+Section 5 — Personal Loans
+
+Include
+
+Xpress Credit
+Xpress Power
+Pension Loan
+Pre-approved PL
+Gold Loan
+Section 6 — Vehicle Loans
+Car Loan
+Green Car Loan
+Two Wheeler
+EV Loan
+Loyalty Scheme
+Section 7 — Education Loans
+Scholar Loan
+Student Loan
+Overseas Education
+Skill Loan
+Section 8 — Gold Loans
+Section 9 — Loans Against Assets
+FD
+Securities
+Mutual Funds
+Property
+Section 10 — Investments
+
+This one should be big.
+
+Include
+
+SIP
+Mutual Funds
+
+Large Cap
+
+Mid Cap
+
+Bluechip
+
+Contra
+
+ELSS
+
+Hybrid
+
+Debt
+
+Liquid
+
+PPF
+
+NPS
+
+Bonds
+
+SGB
+
+Demat
+
+Trading Account
+
+Section 11 — Insurance
+Health
+Life
+Travel
+Motor
+Home
+Accident
+Section 12 — Credit Cards
+
+Include around 20 SBI Cards
+
+For each
+
+Annual Fee
+Joining Fee
+Cashback
+Lounge
+Fuel
+Movies
+Dining
+Reward Points
+Target Customer
+Section 13 — Digital Banking
+YONO
+YONO Cash
+UPI
+NEFT
+RTGS
+IMPS
+Bill Pay
+Section 14 — Government Schemes
+PPF
+Sukanya
+SCSS
+RBI Bonds
+NPS
+Section 15 — AI Recommendation Rules
+
+This is honestly the most important chapter.
+
+For example
+
+Home Loan
+
+Recommend if
+
+✓ Age 24–45
+
+✓ Stable salary
+
+✓ Rent detected
+
+✓ Savings > 6 lakh
+
+✓ Home goal detected
+
+SIP Top-up
+
+Recommend if
+
+✓ Existing SIP
+
+✓ Salary increased
+
+✓ Savings growing
+
+✓ Expenses stable
+
+Cashback Card
+
+Recommend if
+
+✓ Amazon
+
+✓ Flipkart
+
+✓ Online shopping
+
+Travel Card
+
+Recommend if
+
+✓ Flights
+
+✓ Hotels
+
+✓ Forex
+
+Gold Loan
+
+Recommend if
+
+✓ Gold assets
+
+✓ Short-term liquidity
+
+ELSS
+
+Recommend if
+
+✓ Tax saving
+
+✓ Young professional
+
+Senior Citizen FD
+
+Recommend if
+
+✓ Age >60
+
+Education Loan
+
+Recommend if
+
+✓ Student
+
+✓ College expenses
+
+etc.
