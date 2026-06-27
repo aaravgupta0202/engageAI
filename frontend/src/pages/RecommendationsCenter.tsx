@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
+import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { CheckCircle2, XCircle, TrendingUp, ShieldAlert, AlertCircle } from 'lucide-react';
 
@@ -43,7 +43,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
       .finally(() => setIsLoading(false));
   }, [customerId]);
 
-  const handleAccept = (recId: string) => {
+  const handleAccept = (_recId: string) => {
     // In a real app, POST to backend to accept, then navigate
     onNavigate('actions');
   };

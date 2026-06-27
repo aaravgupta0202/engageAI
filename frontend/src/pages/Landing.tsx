@@ -1,6 +1,6 @@
 
 import { Button } from '../components/ui/Button';
-import { Search, Brain, Send, ChevronDown, Bot, Zap, Activity, Clock, ShieldCheck, Database, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Search, Brain, Send, ChevronDown, Bot, Zap, Activity, Database, Layers, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 /**
  * Landing Page Component
