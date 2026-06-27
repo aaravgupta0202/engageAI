@@ -13,6 +13,8 @@
   --color-sbi-navy: #0A1931;
 }
 
+@variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: 0 0% 100%;

@@ -22,7 +22,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </header>
 
       {/* Hero Section */}
-      <div className="w-full max-w-7xl mx-auto px-6 pt-20 pb-32 relative">
+      <div className="w-full max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-12 md:pb-16 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
@@ -102,7 +102,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
 
         {/* Logos Bar */}
-        <div className="mt-20 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-6">
+        <div className="mt-12 md:mt-16 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-6">
           <div className="text-sm font-medium text-slate-500">Trusted by visionary businesses</div>
           <div className="flex space-x-6 md:space-x-12 text-sm font-semibold text-slate-700">
              <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2"/> Collaborative AI</div>
@@ -113,7 +113,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Massive Blue Statistics Banner */}
-      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-20 md:mb-32">
+      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-16 md:mb-20 mt-8 md:mt-12">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#0A1931]/20 to-transparent rounded-full -translate-y-1/4 translate-x-1/4 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#5E95FF]/30 to-transparent rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
         
@@ -141,7 +141,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Our Capabilities Section */}
-      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-40">
+      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
           
           <div className="md:col-span-5 md:pr-12">
