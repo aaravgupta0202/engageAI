@@ -8,7 +8,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       {/* Navigation for Landing Only */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
         <div className="flex items-center space-x-3 cursor-pointer group">
-          <img src="/favicon.png" alt="engageAI Logo" className="h-8 w-auto group-hover:opacity-80 transition-opacity object-contain" />
+          <img src="/favicon.png" alt="engageAI Logo" className="h-20 md:h-24 w-auto group-hover:opacity-80 transition-opacity object-contain -my-6 scale-110" />
         </div>
         <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
           <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
@@ -52,10 +52,10 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           </div>
           
           {/* The Central Shape (simulating the glossy 3D shape from the mockup) */}
-          <div className="w-full max-w-3xl h-32 md:h-48 rounded-full bg-gradient-to-r from-slate-100 via-white to-slate-100 shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.1)] border-2 border-white/50 relative overflow-hidden backdrop-blur-3xl flex items-center justify-center">
+          <div className="w-full max-w-3xl h-32 md:h-48 rounded-full bg-gradient-to-r from-slate-100 via-white to-slate-100 shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.1)] border-2 border-white/50 relative overflow-hidden backdrop-blur-3xl flex items-center justify-center group cursor-default transition-all duration-700 hover:shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.2)]">
              <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/10 via-transparent to-indigo-500/10 mix-blend-overlay"></div>
-             <div className="absolute w-[200%] h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sbi-blue/5 via-transparent to-transparent animate-[spin_10s_linear_infinite]"></div>
-             <span className="text-4xl md:text-6xl font-black text-slate-300 tracking-widest z-10 drop-shadow-sm">engageAI</span>
+             <div className="absolute w-[200%] h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sbi-blue/10 via-transparent to-transparent animate-[spin_8s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite]"></div>
+             <span className="text-4xl sm:text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#0A1931] via-[#185ADB] to-[#0A1931] tracking-widest z-10 drop-shadow-md group-hover:scale-110 group-hover:tracking-[0.2em] transition-all duration-700 ease-out bg-[length:200%_auto] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]">engageAI</span>
           </div>
         </div>
 
