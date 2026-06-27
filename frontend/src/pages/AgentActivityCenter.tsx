@@ -18,14 +18,34 @@ const renderParsedData = (data: any) => {
                 <li key={i} className="text-sm flex items-start">
                   <span className="text-sbi-blue dark:text-cyan-500 mr-2 mt-0.5 font-bold">•</span>
                   <span className="text-slate-700 dark:text-slate-300">
-                    {typeof v === 'object' ? (v.event_type ? `${v.event_type} (Conf: ${(v.confidence * 100).toFixed(0)}%) - ${v.reasoning}` : JSON.stringify(v)) : String(v)}
+                    {typeof v === 'object' ? (
+                      v.event_type ? `${v.event_type} (Conf: ${(v.confidence * 100).toFixed(0)}%) - ${v.reasoning}` :
+                      v.step_number ? `Step ${v.step_number}: ${v.description} [${v.status || 'pending'}]` :
+                      v.product ? `${v.product} (Fit: ${v.fit_score}) - ${v.rationale}` :
+                      v.due_at ? `${v.reason} - Due: ${v.due_at} [${v.status}]` :
+                      <span className="flex flex-wrap gap-2">
+                        {Object.entries(v).map(([k, val]) => (
+                          <span key={k} className="mr-2 px-2 py-1 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 text-xs">
+                            <strong className="text-slate-500">{k.replace(/_/g, ' ')}:</strong> {String(val)}
+                          </span>
+                        ))}
+                      </span>
+                    ) : String(v)}
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
             <div className="text-sm text-slate-700 dark:text-slate-300">
-              {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+              {typeof value === 'object' ? (
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {Object.entries(value).map(([k, val]) => (
+                    <span key={k} className="mr-2 px-2 py-1 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 text-xs">
+                      <strong className="text-slate-500">{k.replace(/_/g, ' ')}:</strong> {String(val)}
+                    </span>
+                  ))}
+                </div>
+              ) : String(value)}
             </div>
           )}
         </div>

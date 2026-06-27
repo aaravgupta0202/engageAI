@@ -99,12 +99,25 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                   <p className="text-sm text-slate-600 dark:text-slate-400">AI identified this life event from transaction patterns.</p>
                 </div>
               ))}
-              <div className="relative opacity-60">
-                <div className="absolute -left-[33px] bg-slate-300 rounded-full w-4 h-4 border-4 border-white dark:border-slate-900"></div>
-                <p className="text-sm text-slate-500 mb-1">Upcoming</p>
-                <h4 className="font-semibold text-slate-800 dark:text-slate-200">AI Recommendations Pending</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Run the Engagement Cycle to generate proactive actions.</p>
-              </div>
+              {data.recommendations && data.recommendations.length > 0 ? (
+                <div className="relative">
+                  <div className="absolute -left-[33px] bg-sbi-blue rounded-full w-4 h-4 border-4 border-white dark:border-slate-900 animate-pulse"></div>
+                  <p className="text-sm text-sbi-blue font-bold tracking-wider uppercase mb-1">Action Required</p>
+                  <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-lg">AI Recommendations Ready</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                    <Button variant="link" className="p-0 h-auto text-sbi-blue font-semibold hover:text-cyan-600 text-base" onClick={() => onNavigate('recommendations')}>
+                      Review {data.recommendations.length} proactive action{data.recommendations.length > 1 ? 's' : ''} ➔
+                    </Button>
+                  </p>
+                </div>
+              ) : (
+                <div className="relative opacity-60">
+                  <div className="absolute -left-[33px] bg-slate-300 rounded-full w-4 h-4 border-4 border-white dark:border-slate-900"></div>
+                  <p className="text-sm text-slate-500 mb-1">Upcoming</p>
+                  <h4 className="font-semibold text-slate-800 dark:text-slate-200">AI Recommendations Pending</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Run the Engagement Cycle to generate proactive actions.</p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

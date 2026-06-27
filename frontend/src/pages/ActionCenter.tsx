@@ -119,8 +119,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                 </div>
                 <Button 
                   onClick={() => onNavigate('chat')}
-                  variant="outline"
-                  className="rounded-full px-6 py-6 border-indigo-200 text-indigo-600 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-900/50 transition-all hover:scale-105"
+                  className="rounded-full px-8 py-6 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold transition-all hover:scale-105 shadow-md"
                 >
                   Return to Chat
                 </Button>
