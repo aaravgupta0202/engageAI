@@ -8,6 +8,7 @@
 }
 
 @theme {
+  --font-sans: 'Batica', ui-sans-serif, system-ui, sans-serif;
   --color-sbi-blue: #185ADB;
   --color-sbi-navy: #0A1931;
 }
