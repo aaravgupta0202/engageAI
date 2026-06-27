@@ -3,7 +3,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
 export default function AgentActivityCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
-  const [logs, setLogs] = useState<{type: string, data: any}[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
@@ -62,9 +62,9 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
               <span className="font-bold">{idx + 1}</span>
             </div>
             <Card className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] glass-card border-0 shadow-md p-5 transition-transform group-hover:-translate-y-1">
-              <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{log.type.replace('_', ' ')}</div>
+              <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{(log.agent || log.type || 'system').replace('_', ' ')}</div>
               <pre className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
-                {JSON.stringify(log.data, null, 2)}
+                {JSON.stringify(log.state_summary || log.data || log, null, 2)}
               </pre>
             </Card>
           </div>

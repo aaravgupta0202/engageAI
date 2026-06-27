@@ -30,7 +30,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
           <p className="text-slate-500 dark:text-slate-400 font-medium">{data.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
         </div>
         <Button onClick={() => onNavigate('agent')} className="rounded-full px-8 shadow-lg bg-gradient-to-r from-cyan-500 to-sbi-blue hover:from-cyan-400 hover:to-sbi-blue text-white font-bold transition-all hover:scale-105">
-          Run Analysis Agents ⚡
+          Run Analysis Agents
         </Button>
       </div>
 
