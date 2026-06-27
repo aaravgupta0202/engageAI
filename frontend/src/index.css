@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Batica';
+  src: url('/fonts/batica/BaticaSans-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @theme {
   --color-sbi-blue: #185ADB;
   --color-sbi-navy: #0A1931;

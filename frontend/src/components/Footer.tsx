@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="w-full bg-white border-t border-slate-100 py-12 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex flex-col items-center md:items-start space-y-2">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center -ml-3">
             <img src="/favicon.png" alt="engageAI Logo" className="h-24 w-auto object-contain -my-6 scale-125" />
           </div>
           <p className="text-sm text-slate-500 font-medium">Built for the SBI Agentic AI Hackathon</p>

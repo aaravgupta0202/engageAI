@@ -7,7 +7,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       
       {/* Navigation for Landing Only */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
-        <div className="flex items-center space-x-3 cursor-pointer group">
+        <div className="flex items-center -ml-3 cursor-pointer group">
           <img src="/favicon.png" alt="engageAI Logo" className="h-32 md:h-40 w-auto group-hover:opacity-80 transition-opacity object-contain -my-10 scale-125" />
         </div>
         <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
@@ -78,7 +78,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         <div className="mt-16 md:mt-24 relative w-full h-48 sm:h-64 md:h-96 flex items-center justify-center">
           
           {/* Glass Particles */}
-          <div className="absolute inset-0 pointer-events-none overflow-visible">
+          <div className="absolute inset-0 pointer-events-none overflow-visible animate-[spin_20s_linear_infinite]">
             <div className="absolute top-[10%] left-[10%] sm:left-[20%] w-3 sm:w-4 h-3 sm:h-4 rounded-full bg-sbi-blue/40 blur-[2px] animate-bounce" style={{animationDuration: '3s'}}></div>
             <div className="absolute top-[40%] left-[5%] sm:left-[10%] w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-indigo-500/30 blur-[4px] animate-pulse" style={{animationDuration: '4s'}}></div>
             <div className="absolute top-[60%] right-[10%] sm:right-[15%] w-5 sm:w-6 h-5 sm:h-6 rounded-full bg-emerald-400/40 blur-[3px] animate-bounce" style={{animationDuration: '5s', animationDelay: '1s'}}></div>
@@ -97,7 +97,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="w-full max-w-[90%] sm:max-w-3xl h-24 sm:h-32 md:h-48 rounded-full bg-gradient-to-r from-slate-100 via-white to-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.05),0_15px_30px_rgba(40,116,240,0.1)] md:shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.1)] border-2 border-white/50 relative overflow-hidden backdrop-blur-3xl flex items-center justify-center group cursor-default transition-all duration-700 hover:shadow-[inset_0_-20px_40px_rgba(0,0,0,0.05),0_30px_60px_rgba(40,116,240,0.2)]">
              <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/10 via-transparent to-indigo-500/10 mix-blend-overlay"></div>
              <div className="absolute w-[200%] h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sbi-blue/10 via-transparent to-transparent animate-[spin_8s_linear_infinite] group-hover:animate-[spin_4s_linear_infinite]"></div>
-             <span className="text-3xl sm:text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#0A1931] via-[#185ADB] to-[#0A1931] tracking-widest z-10 drop-shadow-md group-hover:scale-110 group-hover:tracking-[0.2em] transition-all duration-700 ease-out bg-[length:200%_auto] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]">engageAI</span>
+             <span className="text-3xl sm:text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-[#0A1931] via-[#185ADB] to-[#0A1931] tracking-widest z-10 drop-shadow-md group-hover:scale-110 group-hover:tracking-[0.2em] transition-all duration-700 ease-out bg-[length:200%_auto] animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite] pb-2 sm:pb-3 md:pb-4 leading-normal">engageAI</span>
           </div>
         </div>
 
