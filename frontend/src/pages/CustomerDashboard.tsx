@@ -27,7 +27,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       <div className="flex justify-between items-center glass-panel p-6 rounded-2xl">
         <div>
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">Financial Life Graph</h2>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{data.profile.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">{data.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
         </div>
         <Button onClick={() => onNavigate('agent')} className="rounded-full px-8 shadow-lg bg-gradient-to-r from-cyan-500 to-sbi-blue hover:from-cyan-400 hover:to-sbi-blue text-white font-bold transition-all hover:scale-105">
           Run Analysis Agents ⚡
@@ -40,10 +40,10 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
             <CardTitle className="text-slate-800 dark:text-white flex items-center"><User className="w-6 h-6 mr-2 text-cyan-500" /> Identity & Demographics</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-slate-600 dark:text-slate-300">
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Age</span> <span className="font-bold text-slate-800 dark:text-white">{data.profile?.profile?.age || 'N/A'}</span></div>
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Income</span> <span className="font-bold text-green-600 dark:text-green-400">₹{Number(data.profile?.profile?.income || 0).toLocaleString()}</span></div>
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Occupation</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.profile?.occupation || 'N/A'}</span></div>
-            <div className="flex justify-between"><span className="text-slate-400">Location</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.profile?.location || 'N/A'}</span></div>
+            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Age</span> <span className="font-bold text-slate-800 dark:text-white">{data.profile?.age || 'N/A'}</span></div>
+            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Income</span> <span className="font-bold text-green-600 dark:text-green-400">₹{Number(data.profile?.income || 0).toLocaleString()}</span></div>
+            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Occupation</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.occupation || 'N/A'}</span></div>
+            <div className="flex justify-between"><span className="text-slate-400">Location</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.location || 'N/A'}</span></div>
           </CardContent>
         </Card>
 
@@ -53,7 +53,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-3">
-              {(data.profile?.profile?.goals || []).map((g: string, i: number) => (
+              {(data.profile?.goals || []).map((g: string, i: number) => (
                 <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex items-center">
                   <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}
                 </div>
@@ -69,7 +69,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-              {Object.entries(data.profile.embedded_events || {}).map(([key, val]) => (
+              {Object.entries(data.life_events || {}).map(([key, val]) => (
                 <div key={key} className={`p-4 rounded-xl border ${val ? 'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300' : 'bg-slate-50 border-slate-200 text-slate-500 dark:bg-slate-800/50 dark:border-slate-700'}`}>
                   <div className="text-xs uppercase tracking-wider font-bold mb-1 opacity-70">{key.replace('_', ' ')}</div>
                   <div className="text-lg font-black">{val ? 'DETECTED' : 'None'}</div>
@@ -89,9 +89,9 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 <div className="absolute -left-[33px] bg-green-500 rounded-full w-4 h-4 border-4 border-white dark:border-slate-900"></div>
                 <p className="text-sm text-slate-500 mb-1">Today</p>
                 <h4 className="font-semibold text-slate-800 dark:text-slate-200">Salary Credit</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Regular salary credited (₹{Number(data.profile?.profile?.income || 0).toLocaleString()})</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Regular salary credited (₹{Number(data.profile?.income || 0).toLocaleString()})</p>
               </div>
-              {Object.entries(data.profile.embedded_events || {}).filter(([_, val]) => val).map(([key, _]) => (
+              {Object.entries(data.life_events || {}).filter(([_, val]) => val).map(([key, _]) => (
                 <div key={key} className="relative">
                   <div className="absolute -left-[33px] bg-emerald-500 rounded-full w-4 h-4 border-4 border-white dark:border-slate-900"></div>
                   <p className="text-sm text-slate-500 mb-1">Recent Event</p>

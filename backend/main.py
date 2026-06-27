@@ -119,6 +119,7 @@ def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Persona not found")
         
     return {
+        "archetype": persona.archetype,
         "profile": persona.profile,
         "life_events": persona.embedded_events,
         "transactions": [],
