@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { User, Target, Activity, CalendarClock } from 'lucide-react';
 
 export default function CustomerDashboard({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [data, setData] = useState<any>(null);
@@ -36,7 +37,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1 glass-card border-t-4 border-t-cyan-400">
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><span className="text-2xl mr-2">👤</span> Identity & Demographics</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center"><User className="w-6 h-6 mr-2 text-cyan-500" /> Identity & Demographics</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-slate-600 dark:text-slate-300">
             <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Age</span> <span className="font-bold text-slate-800 dark:text-white">{data.profile?.profile?.age || 'N/A'}</span></div>
@@ -48,7 +49,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
         <Card className="md:col-span-2 glass-card border-t-4 border-t-indigo-500">
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><span className="text-2xl mr-2">🎯</span> Life Goals</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center"><Target className="w-6 h-6 mr-2 text-indigo-500" /> Life Goals</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-3">
@@ -64,7 +65,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
         <Card className="md:col-span-3 glass-card border-t-4 border-t-emerald-400 overflow-hidden relative">
           <div className="absolute right-0 top-0 w-64 h-64 bg-emerald-400 opacity-5 rounded-full blur-3xl"></div>
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><span className="text-2xl mr-2">📊</span> Embedded Life Events</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center"><Activity className="w-6 h-6 mr-2 text-emerald-500" /> Embedded Life Events</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
@@ -80,7 +81,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
         <Card className="md:col-span-3 glass-card border-t-4 border-t-purple-500 overflow-hidden relative">
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><span className="text-2xl mr-2">📅</span> Customer Timeline</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center"><CalendarClock className="w-6 h-6 mr-2 text-purple-500" /> Customer Timeline</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="relative border-l-2 border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">

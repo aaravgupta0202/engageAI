@@ -1,6 +1,6 @@
 
 import { Button } from '../components/ui/Button';
-import { Search, Brain, Send, ChevronDown } from 'lucide-react';
+import { Search, Brain, Send, ChevronDown, Bot, Zap } from 'lucide-react';
 
 /**
  * Landing Page Component
@@ -100,7 +100,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         <h2 className="text-4xl font-bold mb-12 text-center text-slate-900 dark:text-white">Why Agentic AI?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="glass-card p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-red-50 dark:bg-red-900/10">
-            <h3 className="text-xl font-bold text-red-700 dark:text-red-400 mb-4 flex items-center"><span className="text-2xl mr-2">🤖</span> Traditional Chatbots</h3>
+            <h3 className="text-xl font-bold text-red-700 dark:text-red-400 mb-4 flex items-center"><Bot className="w-6 h-6 mr-2" /> Traditional Chatbots</h3>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-6">Reactive systems that wait for you to know what you need.</p>
             <div className="flex items-center space-x-3 text-slate-500 font-mono text-sm">
               <span className="px-3 py-1 bg-white dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700">Ask</span>
@@ -111,7 +111,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           
           <div className="glass-card p-8 rounded-2xl border border-sbi-blue/30 bg-blue-50 dark:bg-sbi-blue/10 shadow-lg shadow-sbi-blue/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-400 opacity-10 rounded-full blur-2xl"></div>
-            <h3 className="text-xl font-bold text-sbi-navy dark:text-sbi-blue mb-4 flex items-center"><span className="text-2xl mr-2">⚡</span> SBI EngageAI</h3>
+            <h3 className="text-xl font-bold text-sbi-navy dark:text-sbi-blue mb-4 flex items-center"><Zap className="w-6 h-6 mr-2" /> SBI EngageAI</h3>
             <p className="text-slate-700 dark:text-slate-300 font-medium mb-6">A proactive system that anticipates needs before you ask.</p>
             <div className="flex flex-wrap gap-2 text-sbi-blue font-mono text-xs md:text-sm items-center">
               <span className="px-3 py-1 bg-white dark:bg-slate-800 rounded-md border border-sbi-blue/30 font-bold shadow-sm">Observe</span> <span className="text-slate-400">→</span>
