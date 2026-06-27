@@ -8,7 +8,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       {/* Navigation for Landing Only */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
         <div className="flex items-center space-x-3 cursor-pointer group">
-          <div className="w-10 h-10 bg-sbi-blue text-white rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg">S</div>
+          <img src="/favicon.png" alt="engageAI Logo" className="w-10 h-10 rounded-xl shadow-lg group-hover:scale-105 transition-transform object-contain" />
           <h1 className="text-2xl font-black tracking-tight text-slate-900 group-hover:opacity-80 transition-opacity">
             engage<span className="text-sbi-blue">AI</span>
           </h1>

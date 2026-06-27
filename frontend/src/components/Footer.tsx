@@ -6,9 +6,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex flex-col items-center md:items-start space-y-2">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-sbi-blue text-white rounded-lg flex items-center justify-center font-bold text-xl">
-              S
-            </div>
+            <img src="/favicon.png" alt="engageAI Logo" className="w-8 h-8 rounded-lg object-contain" />
             <span className="text-xl font-bold text-slate-800 tracking-tight">engageAI</span>
           </div>
           <p className="text-sm text-slate-500 font-medium">Built for the SBI Agentic AI Hackathon</p>
