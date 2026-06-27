@@ -47,11 +47,11 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
           <p className="text-slate-500 dark:text-slate-400 mt-1">LangGraph sequential pipeline analyzing financial state.</p>
         </div>
         <Button 
-          onClick={() => onNavigate('chat')} 
+          onClick={() => onNavigate('recommendations')} 
           disabled={!isDone} 
           className="rounded-full px-8 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 text-white font-bold transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
         >
-          {isDone ? 'Proceed to Chat 💬' : 'Processing...'}
+          {isDone ? 'View Recommendations ➔' : 'Processing...'}
         </Button>
       </div>
 
@@ -63,7 +63,7 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
             </div>
             <Card className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] glass-card border-0 shadow-md p-5 transition-transform group-hover:-translate-y-1">
               <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{(log.agent || log.type || 'system').replace('_', ' ')}</div>
-              <pre className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg overflow-x-auto text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
+              <pre className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg whitespace-pre-wrap break-words text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
                 {JSON.stringify(log.state_summary || log.data || log, null, 2)}
               </pre>
             </Card>

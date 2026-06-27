@@ -12,6 +12,8 @@ import Landing from './pages/Landing';
 import CustomerGenerator from './pages/CustomerGenerator';
 import CustomerDashboard from './pages/CustomerDashboard';
 import AgentActivityCenter from './pages/AgentActivityCenter';
+import RecommendationsCenter from './pages/RecommendationsCenter';
+import ActionCenter from './pages/ActionCenter';
 import AiChat from './pages/AiChat';
 
 function App() {
@@ -42,7 +44,7 @@ function App() {
           </div>
           
           <nav className="flex space-x-1">
-            {['generator', 'dashboard', 'agent', 'chat'].map((page) => {
+            {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat'].map((page) => {
               const isDisabled = !activeCustomerId && page !== 'generator';
               return (
                 <div key={page} className="relative group inline-block">
@@ -78,6 +80,8 @@ function App() {
             <Route path="/generator" element={<CustomerGenerator onNavigate={handleNavigate} />} />
             <Route path="/dashboard" element={<CustomerDashboard customerId={activeCustomerId} onNavigate={handleNavigate} />} />
             <Route path="/agent" element={<AgentActivityCenter customerId={activeCustomerId} onNavigate={handleNavigate} />} />
+            <Route path="/recommendations" element={<RecommendationsCenter customerId={activeCustomerId} onNavigate={handleNavigate} />} />
+            <Route path="/actions" element={<ActionCenter customerId={activeCustomerId} onNavigate={handleNavigate} />} />
             <Route path="/chat" element={<AiChat customerId={activeCustomerId} />} />
           </Routes>
         </div>
