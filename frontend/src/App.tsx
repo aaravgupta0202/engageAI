@@ -5,7 +5,7 @@
  * Landing, Customer Generator, Dashboard, Agent Activity, and Chat.
  * Implements the global navigation header with disabled-state reasoning.
  */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import Landing from './pages/Landing';

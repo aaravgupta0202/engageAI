@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Button } from '../components/ui/Button';
 import { Search, Brain, Send, ChevronDown } from 'lucide-react';
 

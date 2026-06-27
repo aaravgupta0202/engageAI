@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
@@ -68,7 +68,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-              {Object.entries(data.profile.embedded_events || {}).map(([key, val], i) => (
+              {Object.entries(data.profile.embedded_events || {}).map(([key, val]) => (
                 <div key={key} className={`p-4 rounded-xl border ${val ? 'bg-emerald-50 border-emerald-200 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-300' : 'bg-slate-50 border-slate-200 text-slate-500 dark:bg-slate-800/50 dark:border-slate-700'}`}>
                   <div className="text-xs uppercase tracking-wider font-bold mb-1 opacity-70">{key.replace('_', ' ')}</div>
                   <div className="text-lg font-black">{val ? 'DETECTED' : 'None'}</div>
@@ -90,7 +90,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 <h4 className="font-semibold text-slate-800 dark:text-slate-200">Salary Credit</h4>
                 <p className="text-sm text-slate-600 dark:text-slate-400">Regular salary credited (₹{Number(data.profile?.profile?.income || 0).toLocaleString()})</p>
               </div>
-              {Object.entries(data.profile.embedded_events || {}).filter(([_, val]) => val).map(([key, _], i) => (
+              {Object.entries(data.profile.embedded_events || {}).filter(([_, val]) => val).map(([key, _]) => (
                 <div key={key} className="relative">
                   <div className="absolute -left-[33px] bg-emerald-500 rounded-full w-4 h-4 border-4 border-white dark:border-slate-900"></div>
                   <p className="text-sm text-slate-500 mb-1">Recent Event</p>

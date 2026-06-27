@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from '../components/ui/Card';
+import { useEffect, useState } from 'react';
+import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
 export default function AgentActivityCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
