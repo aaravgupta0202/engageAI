@@ -1,5 +1,5 @@
 import { Button } from '../components/ui/Button';
-import { Layers, Activity, Link, Brain, Search, Send, ArrowRight, Zap, Target, Bot } from 'lucide-react';
+import { Link, Search, ArrowRight, Bot, CheckCircle2 } from 'lucide-react';
 
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
