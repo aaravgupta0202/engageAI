@@ -105,8 +105,8 @@ async def generate_persona(request: Request, db: Session = Depends(get_db)):
     prompt = data.get("prompt", "Generate a random realistic financial persona.")
     
     import os, requests
-    api_key = os.getenv("CEREBRAS_API_KEY")
-    if not api_key or api_key == "your_cerebras_api_key_here":
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key or api_key == "your_GROQ_API_KEY_here":
         raise HTTPException(status_code=500, detail="Cerebras API key not configured")
         
     system_prompt = f"""You are a synthetic financial data generator for the State Bank of India.
@@ -130,10 +130,10 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
 }}"""
     try:
         res = requests.post(
-            "https://api.cerebras.ai/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama-3.1-8b-instant",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -141,7 +141,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
             }
         )
         if not res.ok:
-            raise Exception(f"Cerebras API error: {res.text}")
+            raise Exception(f"Groq API error: {res.text}")
             
         response = res.json()["choices"][0]["message"]["content"].strip()
         
@@ -178,9 +178,9 @@ class CustomPersonaRequest(BaseModel):
 
 @app.post("/personas/generate_custom")
 async def generate_custom_persona(req: CustomPersonaRequest, db: Session = Depends(get_db)):
-    api_key = os.getenv("CEREBRAS_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured")
 
     # Simple simulated web scrape for cost of living (in a real app, use BeautifulSoup + requests)
     try:
@@ -218,10 +218,10 @@ Do not include markdown blocks, just raw JSON."""
 
     try:
         res = requests.post(
-            "https://api.cerebras.ai/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama-3.1-8b-instant",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -229,7 +229,7 @@ Do not include markdown blocks, just raw JSON."""
             }
         )
         if not res.ok:
-            raise Exception(f"Cerebras API error: {res.text}")
+            raise Exception(f"Groq API error: {res.text}")
             
         response = res.json()["choices"][0]["message"]["content"].strip()
         
@@ -264,9 +264,9 @@ class OnboardingChatRequest(BaseModel):
 
 @app.post("/personas/onboarding-chat")
 async def onboarding_chat(req: OnboardingChatRequest, db: Session = Depends(get_db)):
-    api_key = os.getenv("CEREBRAS_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured")
 
     system_prompt = """You are a highly conversational and polite onboarding agent for SBI EngageAI. 
 Your goal is to collect the following information from the user to build their Digital Financial Twin:
@@ -309,10 +309,10 @@ Do not include markdown blocks, just raw JSON."""
 
     try:
         res = requests.post(
-            "https://api.cerebras.ai/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama-3.1-8b-instant",
                 "messages": cerebras_messages
             }
         )
@@ -328,7 +328,7 @@ Do not include markdown blocks, just raw JSON."""
                 
             parsed = json.loads(response.strip())
         else:
-            raise Exception(f"Cerebras API error: {res.text}")
+            raise Exception(f"Groq API error: {res.text}")
         
         if parsed.get("is_complete"):
             # Generate the persona immediately using the gathered data
@@ -359,9 +359,9 @@ async def simulate_scenario(req: ScenarioRequest, db: Session = Depends(get_db))
     if not persona:
         raise HTTPException(status_code=404, detail="Persona not found")
         
-    api_key = os.getenv("CEREBRAS_API_KEY")
+    api_key = os.getenv("GROQ_API_KEY")
     if not api_key:
-        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+        raise HTTPException(status_code=500, detail="GROQ_API_KEY not configured")
 
     system_prompt = """You are a financial twin simulator. You will receive a customer's current financial profile and a 'What if...' scenario.
 Output a NEW modified JSON profile predicting the financial impact of the scenario on their income, assets, expenses, goals, and demographics.
@@ -371,10 +371,10 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
     
     try:
         res = requests.post(
-            "https://api.cerebras.ai/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama-3.1-8b-instant",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -395,7 +395,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             simulated_profile = json.loads(response.strip())
             return {"original": persona.profile, "simulated": simulated_profile}
         else:
-            raise Exception(f"Cerebras API error: {res.text}")
+            raise Exception(f"Groq API error: {res.text}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -442,7 +442,7 @@ async def update_customer_graph(customer_id: str, request: Request, db: Session 
         profile = data["profile"]
         
         # Trigger an AI Re-evaluation
-        api_key = os.getenv("CEREBRAS_API_KEY")
+        api_key = os.getenv("GROQ_API_KEY")
         if api_key:
             system_prompt = """You are an expert synthetic data evaluator. 
 The user has manually edited their financial profile. Based ONLY on their updated profile, generate a new 'archetype' (a short 2-word summary, e.g. "Young Professional", "High Net-Worth Individual") and determine realistic 'embedded_events' (boolean flags).
@@ -461,10 +461,10 @@ Do not include markdown blocks, just raw JSON."""
             prompt = f"Updated Profile: {json.dumps(profile)}"
             try:
                 res = requests.post(
-                    "https://api.cerebras.ai/v1/chat/completions",
+                    "https://api.groq.com/openai/v1/chat/completions",
                     headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
                     json={
-                        "model": "gpt-oss-120b",
+                        "model": "llama-3.1-8b-instant",
                         "messages": [
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": prompt}
