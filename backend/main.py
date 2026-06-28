@@ -46,6 +46,12 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     message: str
 
+class ProductUpdate(BaseModel):
+    name: str
+    category: str
+    description: str
+    eligibility_rules: dict
+
 @app.get("/personas")
 def get_personas(db: Session = Depends(get_db)):
     personas = db.query(models.Persona).all()
@@ -55,6 +61,20 @@ def get_personas(db: Session = Depends(get_db)):
 def get_products(db: Session = Depends(get_db)):
     products = db.query(models.ProductCatalog).all()
     return [{"id": p.id, "name": p.name, "category": p.category, "description": p.description, "eligibility_rules": p.eligibility_rules} for p in products]
+
+@app.put("/products/{product_id}")
+def update_product(product_id: str, request: ProductUpdate, db: Session = Depends(get_db)):
+    product = db.query(models.ProductCatalog).filter(models.ProductCatalog.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    product.name = request.name
+    product.category = request.category
+    product.description = request.description
+    product.eligibility_rules = request.eligibility_rules
+    
+    db.commit()
+    return {"status": "success", "product": {"id": product.id, "name": product.name, "category": product.category, "description": product.description, "eligibility_rules": product.eligibility_rules}}
 
 from fastapi import Request
 
@@ -266,6 +286,61 @@ Ensure the output is parseable JSON (no markdown block wrappers around the JSON 
     asst_msg = models.ChatMessage(customer_id=customer_id, role="assistant", message=json.dumps(result))
     db.add(asst_msg)
     db.commit()
+
+    return result
+
+@app.post("/public/chat")
+async def public_chat_endpoint(request: ChatRequest, db: Session = Depends(get_db)):
+    # Fetch catalog so AI can reference products
+    products = db.query(models.ProductCatalog).all()
+    catalog_summary = "\n".join([f"- {p.name} ({p.category}): {p.description}" for p in products])
+
+    system_prompt = f"""You are engageAI, a proactive, helpful financial copilot for the State Bank of India.
+You provide intelligent, context-aware answers to user queries for prospective public customers who are not yet logged in.
+
+Available Product Catalog (use these to suggest SBI products naturally when relevant):
+{catalog_summary}
+
+User Question:
+{request.message}
+
+IMPORTANT: You MUST respond with a valid JSON object in EXACTLY this format:
+{{
+  "response": "Your conversational reply to the user. Gently guide them towards suitable SBI products.",
+  "reasoning": [
+    "A short bullet point of why you suggested this",
+    "Another point..."
+  ]
+}}
+Ensure the output is parseable JSON (no markdown block wrappers around the JSON if possible).
+"""
+
+    llm = get_llm()
+    if llm:
+        try:
+            ai_message = llm.invoke(system_prompt).content
+            clean_json = ai_message.strip()
+            if clean_json.startswith("```json"):
+                clean_json = clean_json[7:-3]
+            elif clean_json.startswith("```"):
+                clean_json = clean_json[3:-3]
+            
+            clean_json = clean_json.strip()
+            result = json.loads(clean_json)
+        except Exception as e:
+            print("LLM parsing error:", e)
+            result = {
+                "response": "I encountered an error connecting to my reasoning engine.",
+                "reasoning": [str(e)]
+            }
+    else:
+        result = {
+            "response": "I am a mockup in this MVP. Once connected to Groq/Gemini, I will answer using the public knowledge base.",
+            "reasoning": [
+                "Mocked reasoning execution",
+                "No API keys detected in .env"
+            ]
+        }
 
     return result
 

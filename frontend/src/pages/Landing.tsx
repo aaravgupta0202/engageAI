@@ -1,5 +1,6 @@
 import { Button } from '../components/ui/Button';
 import { Link, Search, ArrowRight, Bot, CheckCircle2, Network, Database, Cpu, Workflow } from 'lucide-react';
+import PublicChat from '../components/PublicChat';
 
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
@@ -251,6 +252,8 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
       </div>
 
+      {/* Public Assistant Floating Chat */}
+      <PublicChat />
     </div>
   );
 }

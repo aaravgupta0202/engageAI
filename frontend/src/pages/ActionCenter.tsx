@@ -7,6 +7,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showFollowUp, setShowFollowUp] = useState(false);
+  const [fastForwarded, setFastForwarded] = useState(false);
 
   const selectedAction = customerId ? localStorage.getItem(`selected_action_${customerId}`) || "Mutual Fund SIP Top-Up" : "Mutual Fund SIP Top-Up";
 
@@ -110,7 +111,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
             <Card className="glass-card border-indigo-200 dark:border-indigo-800 shadow-xl p-8 animate-in slide-in-from-bottom-8 duration-700">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center shrink-0 shadow-inner">
-                  <Clock size={32} />
+                  <Clock size={32} className={fastForwarded ? "animate-spin" : ""} />
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <div className="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-1">Agent 6: Follow-Up Scheduled</div>
@@ -119,11 +120,43 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                     The autonomous engine will re-engage you next month to ensure the increased SIP is comfortable with your new cash flow, closing the loop.
                   </p>
                 </div>
+                <div className="flex flex-col gap-3">
+                  <Button 
+                    onClick={() => setFastForwarded(true)}
+                    disabled={fastForwarded}
+                    className={`rounded-full px-6 py-2.5 font-bold transition-all shadow-md ${fastForwarded ? 'bg-slate-200 text-slate-400' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105'}`}
+                  >
+                    {fastForwarded ? 'Simulated' : 'Fast Forward 30 Days ⏩'}
+                  </Button>
+                  <Button 
+                    onClick={() => onNavigate('chat')}
+                    className="rounded-full px-6 py-2.5 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold transition-all shadow-sm"
+                  >
+                    Return to Chat
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {fastForwarded && (
+            <Card className="glass-card bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 shadow-xl p-8 animate-in slide-in-from-bottom-8 duration-700">
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="w-16 h-16 bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 rounded-2xl flex items-center justify-center shrink-0 shadow-inner">
+                  <CheckCircle2 size={32} />
+                </div>
+                <div className="flex-1 text-center md:text-left">
+                  <div className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">Agent 6 Triggered</div>
+                  <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Follow-up check-in initiated</h4>
+                  <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 italic text-slate-700 dark:text-slate-300">
+                    "Hi there! It's been 30 days since we increased your Mutual Fund SIP. Did the new amount hold comfortably with your recent salary hike, or should we adjust the allocation?"
+                  </div>
+                </div>
                 <Button 
                   onClick={() => onNavigate('chat')}
-                  className="rounded-full px-8 py-6 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold transition-all hover:scale-105 shadow-md"
+                  className="rounded-full px-8 py-6 bg-amber-500 hover:bg-amber-600 text-white font-bold transition-all hover:scale-105 shadow-md"
                 >
-                  Return to Chat
+                  Reply in Chat
                 </Button>
               </div>
             </Card>
