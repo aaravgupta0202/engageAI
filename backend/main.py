@@ -36,8 +36,8 @@ def startup_event():
     except Exception:
         db.rollback()
         
-    if db.query(models.ProductCatalog).count() < 10:
-        print("Auto-seeding database because catalog has less than 10 products...")
+    if db.query(models.Persona).count() < 15:
+        print("Auto-seeding database because there are less than 15 personas...")
         import seed
         seed.seed_data()
 
@@ -74,7 +74,9 @@ def health_check():
 @app.get("/personas")
 def get_personas(db: Session = Depends(get_db)):
     personas = db.query(models.Persona).all()
-    return [{"id": p.id, "archetype": p.archetype, "profile": p.profile, "embedded_events": p.embedded_events} for p in personas]
+    db_personas = [{"id": p.id, "archetype": p.archetype, "profile": p.profile, "embedded_events": p.embedded_events} for p in personas]
+    cached_personas = list(CUSTOM_PERSONA_CACHE.values())
+    return db_personas + cached_personas
 
 @app.get("/products")
 def get_products(db: Session = Depends(get_db)):
