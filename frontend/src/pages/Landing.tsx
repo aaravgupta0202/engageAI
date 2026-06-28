@@ -27,7 +27,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
               Turn Banking Data<br />
-              into <span className="text-emerald-500 font-semibold">Agentic Actions</span>
+              into <span className="text-sbi-blue-500 font-semibold">Agentic Actions</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-8 md:mb-10 max-w-xl leading-relaxed">
               Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly. Get curated plans and offers for your customer.
