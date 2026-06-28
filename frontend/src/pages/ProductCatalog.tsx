@@ -9,6 +9,7 @@ interface Product {
   category: string;
   description: string;
   eligibility_rules: any;
+  link?: string;
 }
 
 export default function ProductCatalog() {
@@ -239,6 +240,14 @@ export default function ProductCatalog() {
             </div>
             <div className="p-6 bg-slate-50 dark:bg-slate-800/50 flex justify-end space-x-3 border-t border-slate-100 dark:border-slate-800">
               <Button onClick={() => setSelectedProduct(null)} variant="outline" className="rounded-full px-8">Close</Button>
+              {(!adminMode && selectedProduct.link) && (
+                <Button 
+                  onClick={() => window.open(selectedProduct.link, '_blank')} 
+                  className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-8"
+                >
+                  Apply Now
+                </Button>
+              )}
               {adminMode && (
                 <Button 
                   onClick={async () => {

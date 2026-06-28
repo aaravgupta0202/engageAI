@@ -76,6 +76,7 @@ class ProductCatalog(Base):
     category = Column(String(100)) # invest, protect, borrow, save
     eligibility_rules = Column(JSON)
     description = Column(String(2000))
+    link = Column(String(500))
 
 class Recommendation(Base):
     __tablename__ = "recommendations"

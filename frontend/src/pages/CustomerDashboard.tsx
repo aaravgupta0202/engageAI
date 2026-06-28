@@ -70,11 +70,12 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
             body: JSON.stringify({ profile: updatedProfile })
         });
         const resData = await res.json();
-        if (resData.archetype || resData.life_events) {
+        if (resData.archetype || resData.life_events || resData.profile) {
             setData((prev: any) => ({
                 ...prev,
                 archetype: resData.archetype || prev.archetype,
-                life_events: resData.life_events || prev.life_events
+                life_events: resData.life_events || prev.life_events,
+                profile: resData.profile || prev.profile
             }));
         }
     } catch (e) {

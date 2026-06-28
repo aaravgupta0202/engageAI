@@ -5,13 +5,16 @@ from database import engine, SessionLocal, Base
 from models import Customer, Persona, ProductCatalog
 
 # Create tables
+from sqlalchemy import text
+with engine.begin() as conn:
+    conn.execute(text("DROP TABLE IF EXISTS product_catalog"))
+
 Base.metadata.create_all(bind=engine)
 
 def seed_data():
     db = SessionLocal()
 
-    # Clear existing
-    db.query(ProductCatalog).delete()
+    # Clear existing personas
     db.query(Persona).delete()
     db.commit()
 
@@ -27,6 +30,11 @@ def seed_data():
         {"archetype": "Investor", "profile": {"age": 40, "income": "250000", "goals": ["Wealth Creation", "Retirement"]}, "embedded_events": {}},
         {"archetype": "Retiree", "profile": {"age": 65, "income": "50000", "goals": ["Medical Corpus"]}, "embedded_events": {"retirement": True}},
         {"archetype": "Married Couple", "profile": {"age": 30, "income": "200000", "goals": ["Joint Home", "Car"]}, "embedded_events": {"marriage": True}},
+        {"archetype": "Farmer", "profile": {"age": 42, "income": "80000", "goals": ["Tractor Loan", "Kisan Credit Card"]}, "embedded_events": {"seasonal_income": True}},
+        {"archetype": "Freelancer", "profile": {"age": 26, "income": "60000", "goals": ["Tax Savings", "Medical Insurance"]}, "embedded_events": {"irregular_income": True}},
+        {"archetype": "Small Retailer", "profile": {"age": 38, "income": "120000", "goals": ["Business Loan", "Inventory Expansion"]}, "embedded_events": {"business_growth": True}},
+        {"archetype": "NRI", "profile": {"age": 34, "income": "400000", "goals": ["NRE Account", "Remittance", "Property in India"]}, "embedded_events": {"foreign_income": True}},
+        {"archetype": "Teacher", "profile": {"age": 45, "income": "90000", "goals": ["Child Education", "Retirement Fund"]}, "embedded_events": {"stable_job": True}},
     ]
 
     for p in personas_data:
@@ -48,9 +56,10 @@ def seed_data():
         product = ProductCatalog(
             id=prod["id"],
             name=prod["name"],
-            category=prod["category"],
+            category=prod.get("cat", "general"),
             eligibility_rules=prod["eligibility_rules"],
-            description=prod["description"]
+            description=prod["desc"],
+            link=prod.get("url", "")
         )
         db.add(product)
 

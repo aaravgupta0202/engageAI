@@ -39,11 +39,13 @@ graph_app = create_graph()
 # Configure CORS for frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://sbiengageai.netlify.app"], 
+    allow_origins=["*"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+CUSTOM_PERSONA_CACHE = {}
 
 class ChatRequest(BaseModel):
     message: str
@@ -210,7 +212,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -230,16 +232,16 @@ Do not include markdown blocks, just raw JSON."""
         parsed = json.loads(response.strip())
         
         import uuid
-        new_persona = models.Persona(
-            id=str(uuid.uuid4()),
-            archetype=parsed.get("archetype", "Custom Persona"),
-            profile=parsed.get("profile", {}),
-            embedded_events=parsed.get("embedded_events", {})
-        )
-        db.add(new_persona)
-        db.commit()
+        new_persona_id = str(uuid.uuid4())
+        new_persona_dict = {
+            "id": new_persona_id,
+            "archetype": parsed.get("archetype", "Custom Persona"),
+            "profile": parsed.get("profile", {}),
+            "embedded_events": parsed.get("embedded_events", {})
+        }
+        CUSTOM_PERSONA_CACHE[new_persona_id] = new_persona_dict
         
-        return {"id": new_persona.id, "archetype": new_persona.archetype, "profile": new_persona.profile, "embedded_events": new_persona.embedded_events}
+        return new_persona_dict
     except Exception as e:
         print("Custom Generation Error:", e)
         raise HTTPException(status_code=500, detail=str(e))
@@ -301,21 +303,23 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": cerebras_messages
             }
         )
-        if not res.ok:
+        if res.ok:
+            response_text = res.json()["choices"][0]["message"]["content"].strip()
+            
+            import re
+            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+            if json_match:
+                response = json_match.group(0)
+            else:
+                response = response_text
+                
+            parsed = json.loads(response.strip())
+        else:
             raise Exception(f"Cerebras API error: {res.text}")
-            
-        response = res.json()["choices"][0]["message"]["content"].strip()
-        
-        if response.startswith("```json"):
-            response = response[7:-3]
-        elif response.startswith("```"):
-            response = response[3:-3]
-            
-        parsed = json.loads(response.strip())
         
         if parsed.get("is_complete"):
             # Generate the persona immediately using the gathered data
@@ -367,32 +371,44 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
                     {"role": "user", "content": prompt}
                 ]
             }
-        )
-        if not res.ok:
-            raise Exception(f"Cerebras API error: {res.text}")
+        if res.ok:
+            response_text = res.json()["choices"][0]["message"]["content"].strip()
             
-        response = res.json()["choices"][0]["message"]["content"].strip()
-        
-        if response.startswith("```json"):
-            response = response[7:-3]
-        elif response.startswith("```"):
-            response = response[3:-3]
-        
-        simulated_profile = json.loads(response.strip())
-        return {"original": persona.profile, "simulated": simulated_profile}
+            # Robust JSON extraction
+            import re
+            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+            if json_match:
+                response = json_match.group(0)
+            else:
+                response = response_text
+                
+            simulated_profile = json.loads(response.strip())
+            return {"original": persona.profile, "simulated": simulated_profile}
+        else:
+            raise Exception(f"Cerebras API error: {res.text}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/customers/{customer_id}/graph")
 def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
     persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
-    if not persona:
+    
+    if persona:
+        archetype = persona.archetype
+        profile = persona.profile
+        embedded_events = persona.embedded_events
+    elif customer_id in CUSTOM_PERSONA_CACHE:
+        p = CUSTOM_PERSONA_CACHE[customer_id]
+        archetype = p["archetype"]
+        profile = p["profile"]
+        embedded_events = p["embedded_events"]
+    else:
         raise HTTPException(status_code=404, detail="Persona not found")
         
     return {
-        "archetype": persona.archetype,
-        "profile": persona.profile,
-        "life_events": persona.embedded_events,
+        "archetype": archetype,
+        "profile": profile,
+        "life_events": embedded_events,
         "transactions": [],
         "recommendations": []
     }
@@ -400,23 +416,31 @@ def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
 @app.put("/customers/{customer_id}/graph")
 async def update_customer_graph(customer_id: str, request: Request, db: Session = Depends(get_db)):
     persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
-    if not persona:
+    cached_persona = CUSTOM_PERSONA_CACHE.get(customer_id)
+    
+    if not persona and not cached_persona:
         raise HTTPException(status_code=404, detail="Persona not found")
     
     data = await request.json()
     
+    # We will operate on a dict for cached, or the object for DB
+    profile = persona.profile if persona else cached_persona["profile"]
+    archetype = persona.archetype if persona else cached_persona["archetype"]
+    embedded_events = persona.embedded_events if persona else cached_persona["embedded_events"]
+    
     if "profile" in data:
-        # Update the profile
-        persona.profile = data["profile"]
+        profile = data["profile"]
         
         # Trigger an AI Re-evaluation
         api_key = os.getenv("CEREBRAS_API_KEY")
         if api_key:
             system_prompt = """You are an expert synthetic data evaluator. 
 The user has manually edited their financial profile. Based ONLY on their updated profile, generate a new 'archetype' (a short 2-word summary, e.g. "Young Professional", "High Net-Worth Individual") and determine realistic 'embedded_events' (boolean flags).
+CRITICAL INSTRUCTION: If the user updated their 'goals' and provided a compound goal (e.g. 'buy a bike and start a small company'), you MUST split it into distinct individual string items in a 'goals' array.
 Follow this EXACT JSON structure:
 {
   "archetype": "...",
+  "goals": ["Buy a bike", "Start a small company"],
   "embedded_events": {
     "salary_hike": false,
     "new_dependent": false,
@@ -424,7 +448,7 @@ Follow this EXACT JSON structure:
   }
 }
 Do not include markdown blocks, just raw JSON."""
-            prompt = f"Updated Profile: {json.dumps(persona.profile)}"
+            prompt = f"Updated Profile: {json.dumps(profile)}"
             try:
                 res = requests.post(
                     "https://api.cerebras.ai/v1/chat/completions",
@@ -438,36 +462,54 @@ Do not include markdown blocks, just raw JSON."""
                     }
                 )
                 if res.ok:
-                    response = res.json()["choices"][0]["message"]["content"].strip()
-                    if response.startswith("```json"):
-                        response = response[7:-3]
-                    elif response.startswith("```"):
-                        response = response[3:-3]
-                    parsed = json.loads(response.strip())
-                    if "archetype" in parsed:
-                        persona.archetype = parsed["archetype"]
-                    if "embedded_events" in parsed:
-                        persona.embedded_events = parsed["embedded_events"]
+                    response_text = res.json()["choices"][0]["message"]["content"].strip()
+                    import re
+                    json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+                    if json_match:
+                        parsed = json.loads(json_match.group(0))
+                        if "archetype" in parsed:
+                            archetype = parsed["archetype"]
+                        if "embedded_events" in parsed:
+                            embedded_events = parsed["embedded_events"]
+                        if "goals" in parsed:
+                            profile = {**profile, "goals": parsed["goals"]}
             except Exception as e:
                 print("Failed to recalculate persona:", e)
 
     if "life_events" in data:
-        persona.embedded_events = data["life_events"]
+        embedded_events = data["life_events"]
     if "archetype" in data:
-        persona.archetype = data["archetype"]
+        archetype = data["archetype"]
         
-    db.commit()
-    return {"status": "success", "archetype": persona.archetype, "life_events": persona.embedded_events}
+    if persona:
+        persona.profile = profile
+        persona.embedded_events = embedded_events
+        persona.archetype = archetype
+        db.commit()
+    else:
+        CUSTOM_PERSONA_CACHE[customer_id]["profile"] = profile
+        CUSTOM_PERSONA_CACHE[customer_id]["embedded_events"] = embedded_events
+        CUSTOM_PERSONA_CACHE[customer_id]["archetype"] = archetype
+        
+    return {"status": "success", "archetype": archetype, "life_events": embedded_events, "profile": profile}
 
 @app.get("/customers/{customer_id}/run-agents")
 async def run_agents_sse(customer_id: str, db: Session = Depends(get_db)):
     persona_row = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
+    cached_persona = CUSTOM_PERSONA_CACHE.get(customer_id)
+    
     persona_dict = {}
     if persona_row:
         persona_dict = {
             "archetype": persona_row.archetype,
             "profile": persona_row.profile,
             "embedded_events": persona_row.embedded_events
+        }
+    elif cached_persona:
+        persona_dict = {
+            "archetype": cached_persona["archetype"],
+            "profile": cached_persona["profile"],
+            "embedded_events": cached_persona["embedded_events"]
         }
 
     async def event_generator():
