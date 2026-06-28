@@ -85,7 +85,3 @@ This project adheres to the standard hackathon Code of Conduct. By participating
 <summary><b>Certificate of Authenticity</b></summary>
 We certify that all code written for engageAI during the hackathon timeframe is original, aside from standard open-source libraries and frameworks explicitly mentioned in `package.json`.
 </details>
-
----
-
-<p align="center">Made with ❤️ for SBI Hackathon</p>
