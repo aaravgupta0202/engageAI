@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Mic, Paperclip, Copy, Edit2, Check, RotateCcw, Square, Send, Loader2 } from 'lucide-react';
+import { Mic, Paperclip, Copy, Edit2, Check, RotateCcw, Square } from 'lucide-react';
 
 export default function AiChat({ customerId }: { customerId: string | null }) {
   const [messages, setMessages] = useState<{role: string, content: string, reasoning?: string[]}[]>([]);
