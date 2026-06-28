@@ -33,14 +33,14 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
             <p className="text-lg md:text-xl text-slate-600 mb-8 md:mb-10 max-w-xl leading-relaxed">
               Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly. Get curated plans and offers for your customer.
             </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-4 sm:py-6 shadow-xl shadow-sbi-blue/20 text-base sm:text-lg font-semibold flex items-center justify-center w-full sm:w-auto">
+            <div className="flex flex-wrap gap-4 w-full">
+              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-4 sm:py-6 shadow-xl shadow-sbi-blue/20 text-base sm:text-lg font-semibold flex items-center justify-center w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Try Demo <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto">
+              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Product Catalog <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto">
+              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 View Source <ArrowRight size={18} className="ml-2" />
               </Button>
             </div>

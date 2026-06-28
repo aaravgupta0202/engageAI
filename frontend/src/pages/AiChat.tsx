@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Mic, Paperclip, Copy, Edit2, Check } from 'lucide-react';
@@ -163,10 +164,8 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
                     </div>
                   )}
                   
-                  <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${m.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
-                    {m.content.split('\n').map((line, lIdx) => (
-                      <span key={lIdx}>{line}<br/></span>
-                    ))}
+                  <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm prose prose-sm dark:prose-invert ${m.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm prose-p:text-white prose-strong:text-white' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
+                    <ReactMarkdown>{m.content}</ReactMarkdown>
                   </div>
 
                   {m.role === 'user' && (

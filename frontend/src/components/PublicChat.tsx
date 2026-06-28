@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Bot, Send, X, MessageSquare, Loader2 } from 'lucide-react';
 
 interface Message {
@@ -87,12 +88,12 @@ export default function PublicChat() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50 dark:bg-slate-900/50">
             {messages.map((msg, i) => (
               <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm ${
+                <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-sm prose prose-sm dark:prose-invert ${
                   msg.role === 'user' 
-                    ? 'bg-sbi-blue text-white rounded-br-none' 
+                    ? 'bg-sbi-blue text-white rounded-br-none prose-p:text-white prose-strong:text-white' 
                     : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-700 rounded-bl-none'
                 }`}>
-                  {msg.content}
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
                 </div>
                 {msg.role === 'assistant' && msg.reasoning && msg.reasoning.length > 0 && (
                   <div className="mt-1 max-w-[85%] pl-2">
