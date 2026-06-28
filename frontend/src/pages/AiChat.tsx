@@ -2,22 +2,24 @@ import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Mic, Paperclip, Copy, Edit2, Check } from 'lucide-react';
+import { Mic, Paperclip, Copy, Edit2, Check, RotateCcw, Square, Send, Loader2 } from 'lucide-react';
 
 export default function AiChat({ customerId }: { customerId: string | null }) {
   const [messages, setMessages] = useState<{role: string, content: string, reasoning?: string[]}[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingHistory, setIsFetchingHistory] = useState(true);
   const [isListening, setIsListening] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [isFetchingHistory, setIsFetchingHistory] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (!customerId) return;
     
+    setIsFetchingHistory(true);
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     fetch(`${API_URL}/customers/${customerId}/chat`)
       .then(res => res.json())
@@ -36,20 +38,26 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async () => {
+  const handleSend = () => {
     if (!input.trim() || !customerId) return;
     
     const userMsg = input;
     setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
     setInput('');
+    sendMessage(userMsg);
+  };
+
+  const sendMessage = async (userMsg: string) => {
     setIsLoading(true);
+    abortControllerRef.current = new AbortController();
 
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const res = await fetch(`${API_URL}/customers/${customerId}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg })
+        body: JSON.stringify({ message: userMsg }),
+        signal: abortControllerRef.current.signal
       });
       
       if (!res.ok) {
@@ -69,10 +77,28 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
         reasoning: data.reasoning 
       }]);
     } catch (err: any) {
+      if (err.name === 'AbortError') {
+        return;
+      }
       console.error(err);
       setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${err.message}` }]);
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+  };
+
+  const handleStop = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  };
+
+  const handleReload = (index: number) => {
+    if (index > 0 && messages[index - 1].role === 'user') {
+      const userMsg = messages[index - 1].content;
+      setMessages(prev => prev.slice(0, index));
+      sendMessage(userMsg);
     }
   };
 
@@ -134,8 +160,9 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const editMessage = (text: string) => {
+  const editMessage = (text: string, index: number) => {
     setInput(text);
+    setMessages(prev => prev.slice(0, index));
   };
 
   return (
@@ -157,9 +184,12 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
               <div key={i} className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
                 <div className="flex items-center space-x-2 group/message">
                   {m.role === 'assistant' && (
-                    <div className="opacity-0 group-hover/message:opacity-100 transition-opacity">
+                    <div className="opacity-0 group-hover/message:opacity-100 transition-opacity flex flex-col gap-1">
                       <button onClick={() => copyToClipboard(m.content, i)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Copy response">
                         {copiedIndex === i ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      </button>
+                      <button onClick={() => handleReload(i)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Reload response">
+                        <RotateCcw size={14} />
                       </button>
                     </div>
                   )}
@@ -170,7 +200,7 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
 
                   {m.role === 'user' && (
                     <div className="opacity-0 group-hover/message:opacity-100 transition-opacity">
-                      <button onClick={() => editMessage(m.content)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Edit message">
+                      <button onClick={() => editMessage(m.content, i)} className="p-1.5 text-slate-400 hover:text-sbi-blue rounded-md hover:bg-slate-100 dark:hover:bg-slate-800" title="Edit message">
                         <Edit2 size={14} />
                       </button>
                     </div>
@@ -237,8 +267,12 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
               <Mic size={20} />
             </button>
           </div>
-          <Button onClick={handleSend} disabled={isLoading || isFetchingHistory} className="rounded-full px-6 md:px-8 py-6 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transition-all duration-300 transform hover:scale-105 font-bold text-white shrink-0">
-            {isLoading ? '...' : 'Send'}
+          <Button 
+            onClick={isLoading ? handleStop : handleSend} 
+            disabled={isFetchingHistory} 
+            className={`rounded-full px-6 md:px-8 py-6 shadow-lg transition-all duration-300 font-bold text-white shrink-0 ${isLoading ? 'bg-slate-600 hover:bg-slate-700' : 'bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105'}`}
+          >
+            {isLoading ? <Square fill="currentColor" size={16} /> : 'Send'}
           </Button>
         </div>
       </Card>
