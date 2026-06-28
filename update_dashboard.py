@@ -3,171 +3,112 @@ import re
 with open('frontend/src/pages/CustomerDashboard.tsx', 'r', encoding='utf-8') as f:
     content = f.read()
 
-# Add imports
+# Add new icons to import
 content = re.sub(
-    r"import { User, Target, Activity, CalendarClock } from 'lucide-react';",
-    "import { User, Target, Activity, CalendarClock, Wallet, HeartPulse } from 'lucide-react';",
+    r"import \{ HeartPulse, Target, Wallet, Activity, CalendarClock, CreditCard \} from 'lucide-react';",
+    "import { HeartPulse, Target, Wallet, Activity, CalendarClock, CreditCard, Sparkles, Send, ArrowRight } from 'lucide-react';",
     content
 )
 
-metrics_func = """
-  const parseNum = (val: any) => {
-      if (!val) return 0;
-      if (typeof val === 'number') return val;
-      if (typeof val === 'string') {
-          const match = val.match(/\\d+/g);
-          return match ? parseInt(match.join('')) : 0;
+# Add states for scenario planner
+content = content.replace("  const [metrics, setMetrics] = useState<any>(null);",
+                          "  const [metrics, setMetrics] = useState<any>(null);\n  const [scenarioInput, setScenarioInput] = useState('');\n  const [isSimulating, setIsSimulating] = useState(false);\n  const [scenarioResult, setScenarioResult] = useState<any>(null);")
+
+# Add the simulate function
+simulate_func = """
+  const handleSimulateScenario = async () => {
+    if (!scenarioInput.trim() || !id) return;
+    setIsSimulating(true);
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/personas/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: id, scenario: scenarioInput })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const origMetrics = calculateMetrics(data.original);
+        const simMetrics = calculateMetrics(data.simulated);
+        setScenarioResult({ original: origMetrics, simulated: simMetrics, profile: data.simulated });
       }
-      return 0;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSimulating(false);
+    }
   };
-
-  const calculateMetrics = (profile: any) => {
-      const income = parseNum(profile?.income) || 0;
-      const expenses = parseNum(profile?.cost_of_living_estimate) || (income * 0.5) || 0;
-      
-      let assets = 0;
-      if (profile?.assets) {
-        if (Array.isArray(profile.assets)) {
-          assets = profile.assets.reduce((acc: number, cur: any) => acc + parseNum(cur), 0) || income * 2;
-        } else {
-          assets = parseNum(profile.assets) || income * 2;
-        }
-      } else {
-        assets = income * 2;
-      }
-
-      let liabilities = 0;
-      if (profile?.liabilities) {
-        liabilities = parseNum(profile.liabilities);
-      } else {
-        liabilities = assets * 0.3;
-      }
-
-      const netWorth = assets - liabilities;
-
-      const savingsScore = assets > income ? 25 : Math.min(25, (assets / Math.max(income, 1)) * 25);
-      const emergencyFundScore = (assets > expenses * 6) ? 20 : 10;
-      const insuranceScore = profile?.notes?.toLowerCase().includes('insurance') ? 15 : 0;
-      const debtScore = liabilities === 0 ? 15 : Math.max(0, 15 - (liabilities / Math.max(assets, 1)) * 15);
-      const goalsScore = (profile?.goals && profile.goals.length > 0) ? 15 : 0;
-      const cashFlowScore = (income > expenses * 12) ? 10 : 5;
-
-      const healthScore = Math.round(savingsScore + emergencyFundScore + insuranceScore + debtScore + goalsScore + cashFlowScore);
-
-      return {
-          assets,
-          liabilities,
-          netWorth,
-          healthScore,
-          breakdown: {
-              savings: Math.round(savingsScore),
-              emergency: Math.round(emergencyFundScore),
-              insurance: Math.round(insuranceScore),
-              debt: Math.round(debtScore),
-              goals: Math.round(goalsScore),
-              cashFlow: Math.round(cashFlowScore)
-          }
-      };
-  };
-
-  const metrics = data?.profile ? calculateMetrics(data.profile) : null;
 """
 
-content = content.replace('  return (\n    <div className="space-y-8 animate-in', metrics_func + '\n  return (\n    <div className="space-y-8 animate-in')
+content = content.replace("  const hasRunAnalysis = localStorage.getItem(`analysis_run_${id}`);", simulate_func + "\n  const hasRunAnalysis = localStorage.getItem(`analysis_run_${id}`);")
 
-goals_old = """                <div className="flex flex-wrap gap-3">
-                  {(data.profile?.goals || []).map((g: string, i: number) => (
-                    <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex items-center">
-                      <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}
-                    </div>
-                  ))}
-                  {(!data.profile?.goals || data.profile.goals.length === 0) && <span className="text-slate-400 italic">No goals specified.</span>}
-                </div>"""
-
-goals_new = """                <div className="flex flex-col gap-4 w-full">
-                  {(data.profile?.goals || []).map((g: string, i: number) => {
-                    const progress = Math.min(100, Math.max(10, Math.round((g.length * 7.3) % 85))); 
-                    return (
-                    <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex flex-col w-full">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}</span>
-                        <span className="text-sm font-bold">{progress}%</span>
-                      </div>
-                      <div className="w-full bg-indigo-100 dark:bg-indigo-800/50 rounded-full h-2">
-                        <div className="bg-indigo-500 h-2 rounded-full transition-all duration-1000" style={{ width: `${progress}%` }}></div>
-                      </div>
-                    </div>
-                  )})}
-                  {(!data.profile?.goals || data.profile.goals.length === 0) && <span className="text-slate-400 italic">No goals specified.</span>}
-                </div>"""
-
-content = content.replace(goals_old, goals_new)
-
-new_cards = """
-        {metrics && (
-          <>
-            <Card className="md:col-span-1 glass-card border-t-4 border-t-pink-500">
-              <CardHeader>
-                <CardTitle className="text-slate-800 dark:text-white flex items-center"><Wallet className="w-6 h-6 mr-2 text-pink-500" /> Net Worth</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-500 text-sm">Assets</span>
-                  <span className="font-bold text-emerald-500">₹{metrics.assets.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-500 text-sm">Liabilities</span>
-                  <span className="font-bold text-red-500">-₹{metrics.liabilities.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-slate-800 dark:text-white font-bold">Net Worth</span>
-                  <span className="font-black text-xl text-sbi-blue">₹{metrics.netWorth.toLocaleString()}</span>
-                </div>
-              </CardContent>
-            </Card>
+# Add Scenario Planner UI at the bottom
+scenario_ui = """
+        <Card className="md:col-span-3 glass-card border-t-4 border-t-blue-500 overflow-hidden relative">
+          <CardHeader className="bg-gradient-to-r from-blue-500/10 to-transparent">
+            <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
+              <div className="flex items-center"><Sparkles className="w-6 h-6 mr-2 text-blue-500" /> Scenario Planner ("What if?")</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="flex gap-4">
+              <input 
+                type="text" 
+                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="E.g., What if I get married next year and buy a car?" 
+                value={scenarioInput}
+                onChange={e => setScenarioInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSimulateScenario()}
+              />
+              <button 
+                onClick={handleSimulateScenario} 
+                disabled={isSimulating || !scenarioInput.trim()}
+                className="rounded-xl px-6 py-0 bg-blue-500 hover:bg-blue-600 text-white font-bold shrink-0 flex items-center justify-center shadow-md transition-transform hover:scale-105 disabled:opacity-50"
+              >
+                {isSimulating ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <><Send size={18} className="mr-2" /> Simulate</>}
+              </button>
+            </div>
             
-            <Card className="md:col-span-2 glass-card border-t-4 border-t-amber-500">
-              <CardHeader>
-                <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
-                  <div className="flex items-center"><HeartPulse className="w-6 h-6 mr-2 text-amber-500" /> Financial Health Score</div>
-                  <div className="text-2xl font-black text-amber-500">{metrics.healthScore} <span className="text-sm text-slate-400 font-normal">/ 100</span></div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Savings</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.savings} <span className="text-xs font-normal text-slate-400">/ 25</span></div>
+            {scenarioResult && (
+              <div className="mt-6 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 animate-in fade-in slide-in-from-top-4">
+                <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-4 uppercase tracking-wider text-sm">Simulated Twin Projection</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Health Score</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-xl font-bold text-slate-400 line-through">{scenarioResult.original.healthScore}</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className={`text-2xl font-black ${scenarioResult.simulated.healthScore > scenarioResult.original.healthScore ? 'text-emerald-500' : 'text-red-500'}`}>{scenarioResult.simulated.healthScore}</span>
+                     </div>
                   </div>
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Emergency Fund</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.emergency} <span className="text-xs font-normal text-slate-400">/ 20</span></div>
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Net Worth</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-slate-400 line-through">₹{(scenarioResult.original.netWorth/100000).toFixed(1)}L</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className="text-xl font-black text-blue-500">₹{(scenarioResult.simulated.netWorth/100000).toFixed(1)}L</span>
+                     </div>
                   </div>
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Debt Mgmt</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.debt} <span className="text-xs font-normal text-slate-400">/ 15</span></div>
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Cash Flow Score</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-slate-400 line-through">{scenarioResult.original.breakdown.cashFlow}/10</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className="text-xl font-black text-blue-500">{scenarioResult.simulated.breakdown.cashFlow}/10</span>
+                     </div>
                   </div>
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Insurance</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.insurance} <span className="text-xs font-normal text-slate-400">/ 15</span></div>
-                  </div>
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Goals Setup</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.goals} <span className="text-xs font-normal text-slate-400">/ 15</span></div>
-                  </div>
-                  <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg border border-amber-100 dark:border-amber-800/30">
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Cash Flow</div>
-                    <div className="font-bold text-slate-800 dark:text-amber-100">{metrics.breakdown.cashFlow} <span className="text-xs font-normal text-slate-400">/ 10</span></div>
-                  </div>
+                  
                 </div>
-              </CardContent>
-            </Card>
-          </>
-        )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 """
-content = content.replace("<FinancialGraphView data={data} />", new_cards + "\n        <FinancialGraphView data={data} />")
+
+content = content.replace("        </Card>\n      </div>\n    </div>\n  );\n}", "        </Card>\n" + scenario_ui + "\n      </div>\n    </div>\n  );\n}")
 
 with open('frontend/src/pages/CustomerDashboard.tsx', 'w', encoding='utf-8') as f:
     f.write(content)
-
-print("Dashboard updated successfully.")

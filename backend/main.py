@@ -45,6 +45,7 @@ app.add_middleware(
 
 class ChatRequest(BaseModel):
     message: str
+    intent: Optional[str] = None
 
 class ProductUpdate(BaseModel):
     name: str
@@ -239,6 +240,53 @@ Do not include markdown blocks, just raw JSON."""
         print("Custom Generation Error:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+class ScenarioRequest(BaseModel):
+    customer_id: str
+    scenario: str
+
+@app.post("/personas/simulate")
+async def simulate_scenario(req: ScenarioRequest, db: Session = Depends(get_db)):
+    persona = db.query(models.Persona).filter(models.Persona.id == req.customer_id).first()
+    if not persona:
+        raise HTTPException(status_code=404, detail="Persona not found")
+        
+    api_key = os.getenv("CEREBRAS_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+
+    system_prompt = """You are a financial twin simulator. You will receive a customer's current financial profile and a 'What if...' scenario.
+Output a NEW modified JSON profile predicting the financial impact of the scenario on their income, assets, expenses, goals, and demographics.
+Only output the raw JSON profile object (no markdown). Keep the structure identical to the input profile."""
+
+    prompt = f"Current Profile: {json.dumps(persona.profile)}\nScenario: {req.scenario}"
+    
+    try:
+        res = requests.post(
+            "https://api.cerebras.ai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "gpt-oss-120b",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ]
+            }
+        )
+        if not res.ok:
+            raise Exception(f"Cerebras API error: {res.text}")
+            
+        response = res.json()["choices"][0]["message"]["content"].strip()
+        
+        if response.startswith("```json"):
+            response = response[7:-3]
+        elif response.startswith("```"):
+            response = response[3:-3]
+        
+        simulated_profile = json.loads(response.strip())
+        return {"original": persona.profile, "simulated": simulated_profile}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/customers/{customer_id}/graph")
 def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
     persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
@@ -332,6 +380,8 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
     products = db.query(models.ProductCatalog).all()
     catalog_summary = "\n".join([f"- {p.name} ({p.category}): {p.description}" for p in products])
 
+    intent_text = f"\nCurrent Conversation Intent: {request.intent.upper() if request.intent else 'GENERAL ADVICE'}\nYou must shift your personality and focus to strictly answer based on this intent."
+
     system_prompt = f"""You are engageAI, a proactive, helpful financial Relationship Manager for the State Bank of India.
 You provide highly intelligent, context-aware answers to user queries based on their full profile.
 
@@ -355,6 +405,8 @@ Before answering, you must internally consider:
 2. Detected Events
 3. Current Recommendations
 4. Current Products & History
+
+{intent_text}
 
 Every answer MUST be highly personalised to their specific demographics, income, goals, and risk appetite. NEVER give generic financial advice.
 

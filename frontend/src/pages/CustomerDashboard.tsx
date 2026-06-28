@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { User, Target, Activity, CalendarClock, Wallet, HeartPulse } from 'lucide-react';
+import { User, Target, Activity, CalendarClock, Wallet, HeartPulse, Sparkles, Send, ArrowRight } from 'lucide-react';
 import FinancialGraphView from '../components/FinancialGraphView';
 
 export default function CustomerDashboard({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [data, setData] = useState<any>(null);
   const [hasRunAnalysis, setHasRunAnalysis] = useState(false);
+  const [scenarioInput, setScenarioInput] = useState('');
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [scenarioResult, setScenarioResult] = useState<any>(null);
 
   useEffect(() => {
     if (!customerId) return;
@@ -119,6 +122,29 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
   };
 
   const metrics = data?.profile ? calculateMetrics(data.profile) : null;
+
+  const handleSimulateScenario = async () => {
+    if (!scenarioInput.trim() || !customerId) return;
+    setIsSimulating(true);
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/personas/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: customerId, scenario: scenarioInput })
+      });
+      if (res.ok) {
+        const simData = await res.json();
+        const origMetrics = calculateMetrics(simData.original);
+        const simMetrics = calculateMetrics(simData.simulated);
+        setScenarioResult({ original: origMetrics, simulated: simMetrics, profile: simData.simulated });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSimulating(false);
+    }
+  };
 
   // Generate deterministic past events based on age and demographics
   const generatePastEvents = (profile: any) => {
@@ -357,6 +383,70 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
             </div>
           </CardContent>
         </Card>
+
+        <Card className="md:col-span-3 glass-card border-t-4 border-t-blue-500 overflow-hidden relative">
+          <CardHeader className="bg-gradient-to-r from-blue-500/10 to-transparent">
+            <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
+              <div className="flex items-center"><Sparkles className="w-6 h-6 mr-2 text-blue-500" /> Scenario Planner ("What if?")</div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="flex gap-4">
+              <input 
+                type="text" 
+                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder="E.g., What if I get married next year and buy a car?" 
+                value={scenarioInput}
+                onChange={e => setScenarioInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSimulateScenario()}
+              />
+              <button 
+                onClick={handleSimulateScenario} 
+                disabled={isSimulating || !scenarioInput.trim()}
+                className="rounded-xl px-6 py-0 bg-blue-500 hover:bg-blue-600 text-white font-bold shrink-0 flex items-center justify-center shadow-md transition-transform hover:scale-105 disabled:opacity-50"
+              >
+                {isSimulating ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <><Send size={18} className="mr-2" /> Simulate</>}
+              </button>
+            </div>
+            
+            {scenarioResult && (
+              <div className="mt-6 p-6 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-700 animate-in fade-in slide-in-from-top-4">
+                <h4 className="font-bold text-slate-800 dark:text-slate-200 mb-4 uppercase tracking-wider text-sm">Simulated Twin Projection</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Health Score</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-xl font-bold text-slate-400 line-through">{scenarioResult.original.healthScore}</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className={`text-2xl font-black ${scenarioResult.simulated.healthScore > scenarioResult.original.healthScore ? 'text-emerald-500' : 'text-red-500'}`}>{scenarioResult.simulated.healthScore}</span>
+                     </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Net Worth</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-slate-400 line-through">₹{(scenarioResult.original.netWorth/100000).toFixed(1)}L</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className="text-xl font-black text-blue-500">₹{(scenarioResult.simulated.netWorth/100000).toFixed(1)}L</span>
+                     </div>
+                  </div>
+                  
+                  <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+                     <span className="text-sm text-slate-500 mb-1">Cash Flow Score</span>
+                     <div className="flex items-center gap-3">
+                        <span className="text-lg font-bold text-slate-400 line-through">{scenarioResult.original.breakdown.cashFlow}/10</span>
+                        <ArrowRight size={16} className="text-blue-500" />
+                        <span className="text-xl font-black text-blue-500">{scenarioResult.simulated.breakdown.cashFlow}/10</span>
+                     </div>
+                  </div>
+                  
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
       </div>
     </div>
   );

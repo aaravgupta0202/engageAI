@@ -11,6 +11,7 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
   const [isListening, setIsListening] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [isFetchingHistory, setIsFetchingHistory] = useState(false);
+  const [intent, setIntent] = useState('Advice');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -54,7 +55,7 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
       const res = await fetch(`${API_URL}/customers/${customerId}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }),
+        body: JSON.stringify({ message: userMsg, intent: intent }),
         signal: abortControllerRef.current.signal
       });
       
@@ -178,6 +179,21 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
           </div>
         </CardHeader>
         
+        <div className="bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-6 py-3 flex items-center justify-between">
+          <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Conversation Intent</div>
+          <div className="flex bg-white dark:bg-slate-800 rounded-lg p-1 shadow-sm border border-slate-200 dark:border-slate-700">
+            {['Advice', 'Planning', 'Comparison', 'Execution'].map(mode => (
+              <button 
+                key={mode} 
+                onClick={() => setIntent(mode)}
+                className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${intent === mode ? 'bg-sbi-blue text-white shadow' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'}`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <CardContent className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
           {isFetchingHistory ? (
             <div className="flex items-center justify-center h-full text-slate-500">Loading history...</div>
