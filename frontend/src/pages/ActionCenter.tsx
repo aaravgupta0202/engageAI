@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { CheckCircle2, ChevronRight, Clock, ShieldCheck, PlayCircle } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Clock, ShieldCheck, PlayCircle, FastForward } from 'lucide-react';
 
 export default function ActionCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [currentStep, setCurrentStep] = useState(() => {
@@ -147,9 +147,9 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                   <Button 
                     onClick={handleFastForward}
                     disabled={fastForwarded}
-                    className={`rounded-full px-6 py-2.5 font-bold transition-all shadow-md ${fastForwarded ? 'bg-slate-200 text-slate-400' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105'}`}
+                    className={`rounded-full px-6 py-2.5 font-bold transition-all shadow-md flex items-center ${fastForwarded ? 'bg-slate-200 text-slate-400' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105'}`}
                   >
-                    {fastForwarded ? 'Simulated' : 'Fast Forward 30 Days ⏩'}
+                    {fastForwarded ? 'Simulated' : <>Fast Forward 30 Days <FastForward size={16} className="ml-2" /></>}
                   </Button>
                   <Button 
                     onClick={() => onNavigate('chat')}
@@ -176,7 +176,10 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                   </div>
                 </div>
                 <Button 
-                  onClick={() => onNavigate('chat')}
+                  onClick={() => {
+                    localStorage.setItem(`pending_chat_message_${customerId}`, `"Hi there! It's been 30 days since we increased your Mutual Fund SIP. Did the new amount hold comfortably with your recent salary hike, or should we adjust the allocation?"`);
+                    onNavigate('chat');
+                  }}
                   className="rounded-full px-8 py-6 bg-amber-500 hover:bg-amber-600 text-white font-bold transition-all hover:scale-105 shadow-md"
                 >
                   Reply in Chat

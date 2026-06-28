@@ -119,7 +119,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
         <div className="bg-red-50/80 backdrop-blur-md dark:bg-red-900/20 text-red-600 dark:text-red-400 p-5 rounded-2xl border border-red-200 dark:border-red-800 shadow-sm flex items-center justify-between animate-in zoom-in-95">
           <div><strong className="font-bold">Error:</strong> {error}</div>
           {apiFailed && (
-            <Button onClick={fetchPersonas} variant="outline" className="text-red-600 border-red-200 hover:bg-red-100">
+            <Button onClick={fetchPersonas} className="bg-red-600 text-white hover:bg-red-700 border-none shadow-md">
               Retry Connection
             </Button>
           )}

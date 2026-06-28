@@ -48,7 +48,15 @@ function App() {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-1">
               {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat', 'catalog'].map((page) => {
-                const isDisabled = !activeCustomerId && page !== 'generator' && page !== 'catalog';
+                const hasRunAnalysis = activeCustomerId ? localStorage.getItem(`analysis_run_${activeCustomerId}`) === 'true' : false;
+                const hasSelectedAction = activeCustomerId ? localStorage.getItem(`selected_action_${activeCustomerId}`) !== null : false;
+                
+                let isDisabled = true;
+                if (page === 'generator' || page === 'catalog') isDisabled = false;
+                else if (page === 'dashboard' || page === 'agent') isDisabled = !activeCustomerId;
+                else if (page === 'recommendations') isDisabled = !hasRunAnalysis;
+                else if (page === 'actions' || page === 'chat') isDisabled = !hasSelectedAction;
+
                 return (
                   <div key={page} className="relative group inline-block">
                     <button
@@ -65,7 +73,7 @@ function App() {
                     </button>
                     {isDisabled && (
                       <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max px-3 py-1 bg-slate-800 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        Generate a customer first
+                        Complete previous steps first
                       </div>
                     )}
                   </div>
@@ -84,16 +92,23 @@ function App() {
 
           {/* Mobile Sidebar Navigation */}
           <div className={`fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300 ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setIsMobileMenuOpen(false)}></div>
-          <div className={`fixed top-0 right-0 h-full w-64 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-            <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-              <img src="/favicon.png" alt="engageAI Logo" className="h-12 w-auto object-contain" />
+          <div className={`fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+            <div className="p-6 border-b border-slate-100 flex items-center justify-end">
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 text-slate-500 hover:bg-slate-100 rounded-full">
                 <X size={24} />
               </button>
             </div>
             <nav className="flex-1 overflow-y-auto py-4 px-4 space-y-2">
               {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat', 'catalog'].map((page) => {
-                const isDisabled = !activeCustomerId && page !== 'generator' && page !== 'catalog';
+                const hasRunAnalysis = activeCustomerId ? localStorage.getItem(`analysis_run_${activeCustomerId}`) === 'true' : false;
+                const hasSelectedAction = activeCustomerId ? localStorage.getItem(`selected_action_${activeCustomerId}`) !== null : false;
+                
+                let isDisabled = true;
+                if (page === 'generator' || page === 'catalog') isDisabled = false;
+                else if (page === 'dashboard' || page === 'agent') isDisabled = !activeCustomerId;
+                else if (page === 'recommendations') isDisabled = !hasRunAnalysis;
+                else if (page === 'actions' || page === 'chat') isDisabled = !hasSelectedAction;
+
                 return (
                   <button
                     key={page}

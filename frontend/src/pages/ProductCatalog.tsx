@@ -17,7 +17,7 @@ export default function ProductCatalog() {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [adminMode, setAdminMode] = useState(false);
+  const adminMode = false;
   const [editForm, setEditForm] = useState<any>(null);
   const [saving, setSaving] = useState(false);
 
@@ -82,15 +82,6 @@ export default function ProductCatalog() {
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
-          </div>
-          <div className="flex items-center space-x-2 bg-slate-100 dark:bg-slate-800 px-4 py-3 rounded-xl w-full md:w-auto">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Admin Mode</span>
-            <button 
-              onClick={() => setAdminMode(!adminMode)}
-              className={`w-12 h-6 rounded-full transition-colors relative focus:outline-none ${adminMode ? 'bg-sbi-blue' : 'bg-slate-300 dark:bg-slate-600'}`}
-            >
-              <div className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-transform ${adminMode ? 'translate-x-6' : 'translate-x-0.5'}`}></div>
-            </button>
           </div>
         </div>
       </div>

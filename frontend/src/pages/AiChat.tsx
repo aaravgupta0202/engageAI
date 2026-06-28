@@ -20,18 +20,16 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
     if (!customerId) return;
     
     setIsFetchingHistory(true);
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    fetch(`${API_URL}/customers/${customerId}/chat`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          setMessages(data);
-        } else {
-          setMessages([{ role: 'assistant', content: 'Hello! How can I help you today? I have access to your full financial graph.' }]);
-        }
-      })
-      .catch(console.error)
-      .finally(() => setIsFetchingHistory(false));
+    
+    const pendingMsg = localStorage.getItem(`pending_chat_message_${customerId}`);
+    if (pendingMsg) {
+      setMessages([{ role: 'assistant', content: pendingMsg }]);
+      localStorage.removeItem(`pending_chat_message_${customerId}`);
+    } else {
+      setMessages([{ role: 'assistant', content: 'Hello! How can I help you today? I have access to your full financial graph.' }]);
+    }
+    
+    setIsFetchingHistory(false);
   }, [customerId]);
 
   useEffect(() => {
