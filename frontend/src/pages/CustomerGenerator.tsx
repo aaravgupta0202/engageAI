@@ -124,7 +124,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
           </div>
         </div>
       ) : (
-        <div className="glass-panel rounded-3xl border border-slate-200/50 dark:border-slate-800/50 relative overflow-hidden flex flex-col" style={{ height: '500px' }}>
+        <div className="glass-panel rounded-3xl border border-slate-200/50 dark:border-slate-800/50 relative overflow-hidden flex flex-col flex-1 min-h-[60vh]">
           <div className="bg-slate-100 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
             <h3 className="font-bold text-slate-800 dark:text-white flex items-center">
               <Bot className="w-5 h-5 mr-2 text-sbi-blue" /> SBI Copilot Onboarding

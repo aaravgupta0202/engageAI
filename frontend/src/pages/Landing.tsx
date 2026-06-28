@@ -7,7 +7,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
     <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white overflow-x-hidden selection:bg-sbi-blue selection:text-white">
 
       {/* Navigation for Landing Only */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50">
+      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50 sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-200/50">
         <div className="flex items-center -ml-3 cursor-pointer group">
           <img src="/favicon.png" alt="engageAI Logo" className="h-32 md:h-40 w-auto group-hover:opacity-80 transition-opacity object-contain -my-10 scale-125" />
         </div>

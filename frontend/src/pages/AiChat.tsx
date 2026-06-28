@@ -165,8 +165,8 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[80vh] animate-in slide-in-from-bottom-4 duration-500">
-      <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl">
+    <div className="w-full flex flex-col flex-1 min-h-[70vh] animate-in slide-in-from-bottom-4 duration-500">
+      <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl rounded-3xl">
         <CardHeader className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sbi-blue to-cyan-500 flex items-center justify-center text-white shadow-md">

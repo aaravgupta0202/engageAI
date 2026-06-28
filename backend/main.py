@@ -181,16 +181,18 @@ async def generate_custom_persona(req: CustomPersonaRequest, db: Session = Depen
     system_prompt = """You are an expert synthetic data generator for banking personas. 
 You will be provided with custom user inputs from a conversational onboarding chat and a scraped snippet about their city. 
 Synthesize a comprehensive, realistic JSON persona graph. 
-CRITICAL RULE: Do NOT hallucinate or assume missing financial data. If the user explicitly says 'Unknown' or leaves out a detail, mark the JSON field as 'Unknown' (or omit it if it's an array/number). For example, if they don't give expenses, do NOT invent expenses.
+CRITICAL RULE: You MUST intelligently process the user's raw chat inputs into proper numeric or text data (e.g., parse "15 lakhs" into 1500000). 
+CRITICAL RULE 2: If the user explicitly says 'Unknown' or leaves out a detail (e.g., they didn't provide their expenses or assets), you MUST intelligently assume a highly realistic baseline value for a person with their given occupation, income, and city. 
+CRITICAL RULE 3: For ANY field where you have made an assumption or estimate that the user did not explicitly provide, you MUST append " (Assumed)" to the string value (if it's a number, convert it to a string and append it, e.g., "40000 (Assumed)").
 Follow this EXACT JSON structure, adding new fields if necessary to capture their notes/assets:
 {
   "archetype": "Short 2-word summary",
   "profile": {
     "age": 30,
-    "income": 1200000,
+    "income": "1200000",
     "occupation": "...",
     "location": "...",
-    "cost_of_living_estimate": 40000,
+    "cost_of_living_estimate": "40000 (Assumed)",
     "assets": ["..."],
     "goals": ["..."],
     "notes": "..."
