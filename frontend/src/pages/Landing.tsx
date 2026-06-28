@@ -188,42 +188,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
       </div>
 
-      {/* Platform Interface Gallery (3D Popping Style) */}
-      <div id="interface" className="w-full bg-slate-900 text-white py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sbi-blue/20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/20 blur-3xl rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none"></div>
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Platform Interface</h2>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto font-medium">A fully transparent, explainable UI that gives you a 360° view of customer financial graphs and agentic reasoning.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16 [perspective:1500px]">
-            {[1, 2, 3, 4, 5, 6].map((num) => (
-              <div key={num} className="group relative flex justify-center">
-                <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/40 to-indigo-500/40 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100 -z-10"></div>
-                <img 
-                  src={`/images/app-showcase-${num}.png`} 
-                  alt={`engageAI Platform Showcase ${num}`} 
-                  className="w-full rounded-2xl border-[6px] border-slate-800 shadow-2xl transition-all duration-700 ease-out transform lg:[transform:rotateX(15deg)_rotateY(-5deg)_scale(0.95)] group-hover:[transform:rotateX(0deg)_rotateY(0deg)_scale(1.05)] group-hover:border-slate-700 cursor-pointer object-cover object-top h-64 md:h-80"
-                />
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-16 w-full flex justify-center [perspective:1500px]">
-             <div className="group relative w-full max-w-5xl">
-                <div className="absolute inset-0 bg-gradient-to-tr from-sbi-blue/50 to-emerald-500/50 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-0 group-hover:opacity-100 -z-10"></div>
-                <img 
-                  src="/images/app-showcase-9.png" 
-                  alt="engageAI Main Dashboard" 
-                  className="w-full rounded-2xl border-[8px] border-slate-800 shadow-[0_30px_60px_rgba(0,0,0,0.6)] transition-all duration-700 ease-out transform lg:[transform:rotateX(15deg)_scale(0.95)] group-hover:[transform:rotateX(0deg)_scale(1.05)] group-hover:border-slate-700 cursor-pointer"
-                />
-             </div>
-          </div>
-        </div>
-      </div>
+
 
       {/* Our Capabilities Section */}
       <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-20">
