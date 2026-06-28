@@ -24,9 +24,9 @@ export default function FinancialGraphView({ data }: { data: any }) {
   // Generate nodes based on data
   const nodes: Node[] = [
     { id: 'customer', label: data?.archetype || 'Customer', category: 'hub', x: 50, y: 50, data: { id: data?.customer_id } },
-    { id: 'demographics', label: 'Demographics', category: 'static', x: 20, y: 30, data: { age: data?.profile?.age, occupation: data?.profile?.occupation } },
-    { id: 'income', label: 'Income', category: 'flow', x: 80, y: 30, data: { monthly: data?.profile?.income } },
-    { id: 'goals', label: 'Life Goals', category: 'static', x: 20, y: 70, data: { goals: data?.profile?.goals } },
+    { id: 'demographics', label: 'Demographics', category: 'static', x: 15, y: 25, data: { age: data?.profile?.age, occupation: data?.profile?.occupation } },
+    { id: 'income', label: 'Income', category: 'flow', x: 85, y: 25, data: { monthly: data?.profile?.income } },
+    { id: 'goals', label: 'Life Goals', category: 'static', x: 15, y: 75, data: { goals: data?.profile?.goals } },
   ];
 
   const edges: Edge[] = [
@@ -45,12 +45,12 @@ export default function FinancialGraphView({ data }: { data: any }) {
           id: eventId,
           label: key.replace(/_/g, ' ').toUpperCase(),
           category: 'event',
-          x: 80,
-          y: 70 + eventOffset,
+          x: 85 - (eventOffset % 2) * 15,
+          y: 65 + Math.floor(eventOffset / 2) * 20,
           data: { confidence: '91%', source: 'Transaction pattern inference' }
         });
         edges.push({ source: eventId, target: 'customer', animated: true });
-        eventOffset += 15;
+        eventOffset += 1;
       }
     });
   }
@@ -72,9 +72,9 @@ export default function FinancialGraphView({ data }: { data: any }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col md:flex-row gap-6 h-[400px]">
+        <div className="flex flex-col md:flex-row gap-6 min-h-[400px]">
           {/* Canvas Area */}
-          <div className="flex-1 bg-slate-50 dark:bg-slate-900/50 rounded-2xl relative overflow-hidden border border-slate-100 dark:border-slate-800 shadow-inner group">
+          <div className="flex-1 min-h-[300px] md:min-h-[400px] bg-slate-50 dark:bg-slate-900/50 rounded-2xl relative overflow-hidden border border-slate-100 dark:border-slate-800 shadow-inner group">
             
             {/* SVG Edges */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none">

@@ -30,12 +30,12 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
-      <div className="flex justify-between items-center glass-panel p-6 rounded-2xl">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel p-6 rounded-2xl">
         <div>
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">Financial Life Graph</h2>
           <p className="text-slate-500 dark:text-slate-400 font-medium">{data.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
         </div>
-        <Button onClick={() => onNavigate('agent')} className="rounded-full px-8 shadow-lg bg-gradient-to-r from-cyan-500 to-sbi-blue hover:from-cyan-400 hover:to-sbi-blue text-white font-bold transition-all hover:scale-105">
+        <Button onClick={() => onNavigate('agent')} className="w-full md:w-auto rounded-full px-8 shadow-lg bg-gradient-to-r from-cyan-500 to-sbi-blue hover:from-cyan-400 hover:to-sbi-blue text-white font-bold transition-all hover:scale-105 shrink-0 whitespace-nowrap">
           Run Analysis Agents
         </Button>
       </div>

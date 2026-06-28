@@ -107,7 +107,7 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in slide-in-from-bottom-8 duration-700">
-      <div className="flex justify-between items-center glass-panel p-6 rounded-2xl border-l-4 border-l-sbi-blue">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel p-6 rounded-2xl border-l-4 border-l-sbi-blue">
         <div>
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white flex items-center">
             Agent Orchestration 
@@ -118,7 +118,7 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
         <Button 
           onClick={() => onNavigate('recommendations')} 
           disabled={!isDone} 
-          className="rounded-full px-8 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 text-white font-bold transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
+          className="w-full md:w-auto shrink-0 whitespace-nowrap rounded-full px-8 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 text-white font-bold transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
         >
           {isDone ? 'View Recommendations ➔' : 'Processing...'}
         </Button>
