@@ -197,6 +197,9 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
     # In MVP, transactions and recommendations are mocked empty unless we seed them
     transactions = "No recent transactions found."
     recommendations = "No active recommendations."
+    # Fetch catalog so AI can reference other products
+    products = db.query(models.ProductCatalog).all()
+    catalog_summary = "\n".join([f"- {p.name} ({p.category}): {p.description}" for p in products])
 
     system_prompt = f"""You are engageAI, a proactive, helpful financial copilot for the State Bank of India.
 You provide intelligent, context-aware answers to user queries.
@@ -212,6 +215,9 @@ Recent Transactions:
 
 Current Recommendations:
 {recommendations}
+
+Available Product Catalog (use these if the user asks for other options):
+{catalog_summary}
 
 User Question:
 {request.message}
