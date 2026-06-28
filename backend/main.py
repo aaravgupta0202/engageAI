@@ -29,6 +29,13 @@ app = FastAPI(title="engageAI API")
 @app.on_event("startup")
 def startup_event():
     db = next(get_db())
+    from sqlalchemy import text
+    try:
+        db.execute(text("ALTER TABLE product_catalog ADD COLUMN link VARCHAR(500)"))
+        db.commit()
+    except Exception:
+        db.rollback()
+        
     if db.query(models.ProductCatalog).count() < 10:
         print("Auto-seeding database because catalog has less than 10 products...")
         import seed
