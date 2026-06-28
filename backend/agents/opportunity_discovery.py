@@ -19,6 +19,7 @@ def opportunity_discovery_node(state):
         messages.append("Agent 3 (Opportunity Discovery): No significant life events detected. Recommending general baseline products based on demographic and income profile.")
         state["messages"] = messages
 
+    llm = get_llm("reasoning")
     if not llm:
         # Fallback if no LLM - use persona to make a smart guess
         occupation = persona.get("demographics", {}).get("occupation", "").lower()
