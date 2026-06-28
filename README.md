@@ -5,7 +5,7 @@
 </div>
 
 <p align="center">
-  <strong>Built for the SBI Agentic AI Hackathon</strong><br>
+  <strong>Built by Aarav Gupta, for SBI Hackathon @ GFF 2026</strong><br>
   <em>Turn Raw Banking Data into Agentic Actions</em>
 </p>
 

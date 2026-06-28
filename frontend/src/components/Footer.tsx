@@ -8,7 +8,7 @@ export default function Footer() {
           <div className="flex items-center -ml-3">
             <img src="/favicon.png" alt="engageAI Logo" className="h-24 w-auto object-contain -my-6 scale-125" />
           </div>
-          <p className="text-sm text-slate-500 font-medium">Built for the SBI Agentic AI Hackathon</p>
+          <p className="text-sm text-slate-500 font-medium">Built by Aarav Gupta, for SBI Hackathon @ GFF 2026</p>
         </div>
         
         <div className="flex space-x-4">
