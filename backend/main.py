@@ -221,7 +221,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -312,7 +312,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": cerebras_messages
             }
         )
@@ -374,7 +374,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -464,7 +464,7 @@ Do not include markdown blocks, just raw JSON."""
                     "https://api.cerebras.ai/v1/chat/completions",
                     headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
                     json={
-                        "model": "llama3.1-70b",
+                        "model": "gpt-oss-120b",
                         "messages": [
                             {"role": "system", "content": system_prompt},
                             {"role": "user", "content": prompt}
