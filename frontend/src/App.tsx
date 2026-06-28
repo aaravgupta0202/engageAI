@@ -5,7 +5,7 @@
  * Landing, Customer Generator, Dashboard, Agent Activity, and Chat.
  * Implements the global navigation header with disabled-state reasoning.
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Lock, Menu, X } from 'lucide-react';
 import Landing from './pages/Landing';
@@ -23,6 +23,11 @@ function App() {
   const location = useLocation();
   const [activeCustomerId, setActiveCustomerId] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Clear all demo state on full page reload
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const handleNavigate = (page: string, customerId?: string) => {
     if (customerId) setActiveCustomerId(customerId);
