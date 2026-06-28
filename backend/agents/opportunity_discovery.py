@@ -91,7 +91,7 @@ def opportunity_discovery_node(state):
                 })
     else:
         import os
-        catalog_path = os.path.join(os.path.dirname(__file__), "..", "sbi_product_catalog_live.json")
+        catalog_path = os.path.join(os.path.dirname(__file__), "..", "catalog.json")
         try:
             with open(catalog_path, "r") as f:
                 products = json.load(f)
