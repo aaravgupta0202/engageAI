@@ -15,8 +15,21 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
     fetch(`${API_URL}/customers/${customerId}/graph`)
       .then(res => res.json())
       .then(data => {
+        const localOppStr = localStorage.getItem(`opportunities_${customerId}`);
         if (data.recommendations && data.recommendations.length > 0) {
           setRecommendations(data.recommendations);
+        } else if (localOppStr) {
+          try {
+            const opps = JSON.parse(localOppStr);
+            const formattedOpps = opps.map((o: any, idx: number) => ({
+              ...o,
+              id: o.id || `rec_${idx}`,
+              category: o.category || 'invest'
+            }));
+            setRecommendations(formattedOpps);
+          } catch(e) {
+            console.error("Failed to parse local opportunities", e);
+          }
         } else {
           // Fallback mock for the MVP demo path (Young Professional -> SIP Top-Up)
           setRecommendations([

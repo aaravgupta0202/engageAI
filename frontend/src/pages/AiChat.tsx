@@ -87,8 +87,15 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
     
     recognition.onstart = () => setIsListening(true);
     recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setInput(prev => prev ? prev + " " + transcript : transcript);
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      if (finalTranscript) {
+        setInput(prev => prev ? prev + " " + finalTranscript : finalTranscript);
+      }
     };
     recognition.onerror = (e: any) => {
       console.error(e);

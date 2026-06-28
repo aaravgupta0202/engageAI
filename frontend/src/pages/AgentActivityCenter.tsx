@@ -75,6 +75,9 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
       try {
         const parsed = JSON.parse(event.data);
         setLogs(prev => [...prev, parsed]);
+        if (parsed.agent === 'opportunity_discovery' && parsed.state_summary?.opportunities) {
+          localStorage.setItem(`opportunities_${customerId}`, JSON.stringify(parsed.state_summary.opportunities));
+        }
       } catch (e) {
         console.error("Failed to parse SSE data", event.data);
       }
