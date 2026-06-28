@@ -90,32 +90,44 @@ def opportunity_discovery_node(state):
                     "urgency": "Low"
                 })
     else:
-        # Fetch catalog from DB
-        db = SessionLocal()
-        products = db.query(ProductCatalog).all()
-        db.close()
-        
+        import os
+        catalog_path = os.path.join(os.path.dirname(__file__), "..", "sbi_product_catalog_live.json")
+        try:
+            with open(catalog_path, "r") as f:
+                products = json.load(f)
+        except Exception as e:
+            print("Failed to load live catalog, using empty list:", e)
+            products = []
+            
         catalog_summary = []
         for p in products:
-            catalog_summary.append(f"- ID: {p.id} | Name: {p.name} | Category: {p.category} | Desc: {p.description}")
+            desc = p.get("description", "")
+            url = p.get("url", "")
+            catalog_summary.append(f"- Name: {p.get('name')} | Category: {p.get('category')} | Desc: {desc} | URL: {url}")
+            
+        verve_path = os.path.join(os.path.dirname(__file__), "..", "..", "verve_investment_guide.txt")
+        try:
+            with open(verve_path, "r") as f:
+                verve_rules = f.read()
+        except Exception:
+            verve_rules = "No Verve rules found."
             
         catalog_text = "\n".join(catalog_summary)
         
         prompt = f"""You are an expert banking recommendation engine for State Bank of India (SBI).
-Given the customer's financial graph, their persona, and recent life events (if any), select the top 3-5 best product recommendations from the catalog.
+Given the customer's financial graph, their persona, and recent life events, select the top 3-5 best product recommendations from the catalog.
 
-You MUST prioritize and rank your recommendations strictly in this order of importance:
-1. Customer Goals
-2. Detected Life Events
-3. Occupation
+You MUST STRICTLY adhere to the Verve Investment Rules provided below.
+Prioritize your recommendations in this order:
+1. Verve Investment Rules (Age-based % allocations and limits)
+2. Customer Goals
+3. Detected Life Events
 4. Income & Affordability
-5. Risk Appetite
-6. Existing Products
-7. Spending Behaviour
-8. Age
 
-Do NOT recommend products simply because they exist. Every recommendation must be justified.
-The LLM should NEVER invent products, ONLY use the ones from the catalog provided.
+VERVE INVESTMENT RULES:
+{verve_rules}
+
+The LLM should NEVER invent products, ONLY use the ones from the catalog provided. Ensure you include the exact URL of the product.
 
 Customer Persona: {json.dumps(persona)}
 Customer Graph: {json.dumps(graph)}
@@ -126,14 +138,15 @@ Available Products:
 
 Output EXACTLY a JSON array of objects with these keys:
 - "product": (string) the exact name of the product chosen from the catalog.
-- "fit_score": (float) a score between 0.0 and 1.0 representing how well it fits based on weighted priority.
+- "url": (string) the exact URL of the product from the catalog.
+- "fit_score": (float) a score between 0.0 and 1.0 representing how well it fits based on Verve Rules and persona.
 - "rationale": (string) Short overview.
-- "why_this": (string) Explaining why we recommend this product specifically.
+- "why_this": (string) Explaining why we recommend this product specifically based on Verve Rules.
 - "benefits": (string) Key benefits for them.
 - "why_now": (string) Why they should act on it now.
 - "eligibility": (string) Brief eligibility criteria.
 - "impact": (string) Estimated financial impact.
-- "factors": (array of strings) An array of 3-5 bullet points proving explainability (e.g., ["✓ Business Owner", "✓ Goal: Business Expansion", "✓ Annual Income ₹18L"]).
+- "factors": (array of strings) An array of 3-5 bullet points proving explainability (e.g., ["✓ Fits Verve Rule for 31-35 Age Health 4%", "✓ Life Event Detected", "✓ Meets Home Goal"]).
 - "urgency": (string) Low, Medium, or High
 
 Do NOT wrap the output in markdown blocks. Just pure JSON array.

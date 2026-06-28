@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { CheckCircle2, XCircle, TrendingUp, ShieldAlert, AlertCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, TrendingUp, ShieldAlert, AlertCircle, ExternalLink } from 'lucide-react';
 
 export default function RecommendationsCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [recommendations, setRecommendations] = useState<any[]>([]);
@@ -149,6 +149,15 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                   >
                     <XCircle size={18} className="mr-2" /> Decline
                   </Button>
+                  {rec.url && (
+                    <Button 
+                      onClick={() => window.open(rec.url, '_blank')}
+                      variant="outline"
+                      className="flex-1 md:w-40 rounded-full shadow-sm border-sbi-blue text-sbi-blue hover:bg-sbi-blue hover:text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
+                    >
+                      <ExternalLink size={18} className="mr-2" /> View Product
+                    </Button>
+                  )}
                 </div>
 
               </div>
