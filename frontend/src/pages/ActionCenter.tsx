@@ -8,11 +8,13 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
   const [isCompleted, setIsCompleted] = useState(false);
   const [showFollowUp, setShowFollowUp] = useState(false);
 
-  // Hardcoded action plan for the MVP demo path
+  const selectedAction = customerId ? localStorage.getItem(`selected_action_${customerId}`) || "Mutual Fund SIP Top-Up" : "Mutual Fund SIP Top-Up";
+
+  // Dynamic action plan based on the selected action
   const steps = [
-    { title: "Confirm Amount", description: "Review and confirm the additional ₹5,000 top-up for your SIP." },
-    { title: "Select Target Fund", description: "Allocate the top-up to your existing SBI Bluechip Fund." },
-    { title: "Authorize Mandate", description: "Set up the UPI AutoPay mandate for the new total amount." }
+    { title: "Review Details", description: `Review the terms and conditions for ${selectedAction}.` },
+    { title: "Provide Consent", description: "Authenticate and provide your digital consent." },
+    { title: "Finalize Setup", description: `Complete the setup process for ${selectedAction}.` }
   ];
 
   const handleNext = () => {
@@ -36,8 +38,8 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-700 pt-8">
       
       <div className="text-center space-y-2 mb-10">
-        <h2 className="text-3xl font-black text-slate-900 dark:text-white">Action Planning Center</h2>
-        <p className="text-slate-500 dark:text-slate-400 text-lg">Executing: Mutual Fund SIP Top-Up</p>
+        <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2">Action Planning Center</h2>
+        <p className="text-slate-500 dark:text-slate-400 font-medium">Executing: {selectedAction}</p>
       </div>
 
       {!isCompleted ? (

@@ -1,4 +1,4 @@
-import { Code, User, Globe } from 'lucide-react';
+import { Github, Linkedin, Globe } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -17,11 +17,11 @@ export default function Footer() {
             <span>Portfolio</span>
           </a>
           <a href="https://github.com/aaravgupta0202" target="_blank" rel="noreferrer" className="flex items-center space-x-2 px-4 py-2 rounded-full border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-400 hover:bg-slate-50 transition-all font-medium text-sm">
-            <Code size={16} />
+            <Github size={16} />
             <span>GitHub</span>
           </a>
           <a href="https://www.linkedin.com/in/aarav-gupta-230269375/" target="_blank" rel="noreferrer" className="flex items-center space-x-2 px-4 py-2 rounded-full border border-slate-200 text-slate-600 hover:text-[#0A66C2] hover:border-[#0A66C2]/30 hover:bg-blue-50 transition-all font-medium text-sm">
-            <User size={16} />
+            <Linkedin size={16} />
             <span>LinkedIn</span>
           </a>
         </div>

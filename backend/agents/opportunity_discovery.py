@@ -15,8 +15,8 @@ def opportunity_discovery_node(state):
     
     if not actual_events:
         messages = state.get("messages", [])
-        messages.append("Agent 3 (Opportunity Discovery) completed: No significant life events detected to recommend products.")
-        return {"opportunities": opportunities, "messages": messages}
+        messages.append("Agent 3 (Opportunity Discovery): No significant life events detected. Recommending general baseline products based on demographic and income profile.")
+        state["messages"] = messages
 
     llm = get_llm("reasoning")
     if not llm:
@@ -41,7 +41,8 @@ def opportunity_discovery_node(state):
         catalog_text = "\n".join(catalog_summary)
         
         prompt = f"""You are an expert banking recommendation engine for State Bank of India (SBI).
-Given the customer's financial graph and recent life events, select the top 1-3 best product recommendations from the catalog.
+Given the customer's financial graph and recent life events (if any), select the top 1-3 best product recommendations from the catalog.
+If there are no life events, suggest the best baseline products based on their age, income, and goals.
 
 Customer Graph: {json.dumps(graph)}
 Life Events: {json.dumps(actual_events)}
