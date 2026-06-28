@@ -54,10 +54,19 @@ app.add_middleware(
 
 
 def call_llm_with_fallback(messages: list):
-    import os, requests, json
+    import os, requests, json, re
     groq_api_key = os.getenv("GROQ_API_KEY")
     gemini_api_key = os.getenv("GEMINI_API_KEY")
     
+    def extract_and_parse_json(text):
+        if not text:
+            raise Exception("Empty text")
+        json_match = re.search(r'\{.*\}', text, re.DOTALL)
+        if json_match:
+            text = json_match.group(0)
+        json.loads(text) # validate it parses
+        return text
+
     # Try Groq
     try:
         if groq_api_key and groq_api_key != "your_GROQ_API_KEY_here":
@@ -68,7 +77,8 @@ def call_llm_with_fallback(messages: list):
                 timeout=10
             )
             if res.ok:
-                return res.json()["choices"][0]["message"]["content"].strip()
+                response_text = res.json()["choices"][0]["message"]["content"].strip()
+                return extract_and_parse_json(response_text)
             print(f"Groq API error: {res.text}")
     except Exception as e:
         print(f"Groq exception: {e}")
@@ -91,7 +101,7 @@ def call_llm_with_fallback(messages: list):
                 payload["systemInstruction"] = {"parts": [{"text": sys_prompt}]}
                 
             res = requests.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_api_key}",
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_api_key}",
                 headers={"Content-Type": "application/json"},
                 json=payload,
                 timeout=10
@@ -99,7 +109,8 @@ def call_llm_with_fallback(messages: list):
             if res.ok:
                 data = res.json()
                 if "candidates" in data and len(data["candidates"]) > 0:
-                    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    response_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    return extract_and_parse_json(response_text)
             print(f"Gemini API error: {res.text}")
     except Exception as e:
         print(f"Gemini exception: {e}")
