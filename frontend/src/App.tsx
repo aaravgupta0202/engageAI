@@ -46,12 +46,21 @@ function App() {
       {!isLanding && (
         <>
           <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-4 md:px-6 py-4 flex justify-between items-center transition-all duration-300 shadow-sm">
-            <div className="flex items-center -ml-3 md:-ml-3 cursor-pointer group shrink-0" onClick={() => handleNavigate('landing')}>
-              <img src="/favicon.png" alt="engageAI Logo" className="h-20 md:h-24 w-auto group-hover:opacity-80 transition-opacity object-contain -my-6 scale-125 md:scale-125 ml-2 md:ml-0" />
+            {/* Mobile Menu Toggle */}
+            <button 
+              className={`md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors z-50 order-1 ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : ''}`}
+              onClick={() => setIsMobileMenuOpen(true)}
+            >
+              <Menu size={28} />
+            </button>
+
+            {/* Logo */}
+            <div className="flex items-center cursor-pointer group shrink-0 order-2 md:order-1 ml-auto md:ml-0" onClick={() => handleNavigate('landing')}>
+              <img src="/favicon.png" alt="engageAI Logo" className="h-20 md:h-24 w-auto group-hover:opacity-80 transition-opacity object-contain -my-6 scale-125" />
             </div>
             
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-1">
+            <nav className="hidden md:flex space-x-1 order-2">
               {['generator', 'dashboard', 'agent', 'recommendations', 'actions', 'chat', 'catalog'].map((page) => {
                 const hasRunAnalysis = activeCustomerId ? localStorage.getItem(`analysis_run_${activeCustomerId}`) === 'true' : false;
                 const hasSelectedAction = activeCustomerId ? localStorage.getItem(`selected_action_${activeCustomerId}`) !== null : false;
@@ -85,14 +94,6 @@ function App() {
                 );
               })}
             </nav>
-
-            {/* Mobile Menu Toggle */}
-            <button 
-              className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors z-50"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
           </header>
 
           {/* Mobile Sidebar Navigation */}

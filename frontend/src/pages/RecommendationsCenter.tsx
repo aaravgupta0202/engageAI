@@ -115,7 +115,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-row md:flex-col gap-3 w-full md:w-auto shrink-0 mt-4 md:mt-0">
+                <div className="flex flex-col gap-3 w-full md:w-auto shrink-0 mt-4 md:mt-0">
                   <Button 
                     onClick={() => handleAccept(rec.product)}
                     className="flex-1 md:w-40 rounded-full shadow-md bg-emerald-500 hover:bg-emerald-600 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"

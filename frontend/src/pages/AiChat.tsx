@@ -166,12 +166,16 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
   return (
     <div className="max-w-4xl mx-auto flex flex-col h-[80vh] animate-in slide-in-from-bottom-4 duration-500">
       <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl">
-        <CardHeader className="bg-gradient-to-r from-sbi-navy to-indigo-900 text-white p-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-sbi-blue opacity-20 rounded-full blur-3xl -mr-10 -mt-10 animate-pulse"></div>
-          <CardTitle className="text-2xl font-bold flex items-center relative z-10">
-            <img src="/favicon.png" alt="engageAI Logo" className="h-14 w-auto object-contain -my-2 scale-125" />
-          </CardTitle>
-          <p className="text-sm text-indigo-200 mt-2 relative z-10">Grounded dynamically in your personal Financial Graph</p>
+        <CardHeader className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sbi-blue to-cyan-500 flex items-center justify-center text-white shadow-md">
+              <span className="font-bold">AI</span>
+            </div>
+            <div>
+              <CardTitle className="text-lg font-bold text-slate-800 dark:text-white">Financial Assistant</CardTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Grounded dynamically in your personal Financial Graph</p>
+            </div>
+          </div>
         </CardHeader>
         
         <CardContent className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
@@ -244,8 +248,8 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
             className="hidden" 
             accept=".txt,.csv,.json,.md" 
           />
-          <Button variant="ghost" onClick={() => fileInputRef.current?.click()} className="rounded-full w-12 h-12 p-0 text-slate-400 hover:text-sbi-blue hover:bg-sbi-blue/10 shrink-0">
-            <Paperclip size={20} />
+          <Button variant="ghost" onClick={() => fileInputRef.current?.click()} className="rounded-full w-12 h-12 p-0 text-slate-500 hover:text-sbi-blue hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+            <Paperclip size={24} strokeWidth={1.5} />
           </Button>
           <div className="flex-1 relative flex items-center">
             <input 
