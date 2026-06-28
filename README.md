@@ -100,4 +100,3 @@ Revenue is generated indirectly through:
 4. `npm run dev`
 
 ---
-*Built with ❤️ for the State Bank of India.*
