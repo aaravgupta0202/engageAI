@@ -10,7 +10,7 @@ interface Message {
 export default function PublicChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hi! I'm engageAI, your public financial assistant. I can help you find the right SBI products based on your situation. What are you looking to achieve today?" }
+    { role: 'assistant', content: "Hi! I'm engageAI, your public financial assistant. I can help you find the right SBI products based on your situation.\n\nNote: This is just a sample public chat. To experience the full autonomous AI prototype, please click the 'Try Demo' button on the page! What are you looking to achieve today?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

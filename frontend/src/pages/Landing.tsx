@@ -37,6 +37,9 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
               <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-4 sm:py-6 shadow-xl shadow-sbi-blue/20 text-base sm:text-lg font-semibold flex items-center justify-center w-full sm:w-auto">
                 Try Demo <ArrowRight size={18} className="ml-2" />
               </Button>
+              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto">
+                Product Catalog <ArrowRight size={18} className="ml-2" />
+              </Button>
               <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto">
                 View Source <ArrowRight size={18} className="ml-2" />
               </Button>
