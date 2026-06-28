@@ -6,11 +6,13 @@ Orchestrates the engageAI backend services, exposing endpoints for:
 - Agent execution (LangGraph streamed via SSE)
 - Chat interactions and recommendations
 """
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+import os
+import requests
 from typing import List, Optional
 import json
 import asyncio
@@ -120,7 +122,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -206,7 +208,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -297,7 +299,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": cerebras_messages
             }
         )
@@ -357,7 +359,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "llama3.1-70b",
+                "model": "gpt-oss-120b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
