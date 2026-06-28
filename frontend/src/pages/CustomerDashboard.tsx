@@ -11,6 +11,9 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
   const [isSimulating, setIsSimulating] = useState(false);
   const [scenarioResult, setScenarioResult] = useState<any>(null);
 
+  const [editKey, setEditKey] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+
   useEffect(() => {
     if (!customerId) return;
     
@@ -24,15 +27,25 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       .catch(console.error);
   }, [customerId]);
 
+  if (!customerId) return (
+    <div className="flex flex-col items-center justify-center h-[70vh] text-slate-500 text-center px-4">
+      <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+        <User size={32} className="text-slate-400" />
+      </div>
+      <h2 className="text-2xl font-bold text-slate-700 mb-2">No Persona Selected</h2>
+      <p className="text-slate-500 max-w-md mb-8">You need to select or generate a synthetic persona before viewing the dashboard.</p>
+      <Button onClick={() => onNavigate('generator')} className="bg-sbi-blue text-white rounded-full px-8 py-3 font-semibold shadow-md hover:bg-sbi-navy hover:shadow-lg transition-all">
+        Go to Generator
+      </Button>
+    </div>
+  );
+
   if (!data) return (
     <div className="flex flex-col items-center justify-center h-[70vh] text-slate-500">
       <div className="w-16 h-16 border-4 border-slate-200 border-t-sbi-blue rounded-full animate-spin mb-4"></div>
       <p className="text-lg font-medium animate-pulse">Loading Financial Graph...</p>
     </div>
   );
-
-  const [editKey, setEditKey] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState('');
 
   const handleSaveEdit = async () => {
     if (!editKey || !customerId) return;
