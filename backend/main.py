@@ -176,8 +176,9 @@ async def generate_custom_persona(req: CustomPersonaRequest, db: Session = Depen
         city_context = "Could not scrape city data."
 
     system_prompt = """You are an expert synthetic data generator for banking personas. 
-You will be provided with custom user inputs and a scraped snippet about their city. 
-Synthesize a comprehensive, realistic JSON persona graph. If any fields are missing, infer highly realistic default values.
+You will be provided with custom user inputs from a conversational onboarding chat and a scraped snippet about their city. 
+Synthesize a comprehensive, realistic JSON persona graph. 
+CRITICAL RULE: Do NOT hallucinate or assume missing financial data. If the user explicitly says 'Unknown' or leaves out a detail, mark the JSON field as 'Unknown' (or omit it if it's an array/number). For example, if they don't give expenses, do NOT invent expenses.
 Follow this EXACT JSON structure, adding new fields if necessary to capture their notes/assets:
 {
   "archetype": "Short 2-word summary",
