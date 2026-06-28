@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { User, Target, Activity, CalendarClock } from 'lucide-react';
+import FinancialGraphView from '../components/FinancialGraphView';
 
 export default function CustomerDashboard({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [data, setData] = useState<any>(null);
@@ -83,6 +84,8 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
             </div>
           </CardContent>
         </Card>
+
+        <FinancialGraphView data={data} />
 
         <Card className="md:col-span-3 glass-card border-t-4 border-t-purple-500 overflow-hidden relative">
           <CardHeader>
