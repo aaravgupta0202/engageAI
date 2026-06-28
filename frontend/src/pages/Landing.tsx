@@ -47,8 +47,8 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           </div>
 
           {/* Right Column: Floating Agent Dashboard Mockup */}
-          <div className="relative hidden lg:flex items-center justify-center w-full h-[500px]">
-            <div className="w-[420px] bg-white rounded-2xl border-2 border-slate-900 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-4 transition-transform duration-500 cursor-default relative">
+          <div className="relative flex mt-12 lg:mt-0 items-center justify-center w-full h-[500px]">
+            <div className="w-full max-w-[420px] bg-white rounded-2xl border-2 border-slate-900 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-4 transition-transform duration-500 cursor-default relative">
               <div className="flex items-center justify-between mb-6">
                 <div className="text-xs font-bold text-white bg-emerald-500 px-3 py-1 rounded-md tracking-wider uppercase">Life Event</div>
                 <div className="text-slate-400 font-mono text-xs">PID: 8829A</div>
