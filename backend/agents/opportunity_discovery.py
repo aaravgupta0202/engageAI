@@ -7,6 +7,7 @@ def opportunity_discovery_node(state):
     print("Running Opportunity Discovery...")
     life_events = state.get("life_events", [])
     graph = state.get("graph", {})
+    persona = state.get("persona", {})
     
     opportunities = []
     
@@ -20,14 +21,43 @@ def opportunity_discovery_node(state):
 
     llm = get_llm("reasoning")
     if not llm:
-        # Fallback if no LLM
+        # Fallback if no LLM - use persona to make a smart guess
+        occupation = persona.get("demographics", {}).get("occupation", "").lower()
+        age = int(persona.get("demographics", {}).get("age", 30))
+        goals = " ".join(persona.get("goals", [])).lower()
+        
         for event in actual_events:
-            opportunities.append({
-                "product": "SBI Mutual Fund SIP",
-                "fit_score": 0.81,
-                "rationale": f"Rule-based fallback for {event.get('event_type')}",
-                "urgency": "Medium"
-            })
+            event_type = event.get("event_type", "").lower()
+            if "hike" in event_type or "job" in event_type:
+                opportunities.append({
+                    "product": "SBI Mutual Fund SIP",
+                    "fit_score": 0.88,
+                    "rationale": f"Detected {event_type}. Great time to increase wealth accumulation.",
+                    "urgency": "Medium"
+                })
+        
+        if not opportunities:
+            if "business" in occupation or "owner" in occupation or "expand business" in goals:
+                opportunities.append({
+                    "product": "SME Business Loan",
+                    "fit_score": 0.92,
+                    "rationale": "Based on your business ownership and expansion goals, this can provide necessary capital.",
+                    "urgency": "High"
+                })
+            elif age > 50 or "retirement" in goals:
+                opportunities.append({
+                    "product": "SBI Retirement Benefit Fund",
+                    "fit_score": 0.89,
+                    "rationale": "Aligned with your focus on securing a comfortable retirement.",
+                    "urgency": "High"
+                })
+            else:
+                opportunities.append({
+                    "product": "SBI Mutual Fund SIP",
+                    "fit_score": 0.75,
+                    "rationale": "General baseline recommendation for wealth accumulation based on your profile.",
+                    "urgency": "Low"
+                })
     else:
         # Fetch catalog from DB
         db = SessionLocal()
@@ -41,9 +71,10 @@ def opportunity_discovery_node(state):
         catalog_text = "\n".join(catalog_summary)
         
         prompt = f"""You are an expert banking recommendation engine for State Bank of India (SBI).
-Given the customer's financial graph and recent life events (if any), select the top 1-3 best product recommendations from the catalog.
-If there are no life events, suggest the best baseline products based on their age, income, and goals.
+Given the customer's financial graph, their persona (including goals and demographics), and recent life events (if any), select the top 1-3 best product recommendations from the catalog.
+If there are no life events, suggest the best baseline products based on their age, income, and specifically their STATED GOALS.
 
+Customer Persona: {json.dumps(persona)}
 Customer Graph: {json.dumps(graph)}
 Life Events: {json.dumps(actual_events)}
 

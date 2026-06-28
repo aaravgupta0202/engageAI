@@ -1,16 +1,35 @@
+import json
+from llm_adapter import get_llm
+
 def follow_up_node(state):
-    print("Running Follow-Up...")
-    steps = state.get("action_steps", [])
+    print("Running Follow-up...")
+    plan = state.get("engagement_plan", {})
     
-    schedule = {}
-    if steps:
-        schedule = {
+    follow_up = {}
+    messages = state.get("messages", [])
+    
+    if plan:
+        product = plan.get("opportunity", "Product")
+        
+        llm = get_llm("reasoning")
+        condition = ""
+        if llm:
+            prompt = f"Given the product '{product}', write a short (5-10 word) condition for the follow-up check. E.g. for Retirement Fund: 'Review retirement investment progress after 30 days.' Do not wrap in quotes."
+            try:
+                res = llm.invoke(prompt)
+                condition = str(res.content).strip().replace('"', '')
+            except Exception:
+                pass
+                
+        if not condition:
+            condition = f"Review {product} progress after 30 days"
+            
+        follow_up = {
             "due_at": "30 days from now",
             "status": "scheduled",
-            "reason": "Check if top-up holds."
+            "reason": condition
         }
         
-    messages = state.get("messages", [])
-    messages.append("Agent 6 (Follow-Up) completed: Scheduled future check-in.")
+    messages.append("Agent 6 (Follow-up) completed: Scheduled follow-up logic.")
     
-    return {"follow_up_schedule": schedule, "messages": messages}
+    return {"follow_up_schedule": follow_up, "messages": messages}
