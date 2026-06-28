@@ -27,21 +27,15 @@ Banking today is fundamentally reactive. Customers look at their accounts, deter
 
 ## 📱 Platform Interface
 
-Here is a glimpse of the powerful interfaces provided by engageAI, showcasing transparent reasoning and autonomous action pipelines:
+Here is a glimpse of the powerful features provided by engageAI, showcasing transparent reasoning and autonomous action pipelines:
 
-<p align="center">
-  <img src="images/app-showcase-1.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-2.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-3.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-4.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-5.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-6.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-7.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-8.png" width="45%" style="border-radius:10px; margin: 10px;" />
-  <img src="images/app-showcase-9.png" width="90%" style="border-radius:10px; margin: 10px;" />
-</p>
+- **AI-Powered Conversational Onboarding**: Instead of boring web forms, the system uses a seamless conversational AI flow to collect the user's financial context (occupation, city, income, expenses) dynamically. 
+- **Explainable Health Score & Net Worth Tracking**: Live breakdown of what impacts the user's financial health, tracked out of 100 points based on savings, goals, and debt ratios.
+- **Goal Dependencies & Real-Life Rule Engine**: The recommendation engine actively blocks aggressive investment advice if fundamental goals (e.g. 6 months Emergency Fund) are not met.
+- **Financial Simulation & "What If" Planner**: Customers can ask "What if I get married and buy a car next year?" and the platform dynamically computes and visualizes the future state of their Financial Twin, projecting the exact impact on their Health Score and Cash Flow.
+- **Intent-Driven AI Chat**: The integrated Financial Assistant shifts its personality and reasoning strictly based on the user's selected intent (Advice vs Planning vs Comparison).
 
----
+(Note: UI screenshots will be added soon!)
 
 ## 🧠 The Architecture: 6 Autonomous Agents
 

@@ -9,14 +9,7 @@ const MOCK_PERSONAS = [
   { id: 'mock-3', archetype: 'Rural Farmer', profile: { age: 50, income: 300000, goals: ['Savings Account', 'Crop Insurance'] } }
 ];
 
-const QUESTIONS = [
-  { key: 'occupation', text: "Welcome to SBI EngageAI. To build your Financial Twin, could you tell me your primary occupation?" },
-  { key: 'income', text: "Got it. What is your approximate yearly income, and do you have any major assets?" },
-  { key: 'city', text: "Which city do you currently live in?" },
-  { key: 'expenses', text: "What are your estimated base monthly expenses? If you aren't sure, you can just type 'Unknown'." },
-  { key: 'demographics', text: "Can you tell me about your demographics? (e.g., age, marital status, dependents)" },
-  { key: 'notes', text: "Finally, do you have any specific financial goals or additional notes?" }
-];
+
 
 export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: string, id: string) => void }) {
   const [personas, setPersonas] = useState<any[]>([]);
@@ -28,9 +21,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
   // Chat Wizard State
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState<{role: 'ai'|'user', content: string}[]>([]);
-  const [currentQ, setCurrentQ] = useState(0);
   const [inputValue, setInputValue] = useState('');
-  const [collectedData, setCollectedData] = useState<any>({});
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -40,33 +31,48 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
 
   const startChat = () => {
     setShowChat(true);
-    setMessages([{ role: 'ai', content: QUESTIONS[0].text }]);
-    setCurrentQ(0);
-    setCollectedData({});
+    setMessages([{ role: 'ai', content: "Welcome to SBI EngageAI. I'll help you set up your Digital Financial Twin. To start, what is your primary occupation?" }]);
     setInputValue('');
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputValue.trim() || isGenerating) return;
     
     const userMessage = inputValue;
     setInputValue('');
     
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    const newMessages: {role: 'ai'|'user', content: string}[] = [...messages, { role: 'user', content: userMessage }];
+    setMessages(newMessages);
+    setIsGenerating(true);
     
-    const newCollected = { ...collectedData, [QUESTIONS[currentQ].key]: userMessage };
-    setCollectedData(newCollected);
-    
-    if (currentQ < QUESTIONS.length - 1) {
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'ai', content: QUESTIONS[currentQ + 1].text }]);
-        setCurrentQ(q => q + 1);
-      }, 600);
-    } else {
-      setTimeout(() => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/personas/onboarding-chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: newMessages })
+      });
+      
+      if (!res.ok) throw new Error('API Error');
+      const data = await res.json();
+      
+      if (data.status === 'asking') {
+        setMessages(prev => [...prev, { role: 'ai', content: data.question }]);
+        setIsGenerating(false);
+      } else if (data.status === 'complete' || data.id) {
         setMessages(prev => [...prev, { role: 'ai', content: "Thank you. I am now synthesizing your Digital Financial Twin... Please wait." }]);
-        handleGenerateCustom(newCollected);
-      }, 600);
+        setTimeout(() => {
+            onNavigate('dashboard', data.id || data.persona_id);
+            setIsGenerating(false);
+        }, 1500);
+      } else {
+        setMessages(prev => [...prev, { role: 'ai', content: "I encountered an error. Please try again." }]);
+        setIsGenerating(false);
+      }
+    } catch (e) {
+      console.error(e);
+      setMessages(prev => [...prev, { role: 'ai', content: "Error connecting to AI. Please try again later." }]);
+      setIsGenerating(false);
     }
   };
 
@@ -97,45 +103,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
     fetchPersonas();
   }, []);
 
-  const handleGenerateCustom = async (data: any) => {
-    setIsGenerating(true);
-    setError(null);
-    
-    // Convert split fields to match API expectations if necessary
-    // Our new chat combines income & assets in one answer, but API expects them.
-    // We will pass the whole answer to 'income' and empty to 'assets' for LLM to figure out.
-    const payload = {
-        occupation: data.occupation || 'Unknown',
-        income: data.income || 'Unknown',
-        assets: data.income || 'Unknown', // LLM will parse both from the same input
-        city: data.city || 'Unknown',
-        expenses: data.expenses || 'Unknown',
-        demographics: data.demographics || 'Unknown',
-        notes: data.notes || 'Unknown'
-    };
 
-    try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const res = await fetch(`${API_URL}/personas/generate_custom`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.detail || 'Failed to generate persona');
-      }
-      const newPersona = await res.json();
-      setPersonas(prev => [newPersona, ...prev.filter(p => !p.id.toString().startsWith('mock'))]);
-      setShowChat(false);
-      setApiFailed(false);
-    } catch (err: any) {
-      setError(err.message);
-      setMessages(prev => [...prev, { role: 'ai', content: `Error: ${err.message}. Please try again later.` }]);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full flex flex-col">
@@ -185,7 +153,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               <input 
                 type="text" 
                 autoFocus
-                disabled={isGenerating || currentQ >= QUESTIONS.length}
+                disabled={isGenerating}
                 className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-sbi-blue outline-none"
                 placeholder="Type your answer... (or 'Unknown')" 
                 value={inputValue}
@@ -194,7 +162,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               />
               <Button 
                 onClick={handleSendMessage} 
-                disabled={!inputValue.trim() || isGenerating || currentQ >= QUESTIONS.length}
+                disabled={!inputValue.trim() || isGenerating}
                 className="rounded-full w-12 h-12 p-0 bg-sbi-blue hover:bg-sbi-navy text-white shrink-0 flex items-center justify-center shadow-md transition-transform hover:scale-105"
               >
                 <Send size={18} className="ml-1" />

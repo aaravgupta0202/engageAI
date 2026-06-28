@@ -120,7 +120,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -206,7 +206,7 @@ Do not include markdown blocks, just raw JSON."""
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -240,6 +240,98 @@ Do not include markdown blocks, just raw JSON."""
         print("Custom Generation Error:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+class OnboardingMessage(BaseModel):
+    role: str
+    content: str
+
+class OnboardingChatRequest(BaseModel):
+    messages: List[OnboardingMessage]
+
+@app.post("/personas/onboarding-chat")
+async def onboarding_chat(req: OnboardingChatRequest, db: Session = Depends(get_db)):
+    api_key = os.getenv("CEREBRAS_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+
+    system_prompt = """You are a highly conversational and polite onboarding agent for SBI EngageAI. 
+Your goal is to collect the following information from the user to build their Digital Financial Twin:
+1. Primary Occupation
+2. Approximate Yearly Income
+3. Major Assets
+4. Current City
+5. Estimated Monthly Expenses
+6. Demographics (age, marital status, dependents)
+7. Specific Financial Goals or Notes
+
+Ask ONE question at a time. Be natural, conversational, and encouraging. If the user changes their mind or updates previous info, adapt seamlessly.
+
+If you have collected ALL the necessary information (or if the user explicitly says they are done or don't know the rest), you MUST output a JSON object in this EXACT format and nothing else:
+{
+  "is_complete": true,
+  "collected_data": {
+    "occupation": "...",
+    "income": "...",
+    "assets": "...",
+    "city": "...",
+    "expenses": "...",
+    "demographics": "...",
+    "notes": "..."
+  }
+}
+
+If you still need more information, output a JSON object in this EXACT format:
+{
+  "is_complete": false,
+  "next_question": "Your conversational next question here."
+}
+
+Do not include markdown blocks, just raw JSON."""
+
+    cerebras_messages = [{"role": "system", "content": system_prompt}]
+    for m in req.messages:
+        role = "assistant" if m.role == "ai" else m.role
+        cerebras_messages.append({"role": role, "content": m.content})
+
+    try:
+        res = requests.post(
+            "https://api.cerebras.ai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "llama3.1-70b",
+                "messages": cerebras_messages
+            }
+        )
+        if not res.ok:
+            raise Exception(f"Cerebras API error: {res.text}")
+            
+        response = res.json()["choices"][0]["message"]["content"].strip()
+        
+        if response.startswith("```json"):
+            response = response[7:-3]
+        elif response.startswith("```"):
+            response = response[3:-3]
+            
+        parsed = json.loads(response.strip())
+        
+        if parsed.get("is_complete"):
+            # Generate the persona immediately using the gathered data
+            data = parsed.get("collected_data", {})
+            return await generate_custom_persona(CustomPersonaRequest(
+                occupation=str(data.get("occupation", "Unknown")),
+                income=str(data.get("income", "Unknown")),
+                assets=str(data.get("assets", "Unknown")),
+                city=str(data.get("city", "Unknown")),
+                expenses=str(data.get("expenses", "Unknown")),
+                demographics=str(data.get("demographics", "Unknown")),
+                notes=str(data.get("notes", "Unknown"))
+            ), db)
+        else:
+            return {"status": "asking", "question": parsed.get("next_question", "Could you tell me a bit more?")}
+            
+    except Exception as e:
+        print("Onboarding Chat Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
 class ScenarioRequest(BaseModel):
     customer_id: str
     scenario: str
@@ -265,7 +357,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
