@@ -21,7 +21,13 @@
 
 **engageAI** is an advanced multi-agent architecture designed to help banks understand customers, discover hidden financial opportunities, and execute autonomous actions seamlessly.
 
+**SBI Hackathon @ GFF 2026 By Global Fintech Fest**
+- **Theme:** Agentic AI & Emerging Tech
+- **Problem Statement:** Digital Engagement
+
 By monitoring raw banking transactions, engageAI detects critical life events (such as sudden salary hikes or large loan payoffs). Once detected, a LangGraph orchestration pipeline of 6 specialized AI agents springs into action, instantly generating hyper-personalized wealth management plans and executing autonomous CRM actions—all while providing a 100% transparent, explainable UI for bank administrators.
+
+🔗 **[Try the Live Demo Here!](https://sbiengageai.netlify.app/)**
 
 ## 🎯 Key Features
 
