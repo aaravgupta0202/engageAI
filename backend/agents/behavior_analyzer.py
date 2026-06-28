@@ -11,14 +11,15 @@ def behavior_analyzer_node(state):
     
     llm = get_llm("reasoning")
     if llm:
-        prompt = f"""You are a financial behavior analyst.
-Given the customer persona and their financial graph, identify 1 to 2 key behavioral insights or 'deltas' (changes in behavior).
-Focus on their occupation, income level, and stated goals.
+        prompt = f"""You are a senior financial behavior analyst.
+Given the customer persona and their financial graph, identify 2-3 key behavioral insights.
+Specifically address: Income trends, Cash flow stability, Savings behavior, Debt usage, Spending habits, and Financial discipline.
 
 Persona: {json.dumps(persona)}
 Graph: {json.dumps(graph)}
 
-Output EXACTLY a JSON array of strings representing the behavior deltas. Keep them concise (1 sentence each).
+Output EXACTLY a JSON array of strings representing the behavior deltas.
+Make them sound professional (e.g. "Consistent high salary credits with disciplined savings rate of 30%").
 Do NOT wrap the output in markdown blocks. Just pure JSON array.
 """
         try:
@@ -41,17 +42,22 @@ Do NOT wrap the output in markdown blocks. Just pure JSON array.
         
         if "business" in occupation or "owner" in occupation:
             if income > 1000000:
-                deltas.append("Monthly business revenue is stable with high disposable income.")
-                deltas.append("Strong saving capacity and consistent surplus detected.")
+                deltas.append("Income Trends & Cash Flow: Monthly business revenue is highly stable with robust surplus.")
+                deltas.append("Savings Behavior & Discipline: Strong saving capacity and disciplined reinvestment detected.")
+                deltas.append("Spending Habits: High discretionary spend offset by controlled operational expenses.")
             else:
-                deltas.append("Business cash flow shows seasonal variance but steady baseline.")
+                deltas.append("Income Trends: Business cash flow shows seasonal variance but a steady baseline.")
+                deltas.append("Debt & Savings: Moderate savings rate with cautious debt utilization.")
         else:
             if income > 1500000:
-                deltas.append("Consistent high salary credits with increasing discretionary spend.")
+                deltas.append("Income Trends: Consistent high salary credits indicating secure employment.")
+                deltas.append("Spending & Discipline: Increasing discretionary spend but maintains strong financial discipline.")
             elif income > 500000:
-                deltas.append("Regular salary credits with steady savings rate.")
+                deltas.append("Cash Flow & Savings: Regular salary credits with a steady, disciplined savings rate.")
+                deltas.append("Debt Usage: Responsible credit usage, cleared monthly.")
             else:
-                deltas.append("Stable monthly income with tight budget optimization.")
+                deltas.append("Income Trends: Stable monthly income.")
+                deltas.append("Spending Habits: Tight budget optimization with limited discretionary spending.")
 
     messages.append("Agent 1 (Behavior Analyzer) completed: Identified behavior deltas.")
     

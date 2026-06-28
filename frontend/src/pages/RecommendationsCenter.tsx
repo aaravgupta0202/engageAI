@@ -104,14 +104,36 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">{rec.product}</h3>
-                    {rec.urgency === 'High' && <span className="flex items-center text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full"><AlertCircle size={12} className="mr-1"/> Urgent</span>}
+                <div className="flex-1 space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white">{rec.product}</h3>
+                      {rec.urgency === 'High' && <span className="flex items-center text-xs font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full"><AlertCircle size={12} className="mr-1"/> Urgent</span>}
+                    </div>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm md:text-base">
-                    {rec.rationale}
-                  </p>
+                  
+                  {rec.rationale && <p className="text-slate-600 dark:text-slate-400 font-medium text-sm md:text-base border-l-2 border-slate-300 dark:border-slate-700 pl-3 italic">{rec.rationale}</p>}
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 text-sm text-slate-600 dark:text-slate-400 mt-2">
+                    {rec.why_this && <div><span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Why this?</span>{rec.why_this}</div>}
+                    {rec.benefits && <div><span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Benefits</span>{rec.benefits}</div>}
+                    {rec.why_now && <div><span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Why now?</span>{rec.why_now}</div>}
+                    {rec.impact && <div><span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Estimated Impact</span>{rec.impact}</div>}
+                    {rec.eligibility && <div><span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Eligibility</span>{rec.eligibility}</div>}
+                  </div>
+
+                  {rec.factors && Array.isArray(rec.factors) && rec.factors.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+                      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Based on:</div>
+                      <div className="flex flex-wrap gap-2">
+                        {rec.factors.map((factor: string, i: number) => (
+                          <span key={i} className="text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 px-2.5 py-1 rounded-md border border-emerald-100 dark:border-emerald-800/50 flex items-center">
+                            {factor}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Actions */}

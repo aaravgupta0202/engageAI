@@ -126,8 +126,8 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
             <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-800/50 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-6">
               <ShieldCheck size={40} />
             </div>
-            <h3 className="text-3xl font-black text-emerald-800 dark:text-emerald-300 mb-2">Action Successfully Executed</h3>
-            <p className="text-emerald-600 dark:text-emerald-400/80 text-lg">Your SIP top-up mandate has been established.</p>
+            <h3 className="text-3xl font-black text-emerald-800 dark:text-emerald-300 mb-2">Recommendation Accepted (Demo)</h3>
+            <p className="text-emerald-600 dark:text-emerald-400/80 text-lg">Your {selectedAction} mandate has been established.</p>
           </Card>
 
           {showFollowUp && (
@@ -140,7 +140,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                   <div className="text-xs font-bold uppercase tracking-widest text-indigo-500 mb-1">Agent 6: Follow-Up Scheduled</div>
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Check-in scheduled for 30 days from now</h4>
                   <p className="text-slate-600 dark:text-slate-400">
-                    The autonomous engine will re-engage you next month to ensure the increased SIP is comfortable with your new cash flow, closing the loop.
+                    The autonomous engine will re-engage you next month to ensure the {selectedAction} is comfortable with your current cash flow.
                   </p>
                 </div>
                 <div className="flex flex-col gap-3">
@@ -149,7 +149,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                     disabled={fastForwarded}
                     className={`rounded-full px-6 py-2.5 font-bold transition-all shadow-md flex items-center ${fastForwarded ? 'bg-slate-200 text-slate-400' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105'}`}
                   >
-                    {fastForwarded ? 'Simulated' : <>Fast Forward 30 Days <FastForward size={16} className="ml-2" /></>}
+                    {fastForwarded ? 'Demo Mode' : <>Fast Forward 30 Days <FastForward size={16} className="ml-2" /></>}
                   </Button>
                   <Button 
                     onClick={() => onNavigate('chat')}
@@ -172,12 +172,12 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                   <div className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">Agent 6 Triggered</div>
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Follow-up check-in initiated</h4>
                   <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 italic text-slate-700 dark:text-slate-300">
-                    "Hi there! It's been 30 days since we increased your Mutual Fund SIP. Did the new amount hold comfortably with your recent salary hike, or should we adjust the allocation?"
+                    "Hi there! It's been 30 days since you initiated {selectedAction}. Did this setup hold comfortably with your recent activity, or should we review it?"
                   </div>
                 </div>
                 <Button 
                   onClick={() => {
-                    localStorage.setItem(`pending_chat_message_${customerId}`, `"Hi there! It's been 30 days since we increased your Mutual Fund SIP. Did the new amount hold comfortably with your recent salary hike, or should we adjust the allocation?"`);
+                    localStorage.setItem(`pending_chat_message_${customerId}`, `"Hi there! It's been 30 days since you initiated ${selectedAction}. Did this setup hold comfortably with your recent activity, or should we review it?"`);
                     onNavigate('chat');
                   }}
                   className="rounded-full px-8 py-6 bg-amber-500 hover:bg-amber-600 text-white font-bold transition-all hover:scale-105 shadow-md"
