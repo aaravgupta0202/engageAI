@@ -114,15 +114,51 @@ def opportunity_discovery_node(state):
             
         catalog_text = "\n".join(catalog_summary)
         
+        # Goal Dependency Logic
+        profile_data = persona.get("profile", {})
+        
+        try:
+            income = float(profile_data.get("income") or 0)
+            expenses = float(profile_data.get("cost_of_living_estimate") or (income * 0.5) or 0)
+            
+            assets = 0
+            raw_assets = profile_data.get("assets", [])
+            if isinstance(raw_assets, list):
+                import re
+                for a in raw_assets:
+                    match = re.search(r'\d+', str(a))
+                    if match:
+                        assets += float(match.group())
+            elif isinstance(raw_assets, str) or isinstance(raw_assets, int) or isinstance(raw_assets, float):
+                import re
+                match = re.search(r'\d+', str(raw_assets))
+                if match:
+                    assets = float(match.group())
+            else:
+                assets = income * 2
+                
+            emergency_fund_complete = expenses > 0 and assets >= (expenses * 6)
+        except:
+            emergency_fund_complete = True
+            
+        goal_dependency_rules = ""
+        if not emergency_fund_complete:
+            goal_dependency_rules = "CRITICAL GOAL DEPENDENCY: The customer's Emergency Fund is NOT complete (less than 6 months of expenses). You MUST prioritize liquid savings and fixed deposit products over aggressive equity investments or long-term lock-ins, regardless of their other goals."
+        else:
+            goal_dependency_rules = "GOAL DEPENDENCY: The customer's Emergency Fund IS complete. You may freely recommend aggressive investments and long-term products based on their goals."
+        
         prompt = f"""You are an expert banking recommendation engine for State Bank of India (SBI).
 Given the customer's financial graph, their persona, and recent life events, select the top 3-5 best product recommendations from the catalog.
 
 You MUST STRICTLY adhere to the Verve Investment Rules provided below.
 Prioritize your recommendations in this order:
-1. Verve Investment Rules (Age-based % allocations and limits)
-2. Customer Goals
-3. Detected Life Events
-4. Income & Affordability
+1. Goal Dependencies (e.g. Emergency Fund)
+2. Verve Investment Rules (Age-based % allocations and limits)
+3. Customer Goals
+4. Detected Life Events
+5. Income & Affordability
+
+{goal_dependency_rules}
 
 VERVE INVESTMENT RULES:
 {verve_rules}
