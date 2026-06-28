@@ -110,9 +110,9 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                   <p className="text-sm text-sbi-blue font-bold tracking-wider uppercase mb-1">Action Required</p>
                   <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-lg">AI Recommendations Ready</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                    <Button variant="link" className="p-0 h-auto text-sbi-blue font-semibold hover:text-cyan-600 text-base" onClick={() => onNavigate('recommendations')}>
+                    <button className="p-0 h-auto text-sbi-blue font-semibold hover:text-sbi-navy hover:underline text-base outline-none bg-transparent" onClick={() => onNavigate('recommendations')}>
                       Review proactive actions ➔
-                    </Button>
+                    </button>
                   </p>
                 </div>
               ) : (
