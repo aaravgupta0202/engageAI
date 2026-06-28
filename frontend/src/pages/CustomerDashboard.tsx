@@ -5,9 +5,14 @@ import { User, Target, Activity, CalendarClock } from 'lucide-react';
 
 export default function CustomerDashboard({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [data, setData] = useState<any>(null);
+  const [hasRunAnalysis, setHasRunAnalysis] = useState(false);
 
   useEffect(() => {
     if (!customerId) return;
+    
+    // Check if the user has run the analysis agents already
+    setHasRunAnalysis(localStorage.getItem(`analysis_run_${customerId}`) === 'true');
+
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     fetch(`${API_URL}/customers/${customerId}/graph`)
       .then(res => res.json())
@@ -99,14 +104,14 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                   <p className="text-sm text-slate-600 dark:text-slate-400">AI identified this life event from transaction patterns.</p>
                 </div>
               ))}
-              {data.recommendations && data.recommendations.length > 0 ? (
+              {hasRunAnalysis || (data.recommendations && data.recommendations.length > 0) ? (
                 <div className="relative">
                   <div className="absolute -left-[33px] bg-sbi-blue rounded-full w-4 h-4 border-4 border-white dark:border-slate-900 animate-pulse"></div>
                   <p className="text-sm text-sbi-blue font-bold tracking-wider uppercase mb-1">Action Required</p>
                   <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-lg">AI Recommendations Ready</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
                     <Button variant="link" className="p-0 h-auto text-sbi-blue font-semibold hover:text-cyan-600 text-base" onClick={() => onNavigate('recommendations')}>
-                      Review {data.recommendations.length} proactive action{data.recommendations.length > 1 ? 's' : ''} ➔
+                      Review proactive actions ➔
                     </Button>
                   </p>
                 </div>

@@ -65,8 +65,9 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
     const eventSource = new EventSource(`${API_URL}/customers/${customerId}/run-agents`);
     
     eventSource.onmessage = (event) => {
-      if (event.data === "[DONE]") {
+      if (event.data.includes('Workflow Complete')) {
         setIsDone(true);
+        localStorage.setItem(`analysis_run_${customerId}`, 'true');
         eventSource.close();
         return;
       }
