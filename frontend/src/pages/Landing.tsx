@@ -1,5 +1,5 @@
 import { Button } from '../components/ui/Button';
-import { Link, Search, ArrowRight, Bot, CheckCircle2 } from 'lucide-react';
+import { Link, Search, ArrowRight, Bot, CheckCircle2, Network, Database, Cpu, Workflow } from 'lucide-react';
 
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
@@ -12,9 +12,9 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
         <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
           <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
-          <span onClick={() => document.getElementById('stats')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
+          <span onClick={() => document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
           <span onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">GitHub Repo</span>
-          <span onClick={() => window.open('https://aarav-cc.netlify.app/', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">Contact Us</span>
+          <span onClick={() => window.open('https://aarav-cc.netlify.app/', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">Contact</span>
         </div>
         <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-4 md:px-6 py-2 font-semibold shadow-md shadow-sbi-blue/20 text-sm md:text-base">
           Try Demo <ArrowRight size={16} className="ml-1 md:ml-2" />
@@ -27,7 +27,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
               Turn Banking Data<br />
-              into <span className="text-sbi-blue font-semibold">Agentic Actions</span>
+              into <span className="text-emerald-500 font-semibold">Agentic Actions</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-8 md:mb-10 max-w-xl leading-relaxed">
               Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly. Get curated plans and offers for your customer.
@@ -136,6 +136,50 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="flex flex-col justify-center h-full text-center md:text-left">
             <div className="text-5xl md:text-6xl font-light tracking-tight mb-2 md:mb-3">100%</div>
             <p className="text-blue-100 font-medium text-sm md:text-base md:pr-8">Explainable UI architecture with transparent reasoning at every step.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Architecture & Working Section */}
+      <div id="architecture" className="w-full bg-slate-50 border-y border-slate-100 py-20 mt-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">How It Works</h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto font-medium">A transparent, multi-agent AI architecture powered by state-of-the-art LLMs.</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-blue-50 text-sbi-blue rounded-2xl flex items-center justify-center mb-6">
+                <Database size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">1. Persona Creation</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">Raw transactional banking data is processed to embed dynamic personas. We synthesize demographics and behaviors into a structured Financial Graph.</p>
+            </div>
+            
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center mb-6">
+                <Network size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">2. Event Detection</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">A specialized LLM agent scans the graph for significant life events (e.g. salary hikes, loans paid off) to act as triggers for personalized engagement.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center mb-6">
+                <Cpu size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">3. Agentic Analysis</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">We utilize Groq's Llama 3 models in a sequential LangGraph pipeline. Multiple AI agents debate and reason to filter the best opportunities from the SBI catalog.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mb-6">
+                <Workflow size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3">4. Autonomous Execution</h3>
+              <p className="text-slate-600 text-sm leading-relaxed">The final agent outputs an actionable, step-by-step engagement plan for the customer, complete with explainable reasoning for the banking advisor.</p>
+            </div>
           </div>
         </div>
       </div>
