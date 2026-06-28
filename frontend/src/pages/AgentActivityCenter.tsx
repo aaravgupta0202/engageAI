@@ -14,6 +14,7 @@ const renderParsedData = (data: any) => {
           <div className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">{key.replace(/_/g, ' ')}</div>
           {Array.isArray(value) ? (
             <ul className="space-y-2">
+              {value.length === 0 && <li className="text-sm text-slate-400 italic font-medium px-1">None available</li>}
               {value.map((v, i) => (
                 <li key={i} className="text-sm flex items-start">
                   <span className="text-sbi-blue dark:text-cyan-500 mr-2 mt-0.5 font-bold">•</span>
@@ -39,6 +40,7 @@ const renderParsedData = (data: any) => {
             <div className="text-sm text-slate-700 dark:text-slate-300">
               {typeof value === 'object' && value !== null ? (
                 <div className="flex flex-wrap gap-2 mt-1">
+                  {Object.keys(value).length === 0 && <span className="text-sm text-slate-400 italic font-medium px-1">None available</span>}
                   {Object.entries(value).map(([k, val]) => (
                     <span key={k} className="mr-2 px-2 py-1 bg-white dark:bg-slate-800 rounded-md shadow-sm border border-slate-100 dark:border-slate-700 text-xs">
                       <strong className="text-slate-500">{k.replace(/_/g, ' ')}:</strong> {String(val)}
@@ -118,7 +120,7 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
               <span className="font-bold">{idx + 1}</span>
             </div>
             <Card className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] glass-card border-0 shadow-md p-5 transition-transform group-hover:-translate-y-1">
-              <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{(log.agent || log.type || 'system').replace('_', ' ')}</div>
+              <div className="text-xs uppercase tracking-widest font-black text-cyan-600 dark:text-cyan-400 mb-2">{(log.agent || log.type || 'system').replace(/_/g, ' ')}</div>
               {renderParsedData(log.state_summary || log.data || log)}
             </Card>
           </div>
