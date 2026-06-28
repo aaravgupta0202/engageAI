@@ -53,7 +53,9 @@ class ProductUpdate(BaseModel):
     eligibility_rules: dict
 
 @app.get("/")
+@app.head("/")
 @app.get("/health")
+@app.head("/health")
 def health_check():
     return {"status": "ok", "message": "engageAI backend is running"}
 
