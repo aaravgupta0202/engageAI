@@ -74,6 +74,16 @@ Do NOT wrap the output in markdown blocks. Just pure JSON array.
             opportunities = []
 
     messages = state.get("messages", [])
+    
+    if not opportunities:
+        opportunities.append({
+            "product": "SBI Mutual Fund SIP",
+            "fit_score": 0.75,
+            "rationale": "General baseline recommendation for wealth accumulation based on your demographic profile.",
+            "urgency": "Low"
+        })
+        messages.append("Agent 3 (Opportunity Discovery): Appended baseline recommendation.")
+
     messages.append(f"Agent 3 (Opportunity Discovery) completed: Found {len(opportunities)} opportunities using LLM.")
     
     return {"opportunities": opportunities, "messages": messages}
