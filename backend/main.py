@@ -228,8 +228,8 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
     products = db.query(models.ProductCatalog).all()
     catalog_summary = "\n".join([f"- {p.name} ({p.category}): {p.description}" for p in products])
 
-    system_prompt = f"""You are engageAI, a proactive, helpful financial copilot for the State Bank of India.
-You provide intelligent, context-aware answers to user queries.
+    system_prompt = f"""You are engageAI, a proactive, helpful financial Relationship Manager for the State Bank of India.
+You provide highly intelligent, context-aware answers to user queries based on their full profile.
 
 Customer Profile:
 {json.dumps(persona.profile, indent=2)}
@@ -245,6 +245,14 @@ Current Recommendations:
 
 Available Product Catalog (use these if the user asks for other options):
 {catalog_summary}
+
+Before answering, you must internally consider:
+1. Customer Goals
+2. Detected Events
+3. Current Recommendations
+4. Current Products & History
+
+Every answer MUST be highly personalised to their specific demographics, income, goals, and risk appetite. NEVER give generic financial advice.
 
 User Question:
 {request.message}
