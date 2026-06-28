@@ -371,6 +371,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
                     {"role": "user", "content": prompt}
                 ]
             }
+        )
         if res.ok:
             response_text = res.json()["choices"][0]["message"]["content"].strip()
             
