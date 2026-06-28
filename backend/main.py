@@ -361,7 +361,7 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             "https://api.cerebras.ai/v1/chat/completions",
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
             json={
-                "model": "gpt-oss-120b",
+                "model": "llama3.1-70b",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": prompt}
@@ -404,16 +404,60 @@ async def update_customer_graph(customer_id: str, request: Request, db: Session 
         raise HTTPException(status_code=404, detail="Persona not found")
     
     data = await request.json()
+    
     if "profile" in data:
-        # In SQLAlchemy, assigning to JSON column requires re-assignment or flag_modified
+        # Update the profile
         persona.profile = data["profile"]
+        
+        # Trigger an AI Re-evaluation
+        api_key = os.getenv("CEREBRAS_API_KEY")
+        if api_key:
+            system_prompt = """You are an expert synthetic data evaluator. 
+The user has manually edited their financial profile. Based ONLY on their updated profile, generate a new 'archetype' (a short 2-word summary, e.g. "Young Professional", "High Net-Worth Individual") and determine realistic 'embedded_events' (boolean flags).
+Follow this EXACT JSON structure:
+{
+  "archetype": "...",
+  "embedded_events": {
+    "salary_hike": false,
+    "new_dependent": false,
+    "large_deposit": false
+  }
+}
+Do not include markdown blocks, just raw JSON."""
+            prompt = f"Updated Profile: {json.dumps(persona.profile)}"
+            try:
+                res = requests.post(
+                    "https://api.cerebras.ai/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+                    json={
+                        "model": "llama3.1-70b",
+                        "messages": [
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": prompt}
+                        ]
+                    }
+                )
+                if res.ok:
+                    response = res.json()["choices"][0]["message"]["content"].strip()
+                    if response.startswith("```json"):
+                        response = response[7:-3]
+                    elif response.startswith("```"):
+                        response = response[3:-3]
+                    parsed = json.loads(response.strip())
+                    if "archetype" in parsed:
+                        persona.archetype = parsed["archetype"]
+                    if "embedded_events" in parsed:
+                        persona.embedded_events = parsed["embedded_events"]
+            except Exception as e:
+                print("Failed to recalculate persona:", e)
+
     if "life_events" in data:
         persona.embedded_events = data["life_events"]
     if "archetype" in data:
         persona.archetype = data["archetype"]
         
     db.commit()
-    return {"status": "success"}
+    return {"status": "success", "archetype": persona.archetype, "life_events": persona.embedded_events}
 
 @app.get("/customers/{customer_id}/run-agents")
 async def run_agents_sse(customer_id: str, db: Session = Depends(get_db)):

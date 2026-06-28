@@ -64,11 +64,19 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     try {
-        await fetch(`${API_URL}/customers/${customerId}/graph`, {
+        const res = await fetch(`${API_URL}/customers/${customerId}/graph`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ profile: updatedProfile })
         });
+        const resData = await res.json();
+        if (resData.archetype || resData.life_events) {
+            setData((prev: any) => ({
+                ...prev,
+                archetype: resData.archetype || prev.archetype,
+                life_events: resData.life_events || prev.life_events
+            }));
+        }
     } catch (e) {
         console.error("Failed to save edit:", e);
     }
