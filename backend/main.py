@@ -52,6 +52,11 @@ class ProductUpdate(BaseModel):
     description: str
     eligibility_rules: dict
 
+@app.get("/")
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "message": "engageAI backend is running"}
+
 @app.get("/personas")
 def get_personas(db: Session = Depends(get_db)):
     personas = db.query(models.Persona).all()

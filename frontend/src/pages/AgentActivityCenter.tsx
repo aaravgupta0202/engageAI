@@ -57,11 +57,18 @@ const renderParsedData = (data: any) => {
 };
 
 export default function AgentActivityCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
-  const [logs, setLogs] = useState<any[]>([]);
-  const [isDone, setIsDone] = useState(false);
+  const [logs, setLogs] = useState<any[]>(() => {
+    if (!customerId) return [];
+    const saved = localStorage.getItem(`agent_logs_${customerId}`);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [isDone, setIsDone] = useState(() => {
+    if (!customerId) return false;
+    return localStorage.getItem(`analysis_run_${customerId}`) === 'true';
+  });
 
   useEffect(() => {
-    if (!customerId) return;
+    if (!customerId || isDone) return;
     
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     const eventSource = new EventSource(`${API_URL}/customers/${customerId}/run-agents`);
@@ -76,7 +83,11 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
       
       try {
         const parsed = JSON.parse(event.data);
-        setLogs(prev => [...prev, parsed]);
+        setLogs(prev => {
+          const newLogs = [...prev, parsed];
+          localStorage.setItem(`agent_logs_${customerId}`, JSON.stringify(newLogs));
+          return newLogs;
+        });
         if (parsed.agent === 'opportunity_discovery' && parsed.state_summary?.opportunities) {
           localStorage.setItem(`opportunities_${customerId}`, JSON.stringify(parsed.state_summary.opportunities));
         }

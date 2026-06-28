@@ -56,6 +56,8 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
       .finally(() => setIsLoading(false));
   }, [customerId]);
 
+  const selectedAction = customerId ? localStorage.getItem(`selected_action_${customerId}`) : null;
+
   const handleAccept = (productName: string) => {
     localStorage.setItem(`selected_action_${customerId}`, productName);
     onNavigate('actions');
@@ -118,7 +120,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                     onClick={() => handleAccept(rec.product)}
                     className="flex-1 md:w-40 rounded-full shadow-md bg-emerald-500 hover:bg-emerald-600 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                   >
-                    <CheckCircle2 size={18} className="mr-2" /> Accept
+                    <CheckCircle2 size={18} className="mr-2" /> {selectedAction === rec.product ? 'Continue Setup' : 'Accept'}
                   </Button>
                   <Button 
                     className="flex-1 md:w-40 rounded-full shadow-md bg-red-500 hover:bg-red-600 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"

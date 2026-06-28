@@ -4,10 +4,22 @@ import { Button } from '../components/ui/Button';
 import { CheckCircle2, ChevronRight, Clock, ShieldCheck, PlayCircle } from 'lucide-react';
 
 export default function ActionCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [showFollowUp, setShowFollowUp] = useState(false);
-  const [fastForwarded, setFastForwarded] = useState(false);
+  const [currentStep, setCurrentStep] = useState(() => {
+    if (!customerId) return 0;
+    return parseInt(localStorage.getItem(`action_step_${customerId}`) || '0');
+  });
+  const [isCompleted, setIsCompleted] = useState(() => {
+    if (!customerId) return false;
+    return localStorage.getItem(`action_completed_${customerId}`) === 'true';
+  });
+  const [showFollowUp, setShowFollowUp] = useState(() => {
+    if (!customerId) return false;
+    return localStorage.getItem(`action_followup_${customerId}`) === 'true';
+  });
+  const [fastForwarded, setFastForwarded] = useState(() => {
+    if (!customerId) return false;
+    return localStorage.getItem(`action_fastforward_${customerId}`) === 'true';
+  });
 
   const selectedAction = customerId ? localStorage.getItem(`selected_action_${customerId}`) || "Mutual Fund SIP Top-Up" : "Mutual Fund SIP Top-Up";
 
@@ -20,11 +32,22 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      setCurrentStep(prev => prev + 1);
+      const nextStep = currentStep + 1;
+      setCurrentStep(nextStep);
+      localStorage.setItem(`action_step_${customerId}`, nextStep.toString());
     } else {
       setIsCompleted(true);
-      setTimeout(() => setShowFollowUp(true), 800);
+      localStorage.setItem(`action_completed_${customerId}`, 'true');
+      setTimeout(() => {
+        setShowFollowUp(true);
+        localStorage.setItem(`action_followup_${customerId}`, 'true');
+      }, 800);
     }
+  };
+
+  const handleFastForward = () => {
+    setFastForwarded(true);
+    localStorage.setItem(`action_fastforward_${customerId}`, 'true');
   };
 
   if (!customerId) {
@@ -122,7 +145,7 @@ export default function ActionCenter({ customerId, onNavigate }: { customerId: s
                 </div>
                 <div className="flex flex-col gap-3">
                   <Button 
-                    onClick={() => setFastForwarded(true)}
+                    onClick={handleFastForward}
                     disabled={fastForwarded}
                     className={`rounded-full px-6 py-2.5 font-bold transition-all shadow-md ${fastForwarded ? 'bg-slate-200 text-slate-400' : 'bg-slate-800 hover:bg-slate-900 text-white hover:scale-105'}`}
                   >
