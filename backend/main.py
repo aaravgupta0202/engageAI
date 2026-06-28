@@ -52,6 +52,60 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+def call_llm_with_fallback(messages: list):
+    import os, requests, json
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    
+    # Try Groq
+    try:
+        if groq_api_key and groq_api_key != "your_GROQ_API_KEY_here":
+            res = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={"Authorization": f"Bearer {groq_api_key}", "Content-Type": "application/json"},
+                json={"model": "llama-3.1-8b-instant", "messages": messages},
+                timeout=10
+            )
+            if res.ok:
+                return res.json()["choices"][0]["message"]["content"].strip()
+            print(f"Groq API error: {res.text}")
+    except Exception as e:
+        print(f"Groq exception: {e}")
+        
+    # Fallback to Gemini
+    print("Falling back to Gemini...")
+    try:
+        if gemini_api_key and gemini_api_key != "your_gemini_api_key_here":
+            gemini_contents = []
+            sys_prompt = ""
+            for m in messages:
+                if m["role"] == "system":
+                    sys_prompt = m["content"]
+                else:
+                    role = "model" if m["role"] == "assistant" else "user"
+                    gemini_contents.append({"role": role, "parts": [{"text": m["content"]}]})
+            
+            payload = {"contents": gemini_contents}
+            if sys_prompt:
+                payload["systemInstruction"] = {"parts": [{"text": sys_prompt}]}
+                
+            res = requests.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_api_key}",
+                headers={"Content-Type": "application/json"},
+                json=payload,
+                timeout=10
+            )
+            if res.ok:
+                data = res.json()
+                if "candidates" in data and len(data["candidates"]) > 0:
+                    return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            print(f"Gemini API error: {res.text}")
+    except Exception as e:
+        print(f"Gemini exception: {e}")
+        
+    raise Exception("Both Groq and Gemini API calls failed.")
+
 CUSTOM_PERSONA_CACHE = {}
 
 class ChatRequest(BaseModel):
@@ -129,21 +183,10 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
   }}
 }}"""
     try:
-        res = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama-3.1-8b-instant",
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ]
-            }
-        )
-        if not res.ok:
-            raise Exception(f"Groq API error: {res.text}")
-            
-        response = res.json()["choices"][0]["message"]["content"].strip()
+        response = call_llm_with_fallback([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ])
         
         if response.startswith("```json"):
             response = response[7:-3]
@@ -217,21 +260,10 @@ Do not include markdown blocks, just raw JSON."""
     prompt = f"Occupation: {req.occupation}\nIncome: {req.income}\nAssets: {req.assets}\nCity: {req.city}\nScraped City Context: {city_context}\nExpenses: {req.expenses}\nDemographics: {req.demographics}\nNotes: {req.notes}"
 
     try:
-        res = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama-3.1-8b-instant",
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ]
-            }
-        )
-        if not res.ok:
-            raise Exception(f"Groq API error: {res.text}")
-            
-        response = res.json()["choices"][0]["message"]["content"].strip()
+        response = call_llm_with_fallback([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ])
         
         if response.startswith("```json"):
             response = response[7:-3]
@@ -308,16 +340,8 @@ Do not include markdown blocks, just raw JSON."""
         cerebras_messages.append({"role": role, "content": m.content})
 
     try:
-        res = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama-3.1-8b-instant",
-                "messages": cerebras_messages
-            }
-        )
-        if res.ok:
-            response_text = res.json()["choices"][0]["message"]["content"].strip()
+        response_text = call_llm_with_fallback(cerebras_messages)
+        if True:
             
             import re
             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
@@ -370,19 +394,11 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
     prompt = f"Current Profile: {json.dumps(persona.profile)}\nScenario: {req.scenario}"
     
     try:
-        res = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-            json={
-                "model": "llama-3.1-8b-instant",
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ]
-            }
-        )
-        if res.ok:
-            response_text = res.json()["choices"][0]["message"]["content"].strip()
+        response_text = call_llm_with_fallback([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ])
+        if True:
             
             # Robust JSON extraction
             import re
@@ -460,19 +476,11 @@ Follow this EXACT JSON structure:
 Do not include markdown blocks, just raw JSON."""
             prompt = f"Updated Profile: {json.dumps(profile)}"
             try:
-                res = requests.post(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
-                    json={
-                        "model": "llama-3.1-8b-instant",
-                        "messages": [
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": prompt}
-                        ]
-                    }
-                )
-                if res.ok:
-                    response_text = res.json()["choices"][0]["message"]["content"].strip()
+                response_text = call_llm_with_fallback([
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ])
+                if True:
                     import re
                     json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
                     if json_match:
