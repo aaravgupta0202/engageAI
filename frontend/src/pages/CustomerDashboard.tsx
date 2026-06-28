@@ -28,6 +28,36 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
     </div>
   );
 
+  const [editKey, setEditKey] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
+
+  const handleSaveEdit = async () => {
+    if (!editKey || !customerId) return;
+    const isGoal = editKey === 'goals';
+    let newValue: any = editValue;
+    
+    if (isGoal) {
+        newValue = editValue.split(',').map(s => s.trim()).filter(Boolean);
+    } else if (!isNaN(Number(editValue))) {
+        newValue = Number(editValue);
+    }
+    
+    const updatedProfile = { ...data.profile, [editKey]: newValue };
+    setData({ ...data, profile: updatedProfile });
+    setEditKey(null);
+
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+    try {
+        await fetch(`${API_URL}/customers/${customerId}/graph`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profile: updatedProfile })
+        });
+    } catch (e) {
+        console.error("Failed to save edit:", e);
+    }
+  };
+
   return (
     <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel p-6 rounded-2xl">
@@ -43,28 +73,57 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1 glass-card border-t-4 border-t-cyan-400">
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><User className="w-6 h-6 mr-2 text-cyan-500" /> Identity & Demographics</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center"><User className="w-6 h-6 mr-2 text-cyan-500" /> Identity & Profile</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-slate-600 dark:text-slate-300">
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Age</span> <span className="font-bold text-slate-800 dark:text-white">{data.profile?.age || 'N/A'}</span></div>
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Income</span> <span className="font-bold text-green-600 dark:text-green-400">₹{Number(data.profile?.income || 0).toLocaleString()}</span></div>
-            <div className="flex justify-between border-b border-slate-100 dark:border-slate-800 pb-2"><span className="text-slate-400">Occupation</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.occupation || 'N/A'}</span></div>
-            <div className="flex justify-between"><span className="text-slate-400">Location</span> <span className="font-medium text-slate-800 dark:text-white">{data.profile?.location || 'N/A'}</span></div>
+            {Object.keys(data.profile || {}).filter(k => k !== 'goals').map((key) => (
+              <div key={key} className="flex flex-col border-b border-slate-100 dark:border-slate-800 pb-2">
+                <span className="text-slate-400 text-xs uppercase tracking-wider mb-1">{key.replace(/_/g, ' ')}</span>
+                {editKey === key ? (
+                  <div className="flex items-center gap-2">
+                    <input autoFocus className="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded px-2 py-1 text-sm text-slate-900 dark:text-white" value={editValue} onChange={e => setEditValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSaveEdit()} />
+                    <button onClick={handleSaveEdit} className="text-xs bg-emerald-500 text-white px-2 py-1 rounded">Save</button>
+                    <button onClick={() => setEditKey(null)} className="text-xs text-slate-400">Cancel</button>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center group">
+                    <span className="font-bold text-slate-800 dark:text-white">
+                      {key === 'income' || key === 'cost_of_living_estimate' ? `₹${Number(data.profile[key]).toLocaleString()}` : (Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : data.profile[key])}
+                    </span>
+                    <button onClick={() => { setEditKey(key); setEditValue(Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : String(data.profile[key])); }} className="text-xs text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">Edit</button>
+                  </div>
+                )}
+              </div>
+            ))}
           </CardContent>
         </Card>
 
         <Card className="md:col-span-2 glass-card border-t-4 border-t-indigo-500">
           <CardHeader>
-            <CardTitle className="text-slate-800 dark:text-white flex items-center"><Target className="w-6 h-6 mr-2 text-indigo-500" /> Life Goals</CardTitle>
+            <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
+                <div className="flex items-center"><Target className="w-6 h-6 mr-2 text-indigo-500" /> Life Goals</div>
+                {editKey !== 'goals' && <button onClick={() => { setEditKey('goals'); setEditValue((data.profile?.goals || []).join(', ')); }} className="text-xs text-indigo-500 font-medium">Edit Goals</button>}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-3">
-              {(data.profile?.goals || []).map((g: string, i: number) => (
-                <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex items-center">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}
+            {editKey === 'goals' ? (
+                <div className="flex flex-col gap-2">
+                    <input autoFocus className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded px-3 py-2 text-sm text-slate-900 dark:text-white" value={editValue} onChange={e => setEditValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSaveEdit()} placeholder="Comma separated goals..." />
+                    <div className="flex gap-2">
+                        <button onClick={handleSaveEdit} className="text-xs bg-emerald-500 text-white px-3 py-1.5 rounded">Save Goals</button>
+                        <button onClick={() => setEditKey(null)} className="text-xs text-slate-400">Cancel</button>
+                    </div>
                 </div>
-              ))}
-            </div>
+            ) : (
+                <div className="flex flex-wrap gap-3">
+                  {(data.profile?.goals || []).map((g: string, i: number) => (
+                    <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex items-center">
+                      <span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}
+                    </div>
+                  ))}
+                  {(!data.profile?.goals || data.profile.goals.length === 0) && <span className="text-slate-400 italic">No goals specified.</span>}
+                </div>
+            )}
           </CardContent>
         </Card>
 

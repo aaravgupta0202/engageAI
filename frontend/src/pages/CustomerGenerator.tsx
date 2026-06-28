@@ -8,15 +8,25 @@ const MOCK_PERSONAS = [
   { id: 'mock-3', archetype: 'Rural Farmer', profile: { age: 50, income: 300000, goals: ['Savings Account', 'Crop Insurance'] } }
 ];
 
-const TEMPLATES = ['A 45yo NRI investor', 'A young tech entrepreneur', 'A rural farmer'];
-
 export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: string, id: string) => void }) {
   const [personas, setPersonas] = useState<any[]>([]);
-  const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [apiFailed, setApiFailed] = useState(false);
+  
+  // Custom Persona Wizard State
+  const [showWizard, setShowWizard] = useState(false);
+  const [step, setStep] = useState(1);
+  const [customData, setCustomData] = useState({
+    occupation: '',
+    income: '',
+    assets: '',
+    city: '',
+    expenses: '',
+    demographics: '',
+    notes: ''
+  });
 
   const fetchPersonas = () => {
     setIsLoading(true);
@@ -45,16 +55,15 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
     fetchPersonas();
   }, []);
 
-  const handleGenerate = async () => {
-    if (!prompt.trim()) return;
+  const handleGenerateCustom = async () => {
     setIsGenerating(true);
     setError(null);
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const res = await fetch(`${API_URL}/personas/generate`, {
+      const res = await fetch(`${API_URL}/personas/generate_custom`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        body: JSON.stringify(customData)
       });
       if (!res.ok) {
         const errorData = await res.json();
@@ -62,7 +71,9 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
       }
       const newPersona = await res.json();
       setPersonas(prev => [newPersona, ...prev.filter(p => !p.id.toString().startsWith('mock'))]);
-      setPrompt('');
+      setShowWizard(false);
+      setCustomData({ occupation: '', income: '', assets: '', city: '', expenses: '', demographics: '', notes: '' });
+      setStep(1);
       setApiFailed(false);
     } catch (err: any) {
       setError(err.message);
@@ -71,49 +82,89 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
     }
   };
 
-  return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 flex flex-col md:flex-row md:justify-between items-start md:items-center relative overflow-hidden">
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-400 opacity-10 rounded-full blur-3xl"></div>
-        <div className="mb-6 md:mb-0 relative z-10">
-          <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">Select a Persona</h2>
-          <p className="text-lg text-slate-500 dark:text-slate-400 max-w-lg">Choose a synthetic customer or generate a brand new one instantly using Cerebras LLM.</p>
-        </div>
-        <div className="w-full md:w-auto flex flex-col relative z-10">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input 
-              type="text" 
-              placeholder="e.g. A 45yo NRI investor..." 
-              value={prompt}
-              onChange={e => setPrompt(e.target.value)}
-              disabled={isGenerating}
-              onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-              className="w-full sm:w-80 glass-panel bg-white/50 dark:bg-slate-900/50 text-slate-900 dark:text-white px-5 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all shadow-inner"
-            />
-            <Button 
-              onClick={handleGenerate} 
-              disabled={isGenerating || !prompt.trim()} 
-              className="rounded-full px-8 py-3 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transition-all duration-300 disabled:opacity-50 text-white font-bold whitespace-nowrap"
-            >
-              {isGenerating ? (
-                <span className="flex items-center"><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> Generating...</span>
-              ) : 'Generate AI Persona'}
+  const renderWizardStep = () => {
+    const nextStep = () => setStep(s => s + 1);
+    const prevStep = () => setStep(s => s - 1);
+    
+    return (
+      <div className="glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 relative overflow-hidden animate-in fade-in duration-300">
+        <h3 className="text-2xl font-bold mb-6 text-slate-800 dark:text-white">Create Custom Persona - Step {step} of 6</h3>
+        
+        {step === 1 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">What is their occupation? (e.g. "Business owner and real estate investor")</label>
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.occupation} onChange={e => setCustomData({...customData, occupation: e.target.value})} placeholder="Primary and secondary income sources..." />
+          </div>
+        )}
+        {step === 2 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">Yearly Income & Assets?</label>
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.income} onChange={e => setCustomData({...customData, income: e.target.value})} placeholder="Income (e.g. ₹25,00,000)..." />
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.assets} onChange={e => setCustomData({...customData, assets: e.target.value})} placeholder="Assets (e.g. 2 cars, 1 flat)..." />
+          </div>
+        )}
+        {step === 3 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">Which city do they live in? (Used to calculate cost of living)</label>
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.city} onChange={e => setCustomData({...customData, city: e.target.value})} placeholder="e.g. Mumbai, Pune..." />
+          </div>
+        )}
+        {step === 4 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">Base Expenses? (Leave blank to let AI infer based on city)</label>
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.expenses} onChange={e => setCustomData({...customData, expenses: e.target.value})} placeholder="e.g. ₹40,000/month rent..." />
+          </div>
+        )}
+        {step === 5 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">Demographics (Age, Family, Dependents)</label>
+            <input type="text" className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4" value={customData.demographics} onChange={e => setCustomData({...customData, demographics: e.target.value})} placeholder="e.g. 35yo, married, supporting parents..." />
+          </div>
+        )}
+        {step === 6 && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-slate-600 dark:text-slate-300">Any additional notes or specific goals?</label>
+            <textarea className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 mb-4 h-32" value={customData.notes} onChange={e => setCustomData({...customData, notes: e.target.value})} placeholder="e.g. Wants to buy a house in 2 years..." />
+          </div>
+        )}
+
+        <div className="flex justify-between mt-6">
+          <Button variant="outline" onClick={step === 1 ? () => setShowWizard(false) : prevStep}>
+            {step === 1 ? 'Cancel' : 'Back'}
+          </Button>
+          {step < 6 ? (
+            <Button onClick={nextStep} className="bg-sbi-blue text-white">Next</Button>
+          ) : (
+            <Button onClick={handleGenerateCustom} disabled={isGenerating} className="bg-emerald-500 text-white font-bold">
+              {isGenerating ? 'Synthesizing Data...' : 'Generate Graph'}
             </Button>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-3 pl-2">
-            <span className="text-xs text-slate-500 py-1">Quick start:</span>
-            {TEMPLATES.map(t => (
-              <button 
-                key={t} 
-                onClick={() => setPrompt(t)}
-                className="text-xs bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
-              >
-                {t}
-              </button>
-            ))}
-          </div>
+          )}
         </div>
       </div>
+    );
+  };
+
+  return (
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {!showWizard ? (
+        <div className="glass-panel p-8 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 flex flex-col md:flex-row md:justify-between items-start md:items-center relative overflow-hidden">
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-400 opacity-10 rounded-full blur-3xl"></div>
+          <div className="mb-6 md:mb-0 relative z-10">
+            <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-2">Select a Persona</h2>
+            <p className="text-lg text-slate-500 dark:text-slate-400 max-w-lg">Choose a synthetic customer or generate a custom profile manually.</p>
+          </div>
+          <div className="w-full md:w-auto flex flex-col relative z-10">
+            <Button 
+              onClick={() => setShowWizard(true)} 
+              className="rounded-full px-8 py-3 shadow-lg bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transition-all duration-300 text-white font-bold whitespace-nowrap"
+            >
+              Build Custom Persona
+            </Button>
+          </div>
+        </div>
+      ) : (
+        renderWizardStep()
+      )}
       
       {error && (
         <div className="bg-red-50/80 backdrop-blur-md dark:bg-red-900/20 text-red-600 dark:text-red-400 p-5 rounded-2xl border border-red-200 dark:border-red-800 shadow-sm flex items-center justify-between animate-in zoom-in-95">

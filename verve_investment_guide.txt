@@ -1,0 +1,87 @@
+# Verve Systems Investment Guide
+
+This document contains rules and heuristics for AI investment recommendation based on the Verve Systems framework.
+
+## 1. Investment Objectives by Age
+These are the primary objectives an individual should focus on based on their age bracket. "Plan" means it should be actively planned for, "Never" means it should not be considered.
+
+| Objective | 21-25 | 26-30 | 31-35 | 36-40 | 41-45 | 46-50 | 51-55 | 56-60 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Livelihood | Plan | Plan | Plan | Plan | Plan | Plan | Plan | Plan |
+| Health | Plan | Plan | Plan | Plan | Plan | Plan | Plan | Plan |
+| Life | - | - | Plan | Plan | Plan | Plan | Plan | Plan |
+| Retirement | - | - | - | - | Plan | Plan | Plan | Plan |
+| Child | - | - | Plan | Plan | Plan | - | - | - |
+| Education | - | - | - | Plan | Plan | Plan | - | - |
+| Marriage | - | - | - | - | - | Plan | Plan | Plan |
+| Parent Support| Plan | Plan | Plan | Plan | Plan | Plan | Plan | Plan |
+| Legacy | - | - | - | - | - | - | Plan | Plan |
+| Material | Never | Never | Never | Never | Never | Never | Never | Never |
+
+## 2. Funding % from Income
+Recommended percentage of income to allocate to each objective by age.
+
+| Objective | 21-25 | 26-30 | 31-35 | 36-40 | 41-45 | 46-50 | 51-55 | 56-60 |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Livelihood | 60-80% | 50-70% | 50% | 35-50% | 35-50% | 35-50% | 35% | 35% |
+| Health | 2% | 2% | 4% | 5% | 5% | 5% | 5% | 5% |
+| Life | - | - | 2% | 2% | 2% | 2% | 2% | 2% |
+| Retirement | - | - | - | - | 10-15%| 15-20%| 35-40%| 35% |
+| Child | - | - | 5% | 5% | 5% | - | - | - |
+| Education | - | - | - | 10% | 10% | 10% | - | - |
+| Marriage | - | - | - | - | - | 10% | 10% | 10% |
+| Parent Support| 15-35%| 25-45%| 40% | 30-45%| 15-20%| 10% | 5% | 5% |
+| Legacy | - | - | - | - | - | - | 5% | 5-10% |
+| Material | Never | Never | Never | Never | Never | Never | Never | Never |
+
+## 3. Objective Rules and Instruments
+
+### Livelihood
+* **Rules**: Focus on primary source to funnel other income. Should be stable and long-term. 90-95% focus should be here. Do not unnecessarily increase lifestyle you cannot afford.
+* **Instruments**: Job/Service, Business, Farming.
+
+### Health
+* **Rules**: Create corpus (1L to 1Cr) for emergencies. Funds must be available quickly. Replenish if depleted. Take Health Insurance and grow cover every 3-5 years. Do not let policy lapse. Add wife and child as family grows.
+* **Instruments**: Health Insurance, Fixed Deposit, Liquid/Debt Mutual Fund (T+2).
+
+### Life
+* **Rules**: Cover should be 10x to 20x of annual income. Grow cover as risk grows. Assess risk every 2-3 years. Take Term Plan.
+* **Instruments**: Term Plan, ULIP, Endowment Plan.
+
+### Retirement
+* **Rules**: Maintain lifestyle after retirement. Long-term investments (1 to 4Cr corpus). Use guaranteed return instruments and beat inflation. Use compounding. Maximize tax saving plans. Low risk.
+* **Instruments**: Pension Plan/NPS, PPF, Endowment Plan, Tax Saving FDs.
+
+### Child, Education & Marriage
+* **Rules**: Plan from birth to schooling to higher education to marriage. Expenses grow with child. Start early to use compounding. Plan child's priority and use long-term horizons for withdrawals at different intervals.
+* **Instruments**: ELSS, Endowment Plan, Mutual Fund (SIP).
+
+### Parent Support, Legacy
+* **Rules**: Prioritize objectives. Use compounding. Create good corpus to leave behind. Invest in immovable property only if surplus funds exist.
+* **Instruments**: Mutual Fund (SIP/Lumpsum), Stocks, Long Term FDs, ELSS.
+
+## 4. Investment Tools Comparison
+
+### ULIP vs ELSS
+* **Tax**: Both 80C. ULIP gains taxable. ELSS LTCG taxed at 10% above 1 lakh.
+* **Charges**: ULIP has mortality, premium allocation. ELSS has exit load and fund management.
+* **Liquidity**: ULIP 5-year lock-in. ELSS 3-year lock-in.
+* **Risk/Return**: ULIP risk is high, return varies. ELSS risk is high, return depends on scheme (approx 12-14%).
+
+### Endowment vs Term Plan
+* **Endowment**: Life + Investment. High premium. Death benefit + sum assured + bonus on maturity. No risk. Medium return. No flexibility in investment.
+* **Term**: Life coverage only. Less premium. No maturity benefit. No risk. No return. No flexibility.
+
+### NPS Tier 1 vs Tier 2
+* **Tier 1**: Lock-in until age 60. Min Rs 500. Deductions under 80C and 80CCD(1B). Partial withdrawals (25%) allowed after 3 years for specific reasons. Tax-free 60% withdrawal at maturity.
+* **Tier 2**: No lock-in. Min Rs 1,000. No tax exemptions. Flexible withdrawals anytime. Withdrawals added to income and taxed.
+
+## 5. General Axioms
+* Never put all eggs in one basket.
+* Higher risk, higher return.
+* Invest low, Exit high.
+* Understand risk appetite. Take a long-term view.
+* Invest early (Power of Compounding).
+* Don't eat more than what you can digest. Sensibility in investment, not greed.
+* Always keep one bank which never changes.
+* Read the policy before investment. Always know entry, exit, and benefit.

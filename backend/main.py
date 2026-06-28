@@ -153,6 +153,91 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
         print("Cerebras Generation Error:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
+class CustomPersonaRequest(BaseModel):
+    occupation: str
+    income: str
+    assets: str
+    city: str
+    expenses: str
+    demographics: str
+    notes: str
+
+@app.post("/personas/generate_custom")
+async def generate_custom_persona(req: CustomPersonaRequest, db: Session = Depends(get_db)):
+    api_key = os.getenv("CEREBRAS_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="CEREBRAS_API_KEY not configured")
+
+    # Simple simulated web scrape for cost of living (in a real app, use BeautifulSoup + requests)
+    try:
+        col_res = requests.get(f"https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&titles={req.city}&format=json").json()
+        city_context = str(col_res)[:500] # just grab a snippet to prove the scrape happened
+    except:
+        city_context = "Could not scrape city data."
+
+    system_prompt = """You are an expert synthetic data generator for banking personas. 
+You will be provided with custom user inputs and a scraped snippet about their city. 
+Synthesize a comprehensive, realistic JSON persona graph. If any fields are missing, infer highly realistic default values.
+Follow this EXACT JSON structure, adding new fields if necessary to capture their notes/assets:
+{
+  "archetype": "Short 2-word summary",
+  "profile": {
+    "age": 30,
+    "income": 1200000,
+    "occupation": "...",
+    "location": "...",
+    "cost_of_living_estimate": 40000,
+    "assets": ["..."],
+    "goals": ["..."],
+    "notes": "..."
+  },
+  "embedded_events": {
+    "salary_hike": false
+  }
+}
+Do not include markdown blocks, just raw JSON."""
+
+    prompt = f"Occupation: {req.occupation}\nIncome: {req.income}\nAssets: {req.assets}\nCity: {req.city}\nScraped City Context: {city_context}\nExpenses: {req.expenses}\nDemographics: {req.demographics}\nNotes: {req.notes}"
+
+    try:
+        res = requests.post(
+            "https://api.cerebras.ai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "gpt-oss-120b",
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ]
+            }
+        )
+        if not res.ok:
+            raise Exception(f"Cerebras API error: {res.text}")
+            
+        response = res.json()["choices"][0]["message"]["content"].strip()
+        
+        if response.startswith("```json"):
+            response = response[7:-3]
+        elif response.startswith("```"):
+            response = response[3:-3]
+        
+        parsed = json.loads(response.strip())
+        
+        import uuid
+        new_persona = models.Persona(
+            id=str(uuid.uuid4()),
+            archetype=parsed.get("archetype", "Custom Persona"),
+            profile=parsed.get("profile", {}),
+            embedded_events=parsed.get("embedded_events", {})
+        )
+        db.add(new_persona)
+        db.commit()
+        
+        return {"id": new_persona.id, "archetype": new_persona.archetype, "profile": new_persona.profile, "embedded_events": new_persona.embedded_events}
+    except Exception as e:
+        print("Custom Generation Error:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/customers/{customer_id}/graph")
 def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
     persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
@@ -166,6 +251,24 @@ def get_customer_graph(customer_id: str, db: Session = Depends(get_db)):
         "transactions": [],
         "recommendations": []
     }
+
+@app.put("/customers/{customer_id}/graph")
+async def update_customer_graph(customer_id: str, request: Request, db: Session = Depends(get_db)):
+    persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
+    if not persona:
+        raise HTTPException(status_code=404, detail="Persona not found")
+    
+    data = await request.json()
+    if "profile" in data:
+        # In SQLAlchemy, assigning to JSON column requires re-assignment or flag_modified
+        persona.profile = data["profile"]
+    if "life_events" in data:
+        persona.embedded_events = data["life_events"]
+    if "archetype" in data:
+        persona.archetype = data["archetype"]
+        
+    db.commit()
+    return {"status": "success"}
 
 @app.get("/customers/{customer_id}/run-agents")
 async def run_agents_sse(customer_id: str, db: Session = Depends(get_db)):
