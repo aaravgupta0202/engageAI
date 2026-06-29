@@ -164,7 +164,7 @@ export default function AiChat({ customerId }: { customerId: string | null }) {
   };
 
   return (
-    <div className="w-full h-full flex flex-col flex-1 animate-in fade-in duration-500">
+    <div className="fixed inset-0 z-40 bg-slate-50 dark:bg-slate-900 pt-[72px] md:pt-[88px] flex flex-col animate-in fade-in duration-500">
       <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 overflow-hidden">
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 md:px-8 flex flex-row items-center justify-between shadow-sm z-10">
           <div className="flex items-center space-x-3">
