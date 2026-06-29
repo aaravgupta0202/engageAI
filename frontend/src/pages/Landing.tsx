@@ -4,7 +4,7 @@ import PublicChat from '../components/PublicChat';
 
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white selection:bg-sbi-blue selection:text-white">
+    <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white selection:bg-sbi-blue selection:text-white overflow-x-hidden">
 
       {/* Navigation for Landing Only */}
       <header className="w-full z-50 sticky top-0 bg-white/70 backdrop-blur-md border-b border-slate-200/50">
@@ -81,7 +81,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
 
         {/* Abstract Infinity/Glass Graphic area */}
-        <div className="mt-8 md:mt-12 relative w-full overflow-hidden h-48 sm:h-64 md:h-96 flex items-center justify-center">
+        <div className="mt-8 md:mt-12 relative w-full overflow-visible h-48 sm:h-64 md:h-96 flex items-center justify-center">
 
           {/* Glass Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-visible animate-[spin_20s_linear_infinite]">
