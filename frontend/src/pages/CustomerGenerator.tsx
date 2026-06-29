@@ -291,7 +291,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
                 <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-sbi-blue transition-colors">{p.archetype}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mb-5 font-medium">Age: <span className="text-slate-800 dark:text-slate-200">{p.profile?.age || 'N/A'}</span> <span className="mx-2 text-slate-300">•</span> Income: <span className="text-slate-800 dark:text-slate-200">₹{Number(p.profile?.income || 0).toLocaleString()}</span></p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-5 font-medium">Age: <span className="text-slate-800 dark:text-slate-200">{p.profile?.age || 'N/A'}</span> <span className="mx-2 text-slate-300">•</span> Income: <span className="text-slate-800 dark:text-slate-200">₹{Number(p.profile?.income || 0).toLocaleString('en-IN')}</span></p>
                 <div className="flex flex-wrap gap-2">
                   {p.profile?.goals?.map((g: string) => (
                     <span key={g} className="px-3 py-1.5 bg-slate-100 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300 font-medium text-xs rounded-full border border-slate-200/50 dark:border-slate-700/50">{g}</span>

@@ -66,7 +66,7 @@ export default function PublicChat() {
 
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-[380px] h-[550px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom-10 fade-in duration-300">
+        <div className="fixed bottom-6 right-6 w-[calc(100vw-3rem)] sm:w-[380px] h-[80vh] sm:h-[550px] max-h-[800px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200 dark:border-slate-800 animate-in slide-in-from-bottom-10 fade-in duration-300">
           
           {/* Header */}
           <div className="bg-gradient-to-r from-sbi-blue to-cyan-500 text-white p-4 flex justify-between items-center shrink-0">

@@ -295,7 +295,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                     <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
                       <span className="font-medium text-slate-700 dark:text-slate-300">Monthly Cash Flow</span>
                       <span className={simulatingRec.category === 'borrow' ? "font-bold text-red-500" : "font-bold text-amber-500"}>
-                        -₹{Math.floor(Math.random() * 5000 + 2000).toLocaleString()} (Est. EMI/Premium)
+                        -₹{Math.floor(Math.random() * 5000 + 2000).toLocaleString('en-IN')} (Est. EMI/Premium)
                       </span>
                     </div>
                     

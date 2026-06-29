@@ -104,9 +104,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
   const formatCurrency = (val: any, cityStr: string = '') => {
       const num = parseNum(val);
       if (isNaN(num) || num === 0) return '₹0';
-      const city = String(cityStr || '').toLowerCase();
-      const isUS = city.includes('us') || city.includes('usa') || city.includes('new york');
-      return new Intl.NumberFormat(isUS ? 'en-US' : 'en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
   };
 
   const renderProfileValue = (val: any) => {
@@ -339,15 +337,15 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-500 text-sm">Assets</span>
-                  <span className="font-bold text-emerald-500">₹{metrics.assets.toLocaleString()}</span>
+                  <span className="font-bold text-emerald-500">₹{metrics.assets.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-500 text-sm">Liabilities</span>
-                  <span className="font-bold text-red-500">-₹{metrics.liabilities.toLocaleString()}</span>
+                  <span className="font-bold text-red-500">-₹{metrics.liabilities.toLocaleString('en-IN')}</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
                   <span className="text-slate-800 dark:text-white font-bold">Net Worth</span>
-                  <span className="font-black text-xl text-sbi-blue">₹{metrics.netWorth.toLocaleString()}</span>
+                  <span className="font-black text-xl text-sbi-blue">₹{metrics.netWorth.toLocaleString('en-IN')}</span>
                 </div>
               </CardContent>
             </Card>
@@ -454,21 +452,21 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-2 gap-2 relative">
               <input 
                 type="text" 
-                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="E.g., What if I get married next year and buy a car?" 
                 value={scenarioInput}
                 onChange={e => setScenarioInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSimulateScenario()}
+                placeholder="E.g., What if I get married next year and buy a car?" 
+                className="w-full bg-transparent border-none focus:ring-0 text-slate-800 dark:text-slate-200 px-4 py-2 sm:py-0 placeholder:text-slate-400"
               />
               <button 
                 onClick={handleSimulateScenario} 
                 disabled={isSimulating || !scenarioInput.trim()}
-                className="rounded-xl px-6 py-0 bg-blue-500 hover:bg-blue-600 text-white font-bold shrink-0 flex items-center justify-center shadow-md transition-transform hover:scale-105 disabled:opacity-50"
+                className="rounded-xl px-6 py-4 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white shadow-md flex-shrink-0 w-full sm:w-auto font-bold flex items-center justify-center transition-transform hover:scale-105 disabled:opacity-50"
               >
-                {isSimulating ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <><Send size={18} className="mr-2" /> Simulate</>}
+                {isSimulating ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div> : <Send size={18} className="mr-2" />} Simulate
               </button>
             </div>
             

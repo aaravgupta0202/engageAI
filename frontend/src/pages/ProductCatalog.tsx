@@ -87,11 +87,11 @@ export default function ProductCatalog() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex overflow-x-auto hide-scrollbar gap-2 pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scroll-smooth">
         <Button 
           variant={filter === 'all' ? 'default' : 'outline'} 
           onClick={() => setFilter('all')}
-          className={`rounded-full px-6 ${filter === 'all' ? 'bg-sbi-navy text-white hover:bg-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300'}`}
+          className={`rounded-full px-6 flex-shrink-0 ${filter === 'all' ? 'bg-sbi-navy text-white hover:bg-slate-800' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300'}`}
         >
           All Products
         </Button>
@@ -100,7 +100,7 @@ export default function ProductCatalog() {
             key={cat}
             variant={filter === cat ? 'default' : 'outline'} 
             onClick={() => setFilter(cat)}
-            className={`rounded-full px-6 ${filter === cat ? 'bg-sbi-blue text-white' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300'}`}
+            className={`rounded-full px-6 flex-shrink-0 ${filter === cat ? 'bg-sbi-blue text-white' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300'}`}
           >
             {getCategoryLabel(cat)}
           </Button>
