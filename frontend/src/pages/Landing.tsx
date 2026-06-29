@@ -9,8 +9,8 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       {/* Navigation for Landing Only */}
       <header className="w-full z-50 sticky top-0 bg-white/70 backdrop-blur-md border-b border-slate-200/50">
         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
-          <div className="flex items-center -ml-3 cursor-pointer group">
-            <img src="/favicon.png" alt="engageAI Logo" className="h-24 md:h-28 w-auto group-hover:opacity-80 transition-opacity object-contain -my-8 scale-125" />
+          <div className="flex items-center cursor-pointer group shrink-0">
+            <img src="/favicon.png" alt="engageAI Logo" className="h-20 md:h-24 w-auto group-hover:opacity-80 transition-opacity object-contain -my-6 scale-125" />
           </div>
           <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
             <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
@@ -28,8 +28,8 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       <div className="w-full max-w-7xl mx-auto px-6 pt-8 md:pt-12 pb-4 md:pb-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-3xl">
-            <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
-              Turn Banking Data<br />
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
+              Turn Financial Data<br />
               into <span className="text-emerald-500 font-semibold">Agentic Actions</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-600 mb-8 md:mb-10 max-w-xl leading-relaxed">
