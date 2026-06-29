@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Send, Bot, User as UserIcon, Mic, MicOff } from 'lucide-react';
+import { Bot, Mic } from 'lucide-react';
 
 const MOCK_PERSONAS = [
   { id: 'mock-1', archetype: 'NRI Wealth Investor', profile: { age: 45, income: 2500000, goals: ['Retirement', 'Wealth Management'] } },
