@@ -108,7 +108,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
 
         {/* Logos Bar */}
-        <div className="mt-12 md:mt-16 flex flex-col md:flex-row items-center justify-between border-t border-slate-100 pt-8 gap-6">
+        <div className="mt-4 md:mt-6 flex flex-col md:flex-row items-center justify-between pt-4 gap-6">
           <div className="text-sm font-medium text-slate-500">Pure Banking, Nothing Else.</div>
           <div className="flex space-x-6 md:space-x-12 text-sm font-semibold text-slate-700">
             <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Agentic AI</div>
