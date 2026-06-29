@@ -88,8 +88,15 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       if (!val) return 0;
       if (typeof val === 'number') return val;
       if (typeof val === 'string') {
-          const match = val.match(/\d+/g);
-          return match ? parseInt(match.join('')) : 0;
+          const str = val.replace(/,/g, '').toLowerCase();
+          const match = str.match(/[\d.]+/);
+          if (!match) return 0;
+          let num = parseFloat(match[0]);
+          if (str.includes('cr') || str.includes('crore')) num *= 10000000;
+          else if (str.includes('lakh') || str.match(/\bl\b/) || str.match(/[\d.]+(l)/) || str.includes('l ')) num *= 100000;
+          else if (str.includes('million') || str.match(/\bm\b/) || str.match(/[\d.]+(m)/)) num *= 1000000;
+          else if (str.includes('k')) num *= 1000;
+          return num;
       }
       return 0;
   };
@@ -104,7 +111,9 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
   const renderProfileValue = (val: any) => {
       if (Array.isArray(val)) return val.join(', ');
-      if (typeof val === 'object' && val !== null) return JSON.stringify(val);
+      if (typeof val === 'object' && val !== null) {
+          return Object.entries(val).map(([k, v]) => `${k.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${v}`).join(' | ');
+      }
       return String(val);
   };
 
