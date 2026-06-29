@@ -73,7 +73,11 @@ def call_llm_with_fallback(messages: list):
             res = requests.post(
                 "https://api.groq.com/openai/v1/chat/completions",
                 headers={"Authorization": f"Bearer {groq_api_key}", "Content-Type": "application/json"},
-                json={"model": "llama-3.1-8b-instant", "messages": messages},
+                json={
+                    "model": "llama-3.1-8b-instant", 
+                    "messages": messages,
+                    "response_format": {"type": "json_object"}
+                },
                 timeout=10
             )
             if res.ok:
@@ -96,7 +100,10 @@ def call_llm_with_fallback(messages: list):
                     role = "model" if m["role"] == "assistant" else "user"
                     gemini_contents.append({"role": role, "parts": [{"text": m["content"]}]})
             
-            payload = {"contents": gemini_contents}
+            payload = {
+                "contents": gemini_contents,
+                "generationConfig": {"responseMimeType": "application/json"}
+            }
             if sys_prompt:
                 payload["systemInstruction"] = {"parts": [{"text": sys_prompt}]}
                 
