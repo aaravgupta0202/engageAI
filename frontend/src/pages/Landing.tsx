@@ -25,7 +25,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </header>
 
       {/* Hero Section */}
-      <div className="w-full max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-4 md:pb-8 relative">
+      <div className="w-full max-w-7xl mx-auto px-6 pt-8 md:pt-12 pb-4 md:pb-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
@@ -36,13 +36,13 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
               Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly. Get curated plans and offers for your customer.
             </p>
             <div className="flex flex-wrap gap-4 w-full">
-              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-8 py-4 sm:py-6 shadow-xl shadow-sbi-blue/20 text-base sm:text-lg font-semibold flex items-center justify-center w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-6 py-3 sm:px-6 sm:py-4 shadow-xl shadow-sbi-blue/20 text-sm sm:text-base font-semibold flex items-center justify-center w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Try Demo <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Product Catalog <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-8 py-4 sm:py-6 text-base sm:text-lg font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 View Source <ArrowRight size={18} className="ml-2" />
               </Button>
             </div>
@@ -81,7 +81,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
 
         {/* Abstract Infinity/Glass Graphic area */}
-        <div className="mt-16 md:mt-24 relative w-full overflow-hidden h-48 sm:h-64 md:h-96 flex items-center justify-center">
+        <div className="mt-8 md:mt-12 relative w-full overflow-hidden h-48 sm:h-64 md:h-96 flex items-center justify-center">
 
           {/* Glass Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-visible animate-[spin_20s_linear_infinite]">
