@@ -4,7 +4,7 @@ import PublicChat from '../components/PublicChat';
 
 export default function Landing({ onNavigate }: { onNavigate: (page: string) => void }) {
   return (
-    <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white overflow-x-hidden selection:bg-sbi-blue selection:text-white">
+    <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white selection:bg-sbi-blue selection:text-white">
 
       {/* Navigation for Landing Only */}
       <header className="w-full z-50 sticky top-0 bg-white/70 backdrop-blur-md border-b border-slate-200/50">
@@ -81,7 +81,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
         </div>
 
         {/* Abstract Infinity/Glass Graphic area */}
-        <div className="mt-16 md:mt-24 relative w-full h-48 sm:h-64 md:h-96 flex items-center justify-center">
+        <div className="mt-16 md:mt-24 relative w-full overflow-hidden h-48 sm:h-64 md:h-96 flex items-center justify-center">
 
           {/* Glass Particles */}
           <div className="absolute inset-0 pointer-events-none overflow-visible animate-[spin_20s_linear_infinite]">
@@ -119,7 +119,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Massive Blue Statistics Banner */}
-      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-16 md:mb-20 mt-8 md:mt-12">
+      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-8 md:mb-12 mt-8 md:mt-12">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#0A1931]/20 to-transparent rounded-full -translate-y-1/4 translate-x-1/4 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#5E95FF]/30 to-transparent rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
 
@@ -147,7 +147,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Architecture & Working Section */}
-      <div id="architecture" className="w-full bg-slate-50 border-y border-slate-100 py-20 mt-10">
+      <div id="architecture" className="w-full bg-white py-12 mt-4">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">How It Works</h2>
