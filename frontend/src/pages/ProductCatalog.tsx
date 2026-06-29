@@ -140,12 +140,18 @@ export default function ProductCatalog() {
                   </div>
                   <button 
                     onClick={() => {
-                      setSelectedProduct(product);
-                      setEditForm(JSON.parse(JSON.stringify(product))); // Deep copy for edit form
+                      if (adminMode) {
+                        setSelectedProduct(product);
+                        setEditForm(JSON.parse(JSON.stringify(product)));
+                      } else {
+                        const url = product.link || (product as any).url;
+                        if (url) window.open(url, '_blank');
+                        else alert('No website link available for this product.');
+                      }
                     }} 
                     className="bg-transparent text-sbi-blue hover:text-sbi-navy hover:underline font-semibold p-0 px-3 outline-none"
                   >
-                    {adminMode ? 'Edit Product →' : 'View Details →'}
+                    {adminMode ? 'Edit Product →' : 'Go to Website →'}
                   </button>
                 </div>
               </CardContent>

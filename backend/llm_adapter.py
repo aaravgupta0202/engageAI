@@ -14,7 +14,7 @@ try:
 except Exception as e:
     print("Warning: Failed to load KB_TEXT:", e)
 
-KB_INSTRUCTION = f"\n\nUse the following Verve Investment Rules and Guide as a general reference for investment principles, adapting it flexibly based on the customer's specific persona. It is not a strict rulebook but a guiding philosophy:\n{KB_TEXT}\n" if KB_TEXT else ""
+KB_INSTRUCTION = f"\n\nUse the following Wealth Management Rules and Guide as a general reference for investment principles, adapting it flexibly based on the customer's specific persona. It is not a strict rulebook but a guiding philosophy:\n{KB_TEXT}\n" if KB_TEXT else ""
 
 def get_llm(model_type="reasoning"):
     groq_api_key = os.getenv("GROQ_API_KEY")

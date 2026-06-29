@@ -153,7 +153,7 @@ function App() {
       </main>
 
       {/* Global Footer */}
-      <Footer />
+      {location.pathname !== '/chat' && <Footer />}
 
     </div>
   );
