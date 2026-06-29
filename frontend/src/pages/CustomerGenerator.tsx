@@ -157,13 +157,9 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
       ) : (
         <>
           <style>{`
-            footer { display: none !important; }
             body { overflow: hidden; }
           `}</style>
-          <div 
-            className="flex flex-col flex-1 h-[calc(100vh-80px)] animate-in slide-in-from-bottom-4 duration-500 -my-6 bg-slate-50 dark:bg-slate-900"
-            style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
-          >
+          <div className="fixed inset-0 z-40 bg-slate-50 dark:bg-slate-900 pt-[65px] md:pt-[81px] flex flex-col animate-in slide-in-from-bottom-4 duration-500">
             <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 border-0 overflow-hidden">
             <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 md:px-8 flex flex-row items-center justify-between shadow-sm z-10">
               <div className="flex items-center space-x-3">
