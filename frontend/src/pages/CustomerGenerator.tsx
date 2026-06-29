@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Send, Bot, User as UserIcon } from 'lucide-react';
+import { Send, Bot, User as UserIcon, Mic, MicOff } from 'lucide-react';
 
 const MOCK_PERSONAS = [
   { id: 'mock-1', archetype: 'NRI Wealth Investor', profile: { age: 45, income: 2500000, goals: ['Retirement', 'Wealth Management'] } },
@@ -22,6 +22,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState<{role: 'ai'|'user', content: string}[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [isListening, setIsListening] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +34,36 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
     setShowChat(true);
     setMessages([{ role: 'ai', content: "Welcome to SBI EngageAI. I'll help you set up your Digital Financial Twin. To start, what is your primary occupation?" }]);
     setInputValue('');
+  };
+
+  const handleMicClick = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert("Speech recognition is not supported in your browser.");
+      return;
+    }
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event: any) => {
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
+      }
+      if (finalTranscript) {
+        setInputValue(prev => prev ? prev + " " + finalTranscript : finalTranscript);
+      }
+    };
+    recognition.onerror = (e: any) => {
+      console.error(e);
+      setIsListening(false);
+    };
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
   };
 
   const handleSendMessage = async () => {
@@ -124,15 +155,16 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
           </div>
         </div>
       ) : (
-        <div className="glass-panel rounded-3xl border border-slate-200/50 dark:border-slate-800/50 relative overflow-hidden flex flex-col flex-1 min-h-[60vh]">
-          <div className="bg-slate-100 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
-            <h3 className="font-bold text-slate-800 dark:text-white flex items-center">
-              <Bot className="w-5 h-5 mr-2 text-sbi-blue" /> SBI Copilot Onboarding
+        <div className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col">
+          <div className="bg-white dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center shadow-sm">
+            <h3 className="font-bold text-slate-800 dark:text-white flex items-center text-lg">
+              <Bot className="w-6 h-6 mr-3 text-sbi-blue" /> SBI Copilot Onboarding
             </h3>
-            <Button variant="ghost" onClick={() => setShowChat(false)} className="text-slate-500">Cancel</Button>
+            <Button variant="ghost" onClick={() => setShowChat(false)} className="!bg-transparent hover:!bg-slate-100 !text-slate-500 hover:!text-slate-700 border border-transparent hover:border-slate-200">Cancel</Button>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4">
+            <div className="max-w-4xl mx-auto w-full space-y-6">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`flex items-end gap-2 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
@@ -146,20 +178,28 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               </div>
             ))}
             <div ref={messagesEndRef} />
+            </div>
           </div>
 
           <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
-            <div className="flex gap-2 relative">
+            <div className="max-w-4xl mx-auto w-full flex gap-2 relative">
               <input 
                 type="text" 
                 autoFocus
                 disabled={isGenerating}
-                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-5 py-3 text-sm focus:ring-2 focus:ring-sbi-blue outline-none"
+                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-5 py-3 text-sm md:text-base focus:ring-2 focus:ring-sbi-blue outline-none"
                 placeholder="Type your answer... (or 'Unknown')" 
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
               />
+              <Button 
+                onClick={handleMicClick} 
+                className={`rounded-full w-12 h-12 p-0 shrink-0 flex items-center justify-center shadow-md transition-all ${isListening ? 'bg-red-500 hover:bg-red-600 animate-pulse !text-white' : '!bg-white hover:!bg-slate-100 !text-slate-600 border border-slate-200 dark:!bg-slate-800 dark:border-slate-700 dark:!text-slate-300'}`}
+                title="Speech to Text"
+              >
+                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+              </Button>
               <Button 
                 onClick={handleSendMessage} 
                 disabled={!inputValue.trim() || isGenerating}
