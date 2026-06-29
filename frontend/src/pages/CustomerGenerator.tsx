@@ -155,60 +155,61 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
           </div>
         </div>
       ) : (
-        <div className="fixed inset-0 z-[100] bg-slate-50 dark:bg-slate-900 flex flex-col">
-          <div className="bg-white dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center shadow-sm">
-            <h3 className="font-bold text-slate-800 dark:text-white flex items-center text-lg">
-              <Bot className="w-6 h-6 mr-3 text-sbi-blue" /> SBI Copilot Onboarding
-            </h3>
-            <Button variant="ghost" onClick={() => setShowChat(false)} className="!bg-transparent hover:!bg-slate-100 !text-slate-500 hover:!text-slate-700 border border-transparent hover:border-slate-200">Cancel</Button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-4">
-            <div className="max-w-4xl mx-auto w-full space-y-6">
+        <div className="w-full flex flex-col flex-1 min-h-[70vh] animate-in slide-in-from-bottom-4 duration-500">
+          <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl rounded-3xl">
+            <CardHeader className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4 flex flex-row items-center justify-between space-y-0">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sbi-blue to-cyan-500 flex items-center justify-center text-white shadow-md">
+                  <Bot size={20} className="text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg font-bold text-slate-800 dark:text-white">SBI Copilot Onboarding</CardTitle>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Setting up your Digital Financial Twin</p>
+                </div>
+              </div>
+              <Button variant="ghost" onClick={() => setShowChat(false)} className="!bg-transparent hover:!bg-slate-100 !text-slate-500 hover:!text-slate-700 border border-transparent hover:border-slate-200">Cancel</Button>
+            </CardHeader>
+            
+            <CardContent className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`flex items-end gap-2 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-sbi-blue text-white' : 'bg-emerald-500 text-white'}`}>
-                    {msg.role === 'user' ? <UserIcon size={16} /> : <Bot size={16} />}
-                  </div>
-                  <div className={`p-3 rounded-2xl ${msg.role === 'user' ? 'bg-sbi-blue text-white rounded-br-sm' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-100 dark:border-slate-700 rounded-bl-sm shadow-sm'}`}>
+              <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
+                <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
                     {msg.content}
-                  </div>
                 </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
-            </div>
-          </div>
+            </CardContent>
 
-          <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
-            <div className="max-w-4xl mx-auto w-full flex gap-2 relative">
-              <input 
-                type="text" 
-                autoFocus
-                disabled={isGenerating}
-                className="flex-1 bg-slate-100 dark:bg-slate-800 border-none rounded-full px-5 py-3 text-sm md:text-base focus:ring-2 focus:ring-sbi-blue outline-none"
-                placeholder="Type your answer... (or 'Unknown')" 
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-              />
-              <Button 
-                onClick={handleMicClick} 
-                className={`rounded-full w-12 h-12 p-0 shrink-0 flex items-center justify-center shadow-md transition-all ${isListening ? 'bg-red-500 hover:bg-red-600 animate-pulse !text-white' : '!bg-white hover:!bg-slate-100 !text-slate-600 border border-slate-200 dark:!bg-slate-800 dark:border-slate-700 dark:!text-slate-300'}`}
-                title="Speech to Text"
-              >
-                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
-              </Button>
+            <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex space-x-2 items-center">
+              <div className="flex-1 relative flex items-center">
+                <input 
+                  type="text" 
+                  autoFocus
+                  disabled={isGenerating}
+                  className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
+                  placeholder="Type your answer... (or 'Unknown')" 
+                  value={inputValue}
+                  onChange={e => setInputValue(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+                />
+                <button 
+                  onClick={handleMicClick}
+                  className={`absolute right-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
+                  title="Speech to Text"
+                >
+                  <Mic size={20} />
+                </button>
+              </div>
               <Button 
                 onClick={handleSendMessage} 
                 disabled={!inputValue.trim() || isGenerating}
-                className="rounded-full w-12 h-12 p-0 bg-sbi-blue hover:bg-sbi-navy text-white shrink-0 flex items-center justify-center shadow-md transition-transform hover:scale-105"
+                className="rounded-full px-6 md:px-8 py-6 shadow-lg transition-all duration-300 font-bold text-white shrink-0 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105"
               >
-                <Send size={18} className="ml-1" />
+                Send
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
       
