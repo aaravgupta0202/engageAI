@@ -205,10 +205,12 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
     if (age > 26) {
       events.push({ year: currentYear - (age - 26), title: "Bought Car", desc: "First major vehicle purchase.", color: "bg-slate-500" });
     }
-    if (profile?.demographics?.toLowerCase().includes('married') || age > 28) {
+    const demoStr = typeof profile?.demographics === 'string' ? profile.demographics.toLowerCase() : JSON.stringify(profile?.demographics || '').toLowerCase();
+    
+    if (demoStr.includes('married') || age > 28) {
       events.push({ year: currentYear - (age - 28), title: "Married", desc: "Tied the knot.", color: "bg-pink-400" });
     }
-    if (profile?.demographics?.toLowerCase().includes('child') || profile?.demographics?.toLowerCase().includes('dependents') || age > 31) {
+    if (demoStr.includes('child') || demoStr.includes('dependents') || age > 31) {
       events.push({ year: currentYear - (age - 31), title: "Child Born", desc: "Expanded the family.", color: "bg-purple-400" });
     }
     if (profile?.income && parseNum(profile.income) > 1000000) {
