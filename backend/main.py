@@ -640,6 +640,7 @@ Before answering, you must internally consider:
 {intent_text}
 
 Every answer MUST be highly personalised to their specific demographics, income, goals, and risk appetite. NEVER give generic financial advice.
+ALWAYS format any currency numbers using the Indian numbering system (e.g. ₹34,00,000 instead of 3,400,000) with the ₹ symbol.
 
 User Question:
 {request.message}
@@ -699,6 +700,7 @@ async def public_chat_endpoint(request: ChatRequest, db: Session = Depends(get_d
 
     system_prompt = f"""You are engageAI, a proactive, helpful financial copilot for the State Bank of India.
 You provide intelligent, context-aware answers to user queries for prospective public customers who are not yet logged in.
+ALWAYS format any currency numbers using the Indian numbering system (e.g. ₹34,00,000 instead of 3,400,000) with the ₹ symbol.
 
 Available Product Catalog (use these to suggest SBI products naturally when relevant):
 {catalog_summary}
