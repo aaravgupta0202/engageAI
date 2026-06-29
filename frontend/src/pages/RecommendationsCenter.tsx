@@ -1,12 +1,79 @@
 import { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { CheckCircle2, XCircle, TrendingUp, ShieldAlert, AlertCircle, ExternalLink, ActivitySquare, ArrowRight } from 'lucide-react';
+import { CheckCircle2, XCircle, TrendingUp, ShieldAlert, AlertCircle, ExternalLink, ActivitySquare, ArrowRight, Loader2 } from 'lucide-react';
+
+const parseNum = (val: any) => {
+    if (!val) return 0;
+    if (typeof val === 'number') return val;
+    if (typeof val === 'string') {
+        const match = val.match(/\d+/g);
+        return match ? parseInt(match.join('')) : 0;
+    }
+    return 0;
+};
+
+const calculateMetrics = (profile: any) => {
+    const income = parseNum(profile?.income) || 0;
+    const expenses = parseNum(profile?.cost_of_living_estimate) || (income * 0.5) || 0;
+    let assets = 0;
+    if (profile?.assets) {
+      if (Array.isArray(profile.assets)) assets = profile.assets.reduce((acc: number, cur: any) => acc + parseNum(cur), 0) || income * 2;
+      else assets = parseNum(profile.assets) || income * 2;
+    } else {
+      assets = income * 2;
+    }
+    let liabilities = parseNum(profile?.liabilities) || assets * 0.3;
+    const savingsScore = assets > income ? 25 : Math.min(25, (assets / Math.max(income, 1)) * 25);
+    const emergencyFundScore = (assets > expenses * 6) ? 20 : 10;
+    const insuranceScore = (typeof profile?.notes === 'string' && profile.notes.toLowerCase().includes('insurance')) ? 15 : 0;
+    const debtScore = liabilities === 0 ? 15 : Math.max(0, 15 - (liabilities / Math.max(assets, 1)) * 15);
+    let hasGoals = false;
+    if (profile?.goals) {
+        if (Array.isArray(profile.goals)) hasGoals = profile.goals.length > 0;
+        else if (typeof profile.goals === 'string') hasGoals = profile.goals.trim().length > 0;
+        else if (typeof profile.goals === 'object') hasGoals = Object.keys(profile.goals).length > 0;
+    }
+    const goalsScore = hasGoals ? 15 : 0;
+    const cashFlowScore = (income > expenses * 12) ? 10 : 5;
+    const healthScore = Math.round(savingsScore + emergencyFundScore + insuranceScore + debtScore + goalsScore + cashFlowScore);
+    return { healthScore };
+};
 
 export default function RecommendationsCenter({ customerId, onNavigate }: { customerId: string | null, onNavigate: (page: string) => void }) {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [simulatingRec, setSimulatingRec] = useState<any>(null);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simulationResult, setSimulationResult] = useState<any>(null);
+
+  const handleSimulate = async (rec: any) => {
+    setSimulatingRec(rec);
+    if (!customerId) return;
+    setIsSimulating(true);
+    setSimulationResult(null);
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_URL}/personas/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: customerId, scenario: `Adopt recommendation: ${rec.product}` })
+      });
+      if (res.ok) {
+        const simData = await res.json();
+        const origScore = calculateMetrics(simData.original).healthScore;
+        const newScore = calculateMetrics(simData.simulated).healthScore;
+        setSimulationResult({ before: origScore, after: newScore, profile: simData.simulated });
+      } else {
+        setSimulationResult({ error: true });
+      }
+    } catch(e) {
+      console.error(e);
+      setSimulationResult({ error: true });
+    } finally {
+      setIsSimulating(false);
+    }
+  };
 
   useEffect(() => {
     if (!customerId) return;
@@ -146,7 +213,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                     <CheckCircle2 size={18} className="mr-2" /> {selectedAction === rec.product ? 'Continue Setup' : 'Accept'}
                   </Button>
                   <Button 
-                    onClick={() => setSimulatingRec(rec)}
+                    onClick={() => handleSimulate(rec)}
                     className="flex-1 md:w-40 rounded-full shadow-md bg-purple-600 hover:bg-purple-700 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                   >
                     <ActivitySquare size={18} className="mr-2" /> Simulate Impact
@@ -160,8 +227,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                   {rec.url && (
                     <Button 
                       onClick={() => window.open(rec.url, '_blank')}
-                      variant="outline"
-                      className="flex-1 md:w-40 rounded-full shadow-sm border-sbi-blue text-sbi-blue hover:bg-sbi-blue hover:text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
+                      className="flex-1 md:w-40 rounded-full shadow-md bg-sbi-blue hover:bg-sbi-navy text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                     >
                       <ExternalLink size={18} className="mr-2" /> View Product
                     </Button>
@@ -176,7 +242,7 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
 
       {simulatingRec && (
         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in">
-          <Card className="glass-card w-full max-w-2xl overflow-hidden shadow-2xl border-2 border-purple-500">
+          <Card className="w-full max-w-2xl overflow-hidden shadow-2xl border-0">
             <CardHeader className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white pb-6 pt-6">
               <CardTitle className="flex justify-between items-center text-2xl">
                 <span><ActivitySquare className="inline mr-2" /> Recommendation Simulator</span>
@@ -186,50 +252,64 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
             </CardHeader>
             <CardContent className="p-8 space-y-8 bg-white dark:bg-slate-900">
               
-              <div className="grid grid-cols-3 gap-6 items-center">
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
-                  <div className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Before</div>
-                  <div className="text-4xl font-black text-slate-700 dark:text-slate-300">82 <span className="text-lg font-normal text-slate-400">/100</span></div>
-                  <div className="text-xs text-slate-400 mt-2">Health Score</div>
+              {isSimulating ? (
+                <div className="py-12 flex flex-col items-center justify-center space-y-4">
+                  <Loader2 size={48} className="text-purple-500 animate-spin" />
+                  <p className="text-slate-500 dark:text-slate-400 font-medium animate-pulse">Running advanced AI simulation on your digital twin...</p>
                 </div>
-                
-                <div className="flex justify-center text-purple-500 animate-pulse">
-                  <ArrowRight size={48} />
+              ) : simulationResult?.error ? (
+                <div className="py-12 text-center text-red-500">
+                  <AlertCircle size={48} className="mx-auto mb-4 opacity-50" />
+                  <p>Failed to simulate recommendation. Please try again.</p>
                 </div>
-                
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800 shadow-md">
-                  <div className="text-purple-600 dark:text-purple-400 text-sm font-bold uppercase tracking-wider mb-2">After</div>
-                  <div className="text-4xl font-black text-purple-700 dark:text-purple-300">
-                    {simulatingRec.category === 'protect' ? '91' : (simulatingRec.category === 'borrow' ? '79' : '88')} <span className="text-lg font-normal opacity-50">/100</span>
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 gap-6 items-center">
+                    <div className="text-center p-4 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                      <div className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Before</div>
+                      <div className="text-4xl font-black text-slate-700 dark:text-slate-300">{simulationResult?.before || 82} <span className="text-lg font-normal text-slate-400">/100</span></div>
+                      <div className="text-xs text-slate-400 mt-2">Health Score</div>
+                    </div>
+                    
+                    <div className="flex justify-center text-purple-500 animate-pulse">
+                      <ArrowRight size={48} />
+                    </div>
+                    
+                    <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl border-2 border-purple-200 dark:border-purple-800 shadow-md">
+                      <div className="text-purple-600 dark:text-purple-400 text-sm font-bold uppercase tracking-wider mb-2">After</div>
+                      <div className="text-4xl font-black text-purple-700 dark:text-purple-300">
+                        {simulationResult?.after || (simulatingRec.category === 'protect' ? '91' : (simulatingRec.category === 'borrow' ? '79' : '88'))} <span className="text-lg font-normal opacity-50">/100</span>
+                      </div>
+                      <div className="text-xs text-purple-500 mt-2">Projected Health Score</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-purple-500 mt-2">Projected Health Score</div>
-                </div>
-              </div>
 
-              <div className="space-y-4">
-                <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-sm border-b pb-2">Simulated Impacts on Twin</h4>
-                
-                <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">Goal Progress (Est.)</span>
-                  <span className="font-bold text-emerald-500">+8.5% acceleration</span>
-                </div>
-                
-                <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">Monthly Cash Flow</span>
-                  <span className={simulatingRec.category === 'borrow' ? "font-bold text-red-500" : "font-bold text-amber-500"}>
-                    -₹{Math.floor(Math.random() * 5000 + 2000).toLocaleString()} (Est. EMI/Premium)
-                  </span>
-                </div>
-                
-                <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-                  <span className="font-medium text-slate-700 dark:text-slate-300">Risk Profile Alignment</span>
-                  <span className="font-bold text-emerald-500">Optimal Match</span>
-                </div>
-              </div>
-              
-              <Button onClick={() => { handleAccept(simulatingRec.product); setSimulatingRec(null); }} className="w-full h-12 text-lg rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg transition-transform hover:scale-105">
-                Apply Action Now
-              </Button>
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider text-sm border-b pb-2">Simulated Impacts on Twin</h4>
+                    
+                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Goal Progress (Est.)</span>
+                      <span className="font-bold text-emerald-500">{simulationResult?.after > simulationResult?.before ? '+8.5% acceleration' : 'Minor deceleration'}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Monthly Cash Flow</span>
+                      <span className={simulatingRec.category === 'borrow' ? "font-bold text-red-500" : "font-bold text-amber-500"}>
+                        -₹{Math.floor(Math.random() * 5000 + 2000).toLocaleString()} (Est. EMI/Premium)
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                      <span className="font-medium text-slate-700 dark:text-slate-300">Risk Profile Alignment</span>
+                      <span className="font-bold text-emerald-500">Optimal Match</span>
+                    </div>
+                  </div>
+                  
+                  <Button onClick={() => { handleAccept(simulatingRec.product); setSimulatingRec(null); }} className="w-full h-12 text-lg rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-lg transition-transform hover:scale-105">
+                    Apply Action Now
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
