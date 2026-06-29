@@ -188,31 +188,32 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
 
             <div className="p-4 md:p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex justify-center">
               <div className="w-full max-w-4xl flex space-x-2 items-center relative">
-                <input 
-                  type="text" 
-                  autoFocus
-                  disabled={isGenerating}
-                  className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
-                  placeholder="Type your answer... (or 'Unknown')" 
-                  value={inputValue}
-                  onChange={e => setInputValue(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-                />
-                <button 
-                  onClick={handleMicClick}
-                  className={`absolute right-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
-                  title="Speech to Text"
+                <div className="flex-1 relative flex items-center">
+                  <input 
+                    type="text" 
+                    autoFocus
+                    disabled={isGenerating}
+                    className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
+                    placeholder="Type your answer... (or 'Unknown')" 
+                    value={inputValue}
+                    onChange={e => setInputValue(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+                  />
+                  <button 
+                    onClick={handleMicClick}
+                    className={`absolute right-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
+                    title="Speech to Text"
+                  >
+                    <Mic size={20} />
+                  </button>
+                </div>
+                <Button 
+                  onClick={handleSendMessage} 
+                  disabled={!inputValue.trim() || isGenerating}
+                  className="rounded-full px-6 md:px-8 py-6 shadow-lg transition-all duration-300 font-bold text-white shrink-0 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105"
                 >
-                  <Mic size={20} />
-                </button>
-              </div>
-              <Button 
-                onClick={handleSendMessage} 
-                disabled={!inputValue.trim() || isGenerating}
-                className="rounded-full px-6 md:px-8 py-6 shadow-lg transition-all duration-300 font-bold text-white shrink-0 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105"
-              >
-                Send
-              </Button>
+                  Send
+                </Button>
               </div>
             </div>
           </div>
