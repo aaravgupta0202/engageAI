@@ -1,5 +1,5 @@
 import json
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def follow_up_node(state):
     print("Running Follow-up...")
@@ -14,7 +14,7 @@ def follow_up_node(state):
         llm = get_llm("reasoning")
         condition = ""
         if llm:
-            prompt = f"Given the product '{product}', write a short (5-10 word) condition for the follow-up check. E.g. for Retirement Fund: 'Review retirement investment progress after 30 days.' Do not wrap in quotes."
+            prompt = f"Given the product '{product}', write a short (5-10 word) condition for the follow-up check. E.g. for Retirement Fund: 'Review retirement investment progress after 30 days.' Do not wrap in quotes." + KB_INSTRUCTION
             try:
                 res = llm.invoke(prompt)
                 condition = str(res.content).strip().replace('"', '')

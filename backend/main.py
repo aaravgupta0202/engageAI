@@ -19,7 +19,7 @@ import asyncio
 from database import engine, Base, get_db
 import models
 from graph import create_graph
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 # Ensure tables are created
 models.Base.metadata.create_all(bind=engine)
@@ -199,7 +199,7 @@ Return EXACTLY this JSON structure, with no markdown formatting or extra text:
     "new_dependent": false,
     "large_deposit": false
   }}
-}}"""
+}}""" + KB_INSTRUCTION
     try:
         response = call_llm_with_fallback([
             {"role": "system", "content": system_prompt},
@@ -273,7 +273,7 @@ Follow this EXACT JSON structure, adding new fields if necessary to capture thei
     "salary_hike": false
   }
 }
-Do not include markdown blocks, just raw JSON."""
+Do not include markdown blocks, just raw JSON.""" + KB_INSTRUCTION
 
     prompt = f"Occupation: {req.occupation}\nIncome: {req.income}\nAssets: {req.assets}\nCity: {req.city}\nScraped City Context: {city_context}\nExpenses: {req.expenses}\nDemographics: {req.demographics}\nNotes: {req.notes}"
 
@@ -350,7 +350,7 @@ If you still need more information, output a JSON object in this EXACT format:
   "next_question": "Your conversational next question here."
 }
 
-Do not include markdown blocks, just raw JSON."""
+Do not include markdown blocks, just raw JSON.""" + KB_INSTRUCTION
 
     cerebras_messages = [{"role": "system", "content": system_prompt}]
     for m in req.messages:

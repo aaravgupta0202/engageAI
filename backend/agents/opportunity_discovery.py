@@ -1,7 +1,9 @@
 import json
+import uuid
+import datetime
 from database import SessionLocal
 from models import ProductCatalog
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def opportunity_discovery_node(state):
     print("Running Opportunity Discovery...")
@@ -186,7 +188,7 @@ Output EXACTLY a JSON array of objects with these keys:
 - "urgency": (string) Low, Medium, or High
 
 Do NOT wrap the output in markdown blocks. Just pure JSON array.
-"""
+""" + KB_INSTRUCTION
         try:
             res = llm.invoke(prompt)
             content = str(res.content).strip()

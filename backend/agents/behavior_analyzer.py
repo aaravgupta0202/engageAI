@@ -1,5 +1,5 @@
 import json
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def behavior_analyzer_node(state):
     print("Running Behavior Analyzer...")
@@ -18,10 +18,8 @@ Specifically address: Income trends, Cash flow stability, Savings behavior, Debt
 Persona: {json.dumps(persona)}
 Graph: {json.dumps(graph)}
 
-Output EXACTLY a JSON array of strings representing the behavior deltas.
-Make them sound professional (e.g. "Consistent high salary credits with disciplined savings rate of 30%").
-Do NOT wrap the output in markdown blocks. Just pure JSON array.
-"""
+Return EXACTLY a JSON array of 3 string insights. Do not include markdown blocks.
+""" + KB_INSTRUCTION
         try:
             res = llm.invoke(prompt)
             content = str(res.content).strip()

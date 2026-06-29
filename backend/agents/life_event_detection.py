@@ -1,5 +1,5 @@
 import json
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def life_event_detection_node(state):
     print("Running Life Event Detection...")
@@ -13,7 +13,8 @@ def life_event_detection_node(state):
     if llm:
         prompt = f"""You are a financial life event detector.
 Given the customer persona (which may contain injected 'embedded_events'), detect if any significant life events have occurred.
-If no events are present in the data, return an event of type "None".
+If no events are present in the data, return an event of type "None". Do not invent events. Only return events you are highly confident about.
+""" + KB_INSTRUCTION + f"""
 
 Persona: {json.dumps(persona)}
 

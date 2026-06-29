@@ -1,5 +1,5 @@
 import json
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def action_planning_node(state):
     print("Running Action Planning...")
@@ -17,7 +17,7 @@ def action_planning_node(state):
 Given the target product "{product}", generate exactly 3-4 actionable steps for the customer to finalize the setup.
 Output EXACTLY a JSON array of objects with keys: "step_number" (int), "description" (string), "status" (string, always "pending").
 Do NOT wrap the output in markdown blocks. Just pure JSON array.
-"""
+""" + KB_INSTRUCTION
             try:
                 res = llm.invoke(prompt)
                 content = str(res.content).strip()

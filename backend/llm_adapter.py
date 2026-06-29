@@ -5,6 +5,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+KB_TEXT = ""
+try:
+    kb_path = os.path.join(os.path.dirname(__file__), "data", "rules_and_guide.txt")
+    if os.path.exists(kb_path):
+        with open(kb_path, "r", encoding="utf-8") as f:
+            KB_TEXT = f.read()
+except Exception as e:
+    print("Warning: Failed to load KB_TEXT:", e)
+
+KB_INSTRUCTION = f"\n\nUse the following Verve Investment Rules and Guide as a general reference for investment principles, adapting it flexibly based on the customer's specific persona. It is not a strict rulebook but a guiding philosophy:\n{KB_TEXT}\n" if KB_TEXT else ""
+
 def get_llm(model_type="reasoning"):
     groq_api_key = os.getenv("GROQ_API_KEY")
     gemini_api_key = os.getenv("GEMINI_API_KEY")

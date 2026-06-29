@@ -1,5 +1,5 @@
 import json
-from llm_adapter import get_llm
+from llm_adapter import get_llm, KB_INSTRUCTION
 
 def engagement_strategy_node(state):
     print("Running Engagement Strategy...")
@@ -19,7 +19,8 @@ def engagement_strategy_node(state):
         
         if llm:
             prompt = f"""You are an SBI customer engagement AI.
-Draft a short, natural in-app message (1 sentence) offering the product "{product_name}" to the customer based on their goals.
+Draft a short, natural in-app message (1 sentence) offering the product "{product_name}". Return EXACTLY a JSON string with the key "strategy". Do not include markdown blocks.
+""" + KB_INSTRUCTION + f"""
 Customer Goals: {goals}
 
 Do NOT use placeholders like [Name]. Output just the message text.
