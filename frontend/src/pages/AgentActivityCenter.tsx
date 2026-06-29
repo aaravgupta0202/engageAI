@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { ArrowUp } from 'lucide-react';
 
 const renderParsedData = (data: any) => {
   if (typeof data !== 'object' || data === null) {
@@ -66,6 +67,24 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
     if (!customerId) return false;
     return localStorage.getItem(`analysis_run_${customerId}`) === 'true';
   });
+  const [showScroll, setShowScroll] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkScrollTop = () => {
+      if (window.scrollY > 400) {
+        setShowScroll(true);
+      } else {
+        setShowScroll(false);
+      }
+    };
+    window.addEventListener('scroll', checkScrollTop);
+    return () => window.removeEventListener('scroll', checkScrollTop);
+  }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
 
   useEffect(() => {
     if (!customerId || isDone) return;
@@ -105,6 +124,10 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
     return () => eventSource.close();
   }, [customerId]);
 
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in slide-in-from-bottom-8 duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel p-6 rounded-2xl border-l-4 border-l-sbi-blue">
@@ -136,7 +159,17 @@ export default function AgentActivityCenter({ customerId, onNavigate }: { custom
             </Card>
           </div>
         ))}
+        <div ref={bottomRef} className="h-8" />
       </div>
+
+      {showScroll && (
+        <button 
+          onClick={scrollTop}
+          className="fixed bottom-6 right-6 p-4 rounded-full bg-sbi-navy text-white shadow-xl hover:scale-110 transition-transform z-50 flex items-center justify-center animate-in slide-in-from-bottom-5"
+        >
+          <ArrowUp size={24} />
+        </button>
+      )}
     </div>
   );
 }
