@@ -120,9 +120,17 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
 
       const savingsScore = assets > income ? 25 : Math.min(25, (assets / Math.max(income, 1)) * 25);
       const emergencyFundScore = (assets > expenses * 6) ? 20 : 10;
-      const insuranceScore = profile?.notes?.toLowerCase().includes('insurance') ? 15 : 0;
+      const insuranceScore = (typeof profile?.notes === 'string' && profile.notes.toLowerCase().includes('insurance')) ? 15 : 0;
       const debtScore = liabilities === 0 ? 15 : Math.max(0, 15 - (liabilities / Math.max(assets, 1)) * 15);
-      const goalsScore = (profile?.goals && profile.goals.length > 0) ? 15 : 0;
+      
+      let hasGoals = false;
+      if (profile?.goals) {
+          if (Array.isArray(profile.goals)) hasGoals = profile.goals.length > 0;
+          else if (typeof profile.goals === 'string') hasGoals = profile.goals.trim().length > 0;
+          else if (typeof profile.goals === 'object') hasGoals = Object.keys(profile.goals).length > 0;
+      }
+      const goalsScore = hasGoals ? 15 : 0;
+      
       const cashFlowScore = (income > expenses * 12) ? 10 : 5;
 
       const healthScore = Math.round(savingsScore + emergencyFundScore + insuranceScore + debtScore + goalsScore + cashFlowScore);
@@ -160,9 +168,12 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
         const origMetrics = calculateMetrics(simData.original);
         const simMetrics = calculateMetrics(simData.simulated);
         setScenarioResult({ original: origMetrics, simulated: simMetrics, profile: simData.simulated });
+      } else {
+        throw new Error("Failed to simulate scenario");
       }
     } catch (e) {
       console.error(e);
+      alert("Error simulating scenario. Please try a different query.");
     } finally {
       setIsSimulating(false);
     }
