@@ -35,22 +35,22 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
             <p className="text-lg md:text-xl text-slate-600 mb-8 md:mb-10 max-w-xl leading-relaxed">
               Built for the SBI Hackathon. Our autonomous AI system analyzes customer financial data, predicts life events, and executes personalized banking actions seamlessly. Get curated plans and offers for your customer.
             </p>
-            <div className="flex flex-wrap gap-4 w-full">
-              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-[#185ADB] text-white px-6 py-3 sm:px-6 sm:py-4 shadow-xl shadow-sbi-blue/20 text-sm sm:text-base font-semibold flex items-center justify-center w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+            <div className="flex flex-wrap gap-4 w-full relative z-10">
+              <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue/80 backdrop-blur-md hover:bg-[#185ADB]/90 text-white px-6 py-3 sm:px-6 sm:py-4 shadow-xl shadow-sbi-blue/20 text-sm sm:text-base font-semibold flex items-center justify-center w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Try Demo <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+              <Button variant="outline" onClick={() => onNavigate('catalog')} className="rounded-full bg-white/60 backdrop-blur-md border-2 border-slate-200/50 text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 Product Catalog <ArrowRight size={18} className="ml-2" />
               </Button>
-              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
+              <Button variant="outline" onClick={() => window.open('https://github.com/aaravgupta0202/engageAI', '_blank')} className="rounded-full bg-white/60 backdrop-blur-md border-2 border-slate-200/50 text-slate-700 hover:bg-slate-50/80 hover:text-slate-900 px-6 py-3 sm:px-6 sm:py-4 text-sm sm:text-base font-medium flex items-center justify-center shadow-sm w-full sm:w-auto flex-shrink-0 whitespace-nowrap">
                 View Source <ArrowRight size={18} className="ml-2" />
               </Button>
             </div>
           </div>
 
           {/* Right Column: Floating Agent Dashboard Mockup */}
-          <div className="relative flex mt-12 lg:mt-0 items-center justify-center w-full h-[500px]">
-            <div className="w-full max-w-[420px] bg-white rounded-2xl border-2 border-slate-900 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-4 transition-transform duration-500 cursor-default relative">
+          <div className="relative flex mt-12 lg:mt-0 items-center justify-center w-full h-[500px] z-10">
+            <div className="w-full max-w-[420px] bg-white/70 backdrop-blur-lg rounded-2xl border-2 border-slate-900/50 p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:-translate-y-4 transition-transform duration-500 cursor-default relative">
               <div className="flex items-center justify-between mb-6">
                 <div className="text-xs font-bold text-white bg-emerald-500 px-3 py-1 rounded-md tracking-wider uppercase">Life Event</div>
                 <div className="text-slate-400 font-mono text-xs">PID: 8829A</div>
