@@ -151,7 +151,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </div>
 
       {/* Architecture & Working Section */}
-      <div id="architecture" className="w-full bg-white py-12 mt-4">
+      <div id="architecture" className="w-full bg-white py-12 mt-4 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">How It Works</h2>
@@ -197,7 +197,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
 
 
       {/* Our Capabilities Section */}
-      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-8">
+      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-8 scroll-mt-24">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
 
           <div className="md:col-span-5 md:pr-12">
