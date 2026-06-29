@@ -94,6 +94,13 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       return 0;
   };
 
+  const formatCurrency = (val: any, cityStr: string = '') => {
+      const num = parseNum(val);
+      if (isNaN(num) || num === 0) return '₹0';
+      const isUS = cityStr.toLowerCase().includes('us') || cityStr.toLowerCase().includes('usa') || cityStr.toLowerCase().includes('new york');
+      return new Intl.NumberFormat(isUS ? 'en-US' : 'en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+  };
+
   const calculateMetrics = (profile: any) => {
       const income = parseNum(profile?.income) || 0;
       const expenses = parseNum(profile?.cost_of_living_estimate) || (income * 0.5) || 0;
@@ -234,8 +241,8 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                   </div>
                 ) : (
                   <div className="flex justify-between items-center group">
-                    <span className="font-bold text-slate-800 dark:text-white">
-                      {key === 'income' || key === 'cost_of_living_estimate' ? `₹${Number(data.profile[key]).toLocaleString()}` : (Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : data.profile[key])}
+                    <span className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-1 block">
+                      {key === 'income' || key === 'cost_of_living_estimate' ? formatCurrency(data.profile[key], data.profile.location || data.profile.city || '') : (Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : data.profile[key])}
                     </span>
                     <button onClick={() => { setEditKey(key); setEditValue(Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : String(data.profile[key])); }} className="text-xs text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">Edit</button>
                   </div>

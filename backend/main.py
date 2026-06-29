@@ -423,8 +423,6 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
             {"role": "user", "content": prompt}
         ])
         if True:
-            
-            # Robust JSON extraction
             import re
             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
             if json_match:
@@ -433,9 +431,9 @@ Only output the raw JSON profile object (no markdown). Keep the structure identi
                 response = response_text
                 
             simulated_profile = json.loads(response.strip())
-            return {"original": persona.profile, "simulated": simulated_profile}
+            return {"original": profile, "simulated": simulated_profile}
         else:
-            raise Exception(f"Groq API error: {res.text}")
+            raise Exception(f"Groq API error")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

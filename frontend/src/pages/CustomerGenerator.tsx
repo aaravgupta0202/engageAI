@@ -202,8 +202,8 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
             >
               <div className="w-full max-w-7xl space-y-6 pb-12">
             {messages.map((msg, idx) => (
-              <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
-                <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
+              <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 w-full`}>
+                <div className={`max-w-xl break-words whitespace-pre-wrap rounded-2xl p-4 shadow-sm backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
                     {msg.content}
                 </div>
               </div>

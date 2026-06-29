@@ -147,12 +147,12 @@ export default function RecommendationsCenter({ customerId, onNavigate }: { cust
                   </Button>
                   <Button 
                     onClick={() => setSimulatingRec(rec)}
-                    variant="outline"
-                    className="flex-1 md:w-40 rounded-full shadow-sm border-purple-500 text-purple-600 hover:bg-purple-50 hover:text-purple-700 dark:hover:bg-purple-900/20 font-bold transition-all hover:scale-105 flex items-center justify-center"
+                    className="flex-1 md:w-40 rounded-full shadow-md bg-purple-600 hover:bg-purple-700 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                   >
                     <ActivitySquare size={18} className="mr-2" /> Simulate Impact
                   </Button>
                   <Button 
+                    onClick={() => setRecommendations(prev => prev.filter(r => r.id !== rec.id))}
                     className="flex-1 md:w-40 rounded-full shadow-md bg-red-500 hover:bg-red-600 text-white font-bold transition-all hover:scale-105 flex items-center justify-center"
                   >
                     <XCircle size={18} className="mr-2" /> Decline
