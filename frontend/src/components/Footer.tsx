@@ -2,7 +2,7 @@ import { Globe } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-slate-100 py-12 px-6">
+    <footer className="w-full bg-white pt-4 pb-8 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex flex-col items-center md:items-start space-y-2">
           <div className="flex items-center -ml-3">

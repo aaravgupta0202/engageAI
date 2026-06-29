@@ -193,7 +193,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
 
 
       {/* Our Capabilities Section */}
-      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-20">
+      <div id="capabilities" className="w-full max-w-7xl mx-auto px-6 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
 
           <div className="md:col-span-5 md:pr-12">
