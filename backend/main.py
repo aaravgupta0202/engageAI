@@ -398,7 +398,13 @@ class ScenarioRequest(BaseModel):
 @app.post("/personas/simulate")
 async def simulate_scenario(req: ScenarioRequest, db: Session = Depends(get_db)):
     persona = db.query(models.Persona).filter(models.Persona.id == req.customer_id).first()
-    if not persona:
+    cached_persona = CUSTOM_PERSONA_CACHE.get(req.customer_id)
+    
+    if persona:
+        profile = persona.profile
+    elif cached_persona:
+        profile = cached_persona["profile"]
+    else:
         raise HTTPException(status_code=404, detail="Persona not found")
         
     api_key = os.getenv("GROQ_API_KEY")
@@ -409,7 +415,7 @@ async def simulate_scenario(req: ScenarioRequest, db: Session = Depends(get_db))
 Output a NEW modified JSON profile predicting the financial impact of the scenario on their income, assets, expenses, goals, and demographics.
 Only output the raw JSON profile object (no markdown). Keep the structure identical to the input profile."""
 
-    prompt = f"Current Profile: {json.dumps(persona.profile)}\nScenario: {req.scenario}"
+    prompt = f"Current Profile: {json.dumps(profile)}\nScenario: {req.scenario}"
     
     try:
         response_text = call_llm_with_fallback([
@@ -588,7 +594,15 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
     db.commit()
 
     persona = db.query(models.Persona).filter(models.Persona.id == customer_id).first()
-    if not persona:
+    cached_persona = CUSTOM_PERSONA_CACHE.get(customer_id)
+    
+    if persona:
+        profile = persona.profile
+        embedded_events = persona.embedded_events
+    elif cached_persona:
+        profile = cached_persona["profile"]
+        embedded_events = cached_persona["embedded_events"]
+    else:
         raise HTTPException(status_code=404, detail="Persona not found")
 
     # In MVP, transactions and recommendations are mocked empty unless we seed them
@@ -604,10 +618,10 @@ async def chat_endpoint(customer_id: str, request: ChatRequest, db: Session = De
 You provide highly intelligent, context-aware answers to user queries based on their full profile.
 
 Customer Profile:
-{json.dumps(persona.profile, indent=2)}
+{json.dumps(profile, indent=2)}
 
 Detected Life Events:
-{json.dumps(persona.embedded_events, indent=2)}
+{json.dumps(embedded_events, indent=2)}
 
 Recent Transactions:
 {transactions}
