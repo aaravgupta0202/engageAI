@@ -101,7 +101,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       return 0;
   };
 
-  const formatCurrency = (val: any, cityStr: string = '') => {
+  const formatCurrency = (val: any) => {
       const num = parseNum(val);
       if (isNaN(num) || num === 0) return '₹0';
       return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
@@ -258,7 +258,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 ) : (
                   <div className="flex justify-between items-center group">
                     <span className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-1 block">
-                      {key === 'income' || key === 'cost_of_living_estimate' || key === 'expenses' || key === 'assets' || key === 'liabilities' ? formatCurrency(data.profile[key], data.profile.location || data.profile.city || '') : renderProfileValue(data.profile[key])}
+                      {key === 'income' || key === 'cost_of_living_estimate' || key === 'expenses' || key === 'assets' || key === 'liabilities' ? formatCurrency(data.profile[key]) : renderProfileValue(data.profile[key])}
                     </span>
                     <button onClick={() => { setEditKey(key); setEditValue(renderProfileValue(data.profile[key])); }} className="text-xs text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">Edit</button>
                   </div>
