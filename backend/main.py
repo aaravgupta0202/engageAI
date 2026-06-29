@@ -413,6 +413,7 @@ async def simulate_scenario(req: ScenarioRequest, db: Session = Depends(get_db))
 
     system_prompt = """You are a financial twin simulator. You will receive a customer's current financial profile and a 'What if...' scenario.
 Output a NEW modified JSON profile predicting the financial impact of the scenario on their income, assets, expenses, goals, and demographics.
+CRITICAL: You MUST radically change the numeric values (like assets, liabilities, income, expenses) to realistically reflect the scenario! Do NOT just return the same numbers!
 Only output the raw JSON profile object (no markdown). Keep the structure identical to the input profile.""" + KB_INSTRUCTION
 
     prompt = f"Current Profile: {json.dumps(profile)}\nScenario: {req.scenario}"
