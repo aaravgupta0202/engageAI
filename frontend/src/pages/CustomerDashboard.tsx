@@ -226,7 +226,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel p-6 rounded-2xl">
         <div>
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1">Financial Life Graph</h2>
-          <p className="text-slate-500 dark:text-slate-400 font-medium">{data.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
+          <p className="text-slate-500 dark:text-slate-400 font-medium">{typeof data.archetype === 'object' ? JSON.stringify(data.archetype) : data.archetype} • ID: <span className="font-mono text-xs text-slate-400">{customerId?.substring(0, 8)}...</span></p>
         </div>
         <Button onClick={() => onNavigate('agent')} className="w-full md:w-auto rounded-full px-8 shadow-lg bg-gradient-to-r from-cyan-500 to-sbi-blue hover:from-cyan-400 hover:to-sbi-blue text-white font-bold transition-all hover:scale-105 shrink-0 whitespace-nowrap">
           Run Analysis Agents
@@ -283,12 +283,13 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 </div>
             ) : (
                 <div className="flex flex-col gap-4 w-full">
-                  {(Array.isArray(data.profile?.goals) ? data.profile.goals : (typeof data.profile?.goals === 'string' ? [data.profile.goals] : [])).map((g: string, i: number) => {
-                    const progress = Math.min(100, Math.max(10, Math.round((g.length * 7.3) % 85))); 
+                  {(Array.isArray(data.profile?.goals) ? data.profile.goals : (typeof data.profile?.goals === 'string' ? [data.profile.goals] : [])).map((g: any, i: number) => {
+                    const strG = typeof g === 'object' ? JSON.stringify(g) : String(g);
+                    const progress = Math.min(100, Math.max(10, Math.round((strG.length * 7.3) % 85))); 
                     return (
                     <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex flex-col w-full">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {g}</span>
+                        <span className="flex items-center"><span className="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span> {strG}</span>
                         <span className="text-sm font-bold">{progress}%</span>
                       </div>
                       <div className="w-full bg-indigo-100 dark:bg-indigo-800/50 rounded-full h-2">

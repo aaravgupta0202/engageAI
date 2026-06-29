@@ -23,7 +23,7 @@ export default function FinancialGraphView({ data }: { data: any }) {
 
   // Generate nodes based on data
   const nodes: Node[] = [
-    { id: 'customer', label: data?.archetype || 'Customer', category: 'hub', x: 50, y: 50, data: { id: data?.customer_id } },
+    { id: 'customer', label: typeof data?.archetype === 'object' ? JSON.stringify(data.archetype) : (data?.archetype || 'Customer'), category: 'hub', x: 50, y: 50, data: { id: data?.customer_id } },
     { id: 'demographics', label: 'Demographics', category: 'static', x: 15, y: 25, data: { age: data?.profile?.age, occupation: data?.profile?.occupation } },
     { id: 'income', label: 'Income', category: 'flow', x: 85, y: 25, data: { monthly: data?.profile?.income } },
     { id: 'goals', label: 'Life Goals', category: 'static', x: 15, y: 75, data: { goals: data?.profile?.goals } },
