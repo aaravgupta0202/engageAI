@@ -25,7 +25,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </header>
 
       {/* Hero Section */}
-      <div className="w-full max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-12 md:pb-16 relative">
+      <div className="w-full max-w-7xl mx-auto px-6 pt-16 md:pt-20 pb-4 md:pb-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
@@ -107,19 +107,11 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           </div>
         </div>
 
-        {/* Logos Bar */}
-        <div className="mt-4 md:mt-6 flex flex-col md:flex-row items-center justify-between pt-4 gap-6">
-          <div className="text-sm font-medium text-slate-500">Pure Banking, Nothing Else.</div>
-          <div className="flex space-x-6 md:space-x-12 text-sm font-semibold text-slate-700">
-            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Agentic AI</div>
-            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Data-Driven Decisions</div>
-            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Persona Creation</div>
-          </div>
-        </div>
+
       </div>
 
       {/* Massive Blue Statistics Banner */}
-      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-8 md:mb-12 mt-8 md:mt-12">
+      <div id="stats" className="w-full max-w-[95%] mx-auto bg-[#185ADB] rounded-[30px] md:rounded-[40px] p-8 md:p-12 lg:p-20 text-white shadow-2xl relative overflow-hidden mb-6 mt-4 md:mt-6">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-[#0A1931]/20 to-transparent rounded-full -translate-y-1/4 translate-x-1/4 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[#5E95FF]/30 to-transparent rounded-full translate-y-1/4 -translate-x-1/4 pointer-events-none"></div>
 
@@ -142,6 +134,18 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
           <div className="flex flex-col justify-center h-full text-center md:text-left">
             <div className="text-5xl md:text-6xl font-light tracking-tight mb-2 md:mb-3">100%</div>
             <p className="text-blue-100 font-medium text-sm md:text-base md:pr-8">Explainable UI architecture with transparent reasoning at every step.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Logos Bar (Moved below stats) */}
+      <div className="w-full max-w-7xl mx-auto px-6 mb-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-sm font-medium text-slate-500">Pure Banking, Nothing Else.</div>
+          <div className="flex space-x-6 md:space-x-12 text-sm font-semibold text-slate-700">
+            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Agentic AI</div>
+            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Data-Driven Decisions</div>
+            <div className="flex items-center"><CheckCircle2 size={16} className="text-sbi-blue mr-2" /> Persona Creation</div>
           </div>
         </div>
       </div>
