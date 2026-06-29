@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Mic, Paperclip, Copy, Edit2, Check, RotateCcw, Square } from 'lucide-react';
 
