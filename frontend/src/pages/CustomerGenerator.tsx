@@ -155,22 +155,26 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
           </div>
         </div>
       ) : (
-        <div className="w-full flex flex-col flex-1 min-h-[70vh] animate-in slide-in-from-bottom-4 duration-500">
-          <Card className="flex-1 flex flex-col glass-card border-0 overflow-hidden shadow-2xl rounded-3xl">
-            <CardHeader className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4 flex flex-row items-center justify-between space-y-0">
+        <div 
+          className="flex flex-col flex-1 min-h-[calc(100vh-80px)] animate-in slide-in-from-bottom-4 duration-500 -my-6 bg-slate-50 dark:bg-slate-900"
+          style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
+        >
+          <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-900 border-0 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 md:px-8 flex flex-row items-center justify-between shadow-sm z-10">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sbi-blue to-cyan-500 flex items-center justify-center text-white shadow-md">
                   <Bot size={20} className="text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg font-bold text-slate-800 dark:text-white">SBI Copilot Onboarding</CardTitle>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-white">SBI Copilot Onboarding</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">Setting up your Digital Financial Twin</p>
                 </div>
               </div>
               <Button variant="ghost" onClick={() => setShowChat(false)} className="!bg-transparent hover:!bg-slate-100 !text-slate-500 hover:!text-slate-700 border border-transparent hover:border-slate-200">Cancel</Button>
-            </CardHeader>
+            </div>
             
-            <CardContent className="flex-1 p-6 overflow-y-auto space-y-6 bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex-1 p-6 md:p-8 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/50 flex flex-col items-center">
+              <div className="w-full max-w-4xl space-y-6">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
                 <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
@@ -179,10 +183,11 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               </div>
             ))}
             <div ref={messagesEndRef} />
-            </CardContent>
+              </div>
+            </div>
 
-            <div className="p-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex space-x-2 items-center">
-              <div className="flex-1 relative flex items-center">
+            <div className="p-4 md:p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex justify-center">
+              <div className="w-full max-w-4xl flex space-x-2 items-center relative">
                 <input 
                   type="text" 
                   autoFocus
@@ -208,8 +213,9 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               >
                 Send
               </Button>
+              </div>
             </div>
-          </Card>
+          </div>
         </div>
       )}
       
