@@ -25,7 +25,7 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
       </header>
 
       {/* Hero Section */}
-      <div className="w-full max-w-7xl mx-auto px-6 pt-8 md:pt-12 pb-4 md:pb-8 relative">
+      <div className="w-full max-w-7xl mx-auto px-6 pt-2 md:pt-4 pb-4 md:pb-8 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="max-w-3xl">
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-medium tracking-tight text-slate-900 mb-4 md:mb-6 leading-[1.1]">
