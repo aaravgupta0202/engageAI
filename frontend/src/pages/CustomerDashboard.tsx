@@ -97,8 +97,15 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
   const formatCurrency = (val: any, cityStr: string = '') => {
       const num = parseNum(val);
       if (isNaN(num) || num === 0) return '₹0';
-      const isUS = cityStr.toLowerCase().includes('us') || cityStr.toLowerCase().includes('usa') || cityStr.toLowerCase().includes('new york');
+      const city = String(cityStr || '').toLowerCase();
+      const isUS = city.includes('us') || city.includes('usa') || city.includes('new york');
       return new Intl.NumberFormat(isUS ? 'en-US' : 'en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+  };
+
+  const renderProfileValue = (val: any) => {
+      if (Array.isArray(val)) return val.join(', ');
+      if (typeof val === 'object' && val !== null) return JSON.stringify(val);
+      return String(val);
   };
 
   const calculateMetrics = (profile: any) => {
@@ -242,9 +249,9 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 ) : (
                   <div className="flex justify-between items-center group">
                     <span className="text-xl font-bold text-slate-800 dark:text-slate-200 mt-1 block">
-                      {key === 'income' || key === 'cost_of_living_estimate' ? formatCurrency(data.profile[key], data.profile.location || data.profile.city || '') : (Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : data.profile[key])}
+                      {key === 'income' || key === 'cost_of_living_estimate' ? formatCurrency(data.profile[key], data.profile.location || data.profile.city || '') : renderProfileValue(data.profile[key])}
                     </span>
-                    <button onClick={() => { setEditKey(key); setEditValue(Array.isArray(data.profile[key]) ? data.profile[key].join(', ') : String(data.profile[key])); }} className="text-xs text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">Edit</button>
+                    <button onClick={() => { setEditKey(key); setEditValue(renderProfileValue(data.profile[key])); }} className="text-xs text-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity">Edit</button>
                   </div>
                 )}
               </div>
