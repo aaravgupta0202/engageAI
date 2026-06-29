@@ -263,7 +263,11 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
           <CardHeader>
             <CardTitle className="text-slate-800 dark:text-white flex items-center justify-between">
                 <div className="flex items-center"><Target className="w-6 h-6 mr-2 text-indigo-500" /> Life Goals</div>
-                {editKey !== 'goals' && <button onClick={() => { setEditKey('goals'); setEditValue((data.profile?.goals || []).join(', ')); }} className="text-xs text-indigo-500 font-medium">Edit Goals</button>}
+                {editKey !== 'goals' && <button onClick={() => { 
+                    const normalizedGoals = Array.isArray(data.profile?.goals) ? data.profile.goals : (typeof data.profile?.goals === 'string' ? [data.profile.goals] : []);
+                    setEditKey('goals'); 
+                    setEditValue(normalizedGoals.join(', ')); 
+                }} className="text-xs text-indigo-500 font-medium">Edit Goals</button>}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -277,7 +281,7 @@ export default function CustomerDashboard({ customerId, onNavigate }: { customer
                 </div>
             ) : (
                 <div className="flex flex-col gap-4 w-full">
-                  {(data.profile?.goals || []).map((g: string, i: number) => {
+                  {(Array.isArray(data.profile?.goals) ? data.profile.goals : (typeof data.profile?.goals === 'string' ? [data.profile.goals] : [])).map((g: string, i: number) => {
                     const progress = Math.min(100, Math.max(10, Math.round((g.length * 7.3) % 85))); 
                     return (
                     <div key={i} className="px-5 py-3 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-xl border border-indigo-100 dark:border-indigo-800/50 font-medium shadow-sm flex flex-col w-full">
