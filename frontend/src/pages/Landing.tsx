@@ -7,19 +7,21 @@ export default function Landing({ onNavigate }: { onNavigate: (page: string) => 
     <div className="flex flex-col items-center justify-start min-h-screen text-left bg-white overflow-x-hidden selection:bg-sbi-blue selection:text-white">
 
       {/* Navigation for Landing Only */}
-      <header className="w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center z-50 sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-200/50">
-        <div className="flex items-center -ml-3 cursor-pointer group">
-          <img src="/favicon.png" alt="engageAI Logo" className="h-32 md:h-40 w-auto group-hover:opacity-80 transition-opacity object-contain -my-10 scale-125" />
+      <header className="w-full z-50 sticky top-0 bg-white/70 backdrop-blur-md border-b border-slate-200/50">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+          <div className="flex items-center -ml-3 cursor-pointer group">
+            <img src="/favicon.png" alt="engageAI Logo" className="h-24 md:h-28 w-auto group-hover:opacity-80 transition-opacity object-contain -my-8 scale-125" />
+          </div>
+          <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
+            <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
+            <span onClick={() => document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
+            <span onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">GitHub Repo</span>
+            <span onClick={() => window.open('https://aarav-cc.netlify.app/', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">Contact</span>
+          </div>
+          <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-4 md:px-6 py-2 font-semibold shadow-md shadow-sbi-blue/20 text-sm md:text-base">
+            Try Demo <ArrowRight size={16} className="ml-1 md:ml-2" />
+          </Button>
         </div>
-        <div className="hidden md:flex space-x-8 text-sm font-medium text-slate-600">
-          <span onClick={() => document.getElementById('capabilities')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Our Capabilities</span>
-          <span onClick={() => document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' })} className="cursor-pointer hover:text-sbi-blue transition-colors">Architecture</span>
-          <span onClick={() => window.open('https://github.com/aaravgupta0202', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">GitHub Repo</span>
-          <span onClick={() => window.open('https://aarav-cc.netlify.app/', '_blank')} className="cursor-pointer hover:text-sbi-blue transition-colors">Contact</span>
-        </div>
-        <Button onClick={() => onNavigate('generator')} className="rounded-full bg-sbi-blue hover:bg-sbi-navy text-white px-4 md:px-6 py-2 font-semibold shadow-md shadow-sbi-blue/20 text-sm md:text-base">
-          Try Demo <ArrowRight size={16} className="ml-1 md:ml-2" />
-        </Button>
       </header>
 
       {/* Hero Section */}
