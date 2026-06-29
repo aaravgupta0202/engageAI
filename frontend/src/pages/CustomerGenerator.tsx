@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import { Bot, Mic } from 'lucide-react';
+import { Bot, Mic, ArrowDown } from 'lucide-react';
 
 const MOCK_PERSONAS = [
   { id: 'mock-1', archetype: 'NRI Wealth Investor', profile: { age: 45, income: 2500000, goals: ['Retirement', 'Wealth Management'] } },
@@ -25,10 +25,30 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
   const [isListening, setIsListening] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollToBottom();
   }, [messages]);
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+      setShowScrollButton(scrollHeight - scrollTop - clientHeight > 100);
+    }
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValue(e.target.value);
+    e.target.style.height = 'auto';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 200)}px`;
+  };
 
   const startChat = () => {
     setShowChat(true);
@@ -71,6 +91,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
     
     const userMessage = inputValue;
     setInputValue('');
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
     
     const newMessages: {role: 'ai'|'user', content: string}[] = [...messages, { role: 'user', content: userMessage }];
     setMessages(newMessages);
@@ -174,8 +195,12 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
               <Button variant="ghost" onClick={() => setShowChat(false)} className="!bg-transparent hover:!bg-slate-100 !text-slate-500 hover:!text-slate-700 border border-transparent hover:border-slate-200">Cancel</Button>
             </div>
             
-            <div className="flex-1 p-6 md:p-8 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/50 flex flex-col items-center">
-              <div className="w-full max-w-4xl space-y-6">
+            <div 
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              className="flex-1 p-6 md:p-8 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/50 flex flex-col items-center relative"
+            >
+              <div className="w-full max-w-7xl space-y-6 pb-12">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2`}>
                 <div className={`max-w-xl rounded-2xl p-4 shadow-sm backdrop-blur-sm ${msg.role === 'user' ? 'bg-gradient-to-r from-sbi-blue to-cyan-500 text-white rounded-tr-sm' : 'bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-md'}`}>
@@ -185,24 +210,43 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
             ))}
             <div ref={messagesEndRef} />
               </div>
+
+              {/* Scroll to bottom button */}
+              {showScrollButton && (
+                <button 
+                  onClick={scrollToBottom}
+                  className="sticky bottom-4 bg-white dark:bg-slate-800 p-2 rounded-full shadow-lg border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all z-10 animate-in fade-in zoom-in"
+                >
+                  <ArrowDown size={20} />
+                </button>
+              )}
             </div>
 
             <div className="p-4 md:p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200/50 dark:border-slate-800/50 flex justify-center">
-              <div className="w-full max-w-4xl flex space-x-2 items-center relative">
-                <div className="flex-1 relative flex items-center">
-                  <input 
-                    type="text" 
+              <div className="w-full max-w-5xl flex space-x-2 items-end relative">
+                <div className="flex-1 relative flex items-center bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-inner overflow-hidden transition-all focus-within:ring-2 focus-within:ring-sbi-blue focus-within:border-transparent">
+                  <textarea 
+                    ref={textareaRef}
                     autoFocus
                     disabled={isGenerating}
-                    className="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 dark:text-white rounded-full pl-6 pr-14 py-4 focus:outline-none focus:ring-2 focus:ring-sbi-blue focus:border-transparent transition-all shadow-inner disabled:opacity-50"
+                    className="w-full bg-transparent dark:text-white pl-6 pr-14 py-4 focus:outline-none disabled:opacity-50 resize-none overflow-y-auto"
                     placeholder="Type your answer... (or 'Unknown')" 
                     value={inputValue}
-                    onChange={e => setInputValue(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
+                    rows={1}
+                    style={{ minHeight: '56px', maxHeight: '200px' }}
+                    onChange={handleInput}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        if (inputValue.trim() && !isGenerating) {
+                          handleSendMessage();
+                        }
+                      }
+                    }}
                   />
                   <button 
                     onClick={handleMicClick}
-                    className={`absolute right-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
+                    className={`absolute right-3 bottom-3 p-2 transition-colors ${isListening ? 'text-red-500 animate-pulse' : 'text-slate-400 hover:text-sbi-blue'}`}
                     title="Speech to Text"
                   >
                     <Mic size={20} />
@@ -211,7 +255,7 @@ export default function CustomerGenerator({ onNavigate }: { onNavigate: (page: s
                 <Button 
                   onClick={handleSendMessage} 
                   disabled={!inputValue.trim() || isGenerating}
-                  className="rounded-full px-6 md:px-8 py-6 shadow-lg transition-all duration-300 font-bold text-white shrink-0 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105"
+                  className="rounded-full h-14 px-6 md:px-8 shadow-lg transition-all duration-300 font-bold text-white shrink-0 bg-gradient-to-r from-sbi-blue to-cyan-500 hover:from-sbi-navy hover:to-sbi-blue transform hover:scale-105 ml-1"
                 >
                   Send
                 </Button>
